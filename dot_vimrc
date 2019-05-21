@@ -1,0 +1,98 @@
+set nocompatible
+filetype off
+
+set runtimepath+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+
+"Let vundle manage vundle
+Plugin 'gmarik/Vundle.vim'
+
+"My Plugins here
+Plugin 'tpope/sensible'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-ragtag'
+Plugin 'tpope/vim-dispatch'
+Plugin 'scrooloose/nerdtree'
+Plugin 'wting/rust.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'airline/airline'
+Plugin 'chriskempson/base16-vim'
+if $GOPATH != ''
+  Plugin 'fatih/vim-go'
+end
+
+" All of your Plugins must be added before the following line
+call vundle#end() 
+
+filetype plugin on
+filetype indent on
+syntax enable
+set background=dark
+
+colorscheme base16-eighties
+
+"behave xterm
+set number
+set incsearch
+set hlsearch
+set linebreak
+set autoread
+set backupdir=/tmp
+set directory=/tmp
+imap jj <ESC>
+map <C-s> :w<CR>
+imap <C-s> <Esc>:w<CR>
+nnoremap <C-l> :nohlsearch<CR><C-l>
+set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+set gfn=Lucida_Console:h12:cANSI
+set bs=2 
+au BufNewFile,BufRead *.ahk set filetype=autohotkey
+set nowrap
+
+"vmap <C-c> y:call system("pbcopy", getreg("\""))<CR>
+"nmap <C-v> :call setreg("\"", system("pbpaste"))<CR>p
+set encoding=utf-8
+
+"history sized and navigable via <C-p>, <C-n>
+set history=50
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+
+"toggle set list (show hidden characters)
+nmap <leader>l :set list!<CR>
+
+"if working on a golang project
+if $GOPATH != ''
+  "build go project
+  nmap <leader>b :GoBuild<CR>
+
+  "test go project
+  nmap <leader>t :GoTest<CR>
+
+endif
+
+"set symbols for tabs and EOL
+set listchars=tab:▸\ ,eol:¬
+
+"allow unwritten windows to be hidden
+set hidden
+
+"use smartcase senitivity on searches
+set ignorecase
+set smartcase
+
+"show filename at all times
+set modeline
+set ls=2
+
+"check if file needs reloaded after cursor is moved
+:au CursorHold * checktime
+
+"keep cursor a few lines from the edge of a buffer
+set scrolloff=5
+
+"enable easy access to NERDTree
+map <C-n> :NERDTreeToggle<CR>

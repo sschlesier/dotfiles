@@ -32,7 +32,10 @@ filetype indent on
 syntax enable
 set background=dark
 
-colorscheme base16-eighties
+try
+  colorscheme base16-eighties
+  catch
+endtry
 
 "behave xterm
 set number

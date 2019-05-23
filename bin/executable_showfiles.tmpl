@@ -1,0 +1,5 @@
+{{- if eq .chezmoi.hostname "work-laptop" }}#!/bin/sh
+
+defaults write com.apple.finder AppleShowAllFiles TRUE
+killall Finder
+{{- end }}

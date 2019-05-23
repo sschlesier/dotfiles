@@ -7,19 +7,22 @@ if [[ ! -e "$HOME/.zsh_plugins.sh" || "$HOME/.zsh_plugins.sh" -ot "$HOME/.zsh_pl
 fi
 source "$HOME/.zsh_plugins.sh"
 
+#user for theme to know when to display alternate username
 DEFAULT_USER="{{ .chezmoi.username }}"
 
 #add'l git tools
 alias gitk='gitk --all &'
 alias gitgui='git gui &'
+#alias gt='git tree --color=always | head -n$(($LINES - 4)) | color-cut $COLUMNS'
+alias gt='git tree --color=always | head -n$(($LINES - 4))'
 
 export CLICOLOR=1
 export EDITOR=nvim
-export LESS=-RFX
+export LESS=-RFSMX
 alias vim=nvim
 
 if [[ -e "$HOME/bin" ]]; then
-  PATH+=:/usr/bin
+  PATH+=:"$HOME/bin"
 fi
 
 #disable tty XON/XOFF via ^S, ^Q

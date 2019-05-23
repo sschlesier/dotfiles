@@ -35,6 +35,17 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 #omit l and git status from history
 HISTIGNORE='l:gst: '
 
+#define paths for windows file system access
+if [[ -d /mnt/c ]]; then
+  export C_ROOT=/mnt/c
+fi
+if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
+  export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
+fi
+if [[ -d $C_ROOT/Program\ Files ]]; then
+  export PRG_FILES=$C_ROOT/Program\ Files
+fi
+
 {{- if eq .email "scotts@iqmetrix.com" }}
 #begin work machine specific items
 

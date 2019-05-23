@@ -7,7 +7,7 @@ if [[ ! -e "$HOME/.zsh_plugins.sh" || "$HOME/.zsh_plugins.sh" -ot "$HOME/.zsh_pl
 fi
 source "$HOME/.zsh_plugins.sh"
 
-DEFAULT_USER="scotts"
+DEFAULT_USER="{{ .chezmoi.username }}"
 
 #add'l git tools
 alias gitk='gitk --all &'
@@ -25,10 +25,14 @@ fi
 #disable tty XON/XOFF via ^S, ^Q
 stty -ixon
 
+DISABLE_AUTO_TITLE="true"
+COMPLETION_WAITING_DOTS="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 #plugins=(git brew vi-mode web-search docker docker-compose)
 
 # Customize to your needs...
-#export PATH=/usr/local/bin:/bin:$HOME/go/bin:/usr/local/sbin:/usr/pkg/bin:/usr/pkg/sbin:/usr/sbin:/sbin:/usr/bin:/opt/X11/bin:/Users/scotts/bin:/usr/local/share/npm/bin:$GOPATH/bin:$PATH
+#export PATH=/usr/local/bin:/bin:$HOME/go/bin:/usr/local/sbin:/usr/pkg/bin:/usr/pkg/sbin:/usr/sbin:/sbin:/usr/bin:/opt/X11/bin:{{ .chezmoi.homedir }}/bin:/usr/local/share/npm/bin:$GOPATH/bin:$PATH

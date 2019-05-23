@@ -29,6 +29,18 @@ DISABLE_AUTO_TITLE="true"
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+#omit l and git status from history
+HISTIGNORE='l:gst: '
+
+{{- if eq .email "scotts@iqmetrix.com" }}
+#begin work machine specific items
+
+# project folder aliases
+source ~/.project-aliases
+
+#end work machine specific items
+{{- end }}
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)

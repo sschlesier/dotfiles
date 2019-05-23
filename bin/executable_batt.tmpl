@@ -1,0 +1,18 @@
+{{- if eq .chezmoi.os "darwin" }}#!/usr/bin/env ruby
+
+output = `pmset -g batt`
+powerSource = output.match( /'(\w+)/ )[1][0,4]
+percent = output.match( /\d+%/ )[0]
+timeMatch = output.match( /\d+:\d+/)
+if timeMatch
+  time = timeMatch[0]
+else
+  time = ''
+end
+
+display = powerSource
+display += ':' + percent if percent != '100%'
+display += '-' + time if time != '' && time != '0:00'
+
+puts display
+{{- end }}

@@ -24,16 +24,36 @@ export EDITOR=nvim
 export LESS=-RFSMX
 alias vim=nvim
 
+#define paths for windows file system access
+if [[ -d /mnt/c ]]; then
+  export C_ROOT=/mnt/c
+fi
+if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
+  export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
+  alias wh=cd "$WIN_HOME"
+fi
+if [[ -d $C_ROOT/Program\ Files ]]; then
+  export PRG_FILES=$C_ROOT/Program\ Files
+fi
+
 #include /bin on path
 if [[ -e "$HOME/bin" && -z $PATHS_SET ]]; then
   PATH+=:"$HOME/bin"
   alias llb="ls -l $HOME/bin"
 fi
 
-#include /bin on path
+#include /winbin on path
 if [[ -e "$HOME/winbin" && -z $PATHS_SET ]]; then
   PATH+=:"$HOME/winbin"
   alias llw="ls -l $HOME/winbin"
+fi
+
+if [[ -n $C_ROOT && -z $PATHS_SET ]]; then
+  #remove windows folders
+  PATH=$(echo $PATH | tr ':' '\n' | grep -v $C_ROOT | tr '\n' ':')
+  #strip trailing :
+  PATH=${PATH%:}
+  export PATH
 fi
 
 #prevent paths from being set again
@@ -48,18 +68,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 #omit l and git status from history
 HISTIGNORE='l:gst: '
-
-#define paths for windows file system access
-if [[ -d /mnt/c ]]; then
-  export C_ROOT=/mnt/c
-fi
-if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
-  export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
-  alias wh=cd "$WIN_HOME"
-fi
-if [[ -d $C_ROOT/Program\ Files ]]; then
-  export PRG_FILES=$C_ROOT/Program\ Files
-fi
 
 {{- if ne .term "" }}
 #set TERM

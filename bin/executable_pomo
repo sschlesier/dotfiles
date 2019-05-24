@@ -1,0 +1,32 @@
+#! /usr/bin/zsh
+
+pomodoro
+noti --title pomo --message "Time for a break"
+
+read -r -s -k \?'Press any key to start a 5 minute break'
+pomodoro 5m
+noti --title pomo --message "Back to work"
+
+read -r -s -k \?'Press any key to start a pomodoro'
+pomodoro
+noti --title pomo --message "Time for a break"
+
+read -r -s -k \?'Press any key to start a 5 minute break'
+pomodoro 5m
+noti --title pomo --message "Back to work"
+
+read -r -s -k \?'Press any key to start a pomodoro'
+pomodoro
+noti --title pomo --message "Time for a break"
+
+read -r -s -k \?'Press any key to start a 5 minute break'
+pomodoro 5m
+noti --title pomo --message "Back to work"
+
+read -r -s -k \?'Press any key to start a pomodoro'
+pomodoro
+noti --title pomo --message "Good work take a rest"
+
+read -r -s -k \?'Press any key to start a 30 minute break'
+pomodoro 30m
+noti --title pomo --message "Back to work"

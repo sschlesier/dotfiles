@@ -1,0 +1,14 @@
+#! /usr/bin/zsh
+
+URL=`git remote get-url origin` #assumes origin is a http path
+ #remove .git suffix if it is present
+if [[ "$URL" ==  *.git ]]
+then
+  URL=$URL[1,-5]
+fi
+
+URL="$URL"/tree/ #append /tree/
+URL=$URL`git symbolic-ref --short HEAD` #append branch name
+
+# echo $URL
+cmd /c start "$URL"

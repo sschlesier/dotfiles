@@ -1,0 +1,4 @@
+#! /bin/bash
+
+#tail -f $(find . -wholename "./**/logs/*.log") | lch -c ~/bin/lch.conf
+tail -f $(findlogs) | lch -c ~/bin/lch.conf

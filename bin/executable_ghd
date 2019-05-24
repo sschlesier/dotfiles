@@ -1,0 +1,14 @@
+#! /bin/bash
+
+URL=`git remote get-url origin` #assumes origin is a http path
+#remove .git suffix if it is present
+if [[ "$URL" ==  *.git ]]
+then
+  URL="${URL::-4}"
+fi
+
+URL="$URL"/compare/ #append /compare/
+URL=$URL`git symbolic-ref --short HEAD` #append branch name
+
+#echo $URL
+xdg-open $URL

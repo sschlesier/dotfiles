@@ -1,0 +1,11 @@
+#! /bin/bash
+
+for branchName in "$@"
+do
+    git rev-parse --verify "$branchName" > /dev/null 2>&1
+    if [ $? -eq 0 ]
+    then
+        echo "$branchName"
+        exit
+    fi
+done

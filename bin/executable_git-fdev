@@ -1,0 +1,5 @@
+#! /bin/bash
+
+branch=$(git isbranch develop master)
+
+git fetch origin "$branch":"$branch"

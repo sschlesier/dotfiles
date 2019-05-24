@@ -94,10 +94,12 @@ b() {
 }
 export b
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-#plugins=(git brew vi-mode web-search docker docker-compose)
+{{- if eq .launchtmux "true" }}
+#launch tmux or attach to existing session
+if [[ -z "$TMUX" ]]; then
+  tmux attach 2>/dev/null || exec tmux new
+fi
+{{- end }}
 
 # Customize to your needs...
 #export PATH=/usr/local/bin:/bin:$HOME/go/bin:/usr/local/sbin:/usr/pkg/bin:/usr/pkg/sbin:/usr/sbin:/sbin:/usr/bin:/opt/X11/bin:{{ .chezmoi.homedir }}/bin:/usr/local/share/npm/bin:$GOPATH/bin:$PATH

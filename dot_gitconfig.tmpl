@@ -1,12 +1,21 @@
 [user]
-	name = ScottS
+	name = Scott S.
 	email = {{ .email }}
 [core]
-	excludesfile = $HOME/.gitignore_global
 	autocrlf = input
 [include]
-  path = ~/.git-alias.config
-[color]
-	ui = true
+	path = ~/.git-alias.config
 [push]
 	default = upstream
+[rerere]
+	enabled = 1
+[grep]
+	extendRegexp = true
+[blame]
+	date = short
+[status]
+	showUntrackedFiles = all
+{{- if ne .cred_helper "" }}
+[credential]
+	helper = {{ .cred_helper }}
+{{- end }}

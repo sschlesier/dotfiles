@@ -102,12 +102,13 @@ b() {
 }
 export b
 
-{{- if eq .launchtmux "true" }}
+{{- if eq .launch_tmux "true" }}
 #launch tmux or attach to existing session
 if [[ -z "$TMUX" ]]; then
   tmux attach 2>/dev/null || exec tmux new
 fi
 {{- end }}
 
-# Customize to your needs...
-#export PATH=/usr/local/bin:/bin:$HOME/go/bin:/usr/local/sbin:/usr/pkg/bin:/usr/pkg/sbin:/usr/sbin:/sbin:/usr/bin:/opt/X11/bin:{{ .chezmoi.homedir }}/bin:/usr/local/share/npm/bin:$GOPATH/bin:$PATH
+{{- if eq .insecure_docker "true" }}
+export DOCKER_HOST=tcp://127.0.0.1:2375
+{{- end }}

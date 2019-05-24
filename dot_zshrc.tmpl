@@ -61,6 +61,11 @@ if [[ -d $C_ROOT/Program\ Files ]]; then
   export PRG_FILES=$C_ROOT/Program\ Files
 fi
 
+{{- if ne .term "" }}
+#set TERM
+export TERM={{ .term }}
+{{- end }}
+
 {{- if eq .email "scotts@iqmetrix.com" }}
 #begin work machine specific items
 

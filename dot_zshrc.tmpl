@@ -25,16 +25,19 @@ export LESS=-RFSMX
 alias vim=nvim
 
 #include /bin on path
-if [[ -e "$HOME/bin" ]]; then
+if [[ -e "$HOME/bin" && -z $PATHS_SET ]]; then
   PATH+=:"$HOME/bin"
   alias llb="ls -l $HOME/bin"
 fi
 
 #include /bin on path
-if [[ -e "$HOME/winbin" ]]; then
+if [[ -e "$HOME/winbin" && -z $PATHS_SET ]]; then
   PATH+=:"$HOME/winbin"
   alias llw="ls -l $HOME/winbin"
 fi
+
+#prevent paths from being set again
+export PATHS_SET=true
 
 #disable tty XON/XOFF via ^S, ^Q
 stty -ixon

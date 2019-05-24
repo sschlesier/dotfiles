@@ -24,19 +24,11 @@ bind -r L resize-pane -R 5
 set -g default-terminal "screen-256color"
 set -g status-fg white
 set -g status-bg black
-set-window-option -g window-status-fg cyan
-set-window-option -g window-status-bg default
-set-window-option -g window-status-attr dim
-set-window-option -g window-status-current-fg white
-set-window-option -g window-status-current-bg red
-set-window-option -g window-status-attr dim
-set -g pane-border-fg green
-set -g pane-border-bg black
-set -g pane-active-border-fg white
-set -g pane-active-border-bg yellow
-set -g message-fg white
-set -g message-bg black
-set -g message-attr bright
+set-window-option -g window-status-style fg=cyan,bg=default,dim
+set-window-option -g window-status-current-style fg=white,bg=red,dim
+set -g pane-border-style fg=green,bg=black
+set -g pane-active-border-style fg=white,bg=yellow
+set -g message-style fg=white,bg=black,bright
 set -g status-left-length 40
 set -g status-left "#[fg=green]#S:#I.#P"
 {{- if eq .chezmoi.os "darwin" }}

@@ -17,14 +17,23 @@ DEFAULT_USER="{{ .chezmoi.username }}"
 #alias gitgui='git gui &'
 #alias gt='git tree --color=always | head -n$(($LINES - 4)) | color-cut $COLUMNS'
 alias gt='git tree --color=always | head -n$(($LINES - 4))'
+alias gta='git tree --all'
 
 export CLICOLOR=1
 export EDITOR=nvim
 export LESS=-RFSMX
 alias vim=nvim
 
+#include /bin on path
 if [[ -e "$HOME/bin" ]]; then
   PATH+=:"$HOME/bin"
+  alias llb="ls -l $HOME/bin"
+fi
+
+#include /bin on path
+if [[ -e "$HOME/winbin" ]]; then
+  PATH+=:"$HOME/winbin"
+  alias llw="ls -l $HOME/winbin"
 fi
 
 #disable tty XON/XOFF via ^S, ^Q
@@ -43,6 +52,7 @@ if [[ -d /mnt/c ]]; then
 fi
 if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
   export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
+  alias wh=cd "$WIN_HOME"
 fi
 if [[ -d $C_ROOT/Program\ Files ]]; then
   export PRG_FILES=$C_ROOT/Program\ Files
@@ -69,6 +79,12 @@ mdd() {
   mcd $(date '+%Y-%m-%d')
 }
 export mdd
+
+#open the current folder in explorer
+b() {
+	open_command .
+}
+export b
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/

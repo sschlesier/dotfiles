@@ -1,0 +1,69 @@
+{{- if eq .chezmoi.os "darwin" }}
+set-option -g default-command "reattach-to-user-namespace -l zsh"
+{{- end }}
+unbind C-b
+set -g prefix C-a
+set-window-option -g mode-keys vi
+set -sg escape-time 1
+set -g base-index 1
+set-window-option -g pane-base-index 1
+bind r source-file ~/.tmux.conf \; display "Reloaded!"
+bind C-a send-prefix
+bind | split-window -hc "#{pane_current_path}"
+bind - split-window -vc "#{pane_current_path}"
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+set -g default-terminal "screen-256color"
+set -g status-fg white
+set -g status-bg black
+set-window-option -g window-status-fg cyan
+set-window-option -g window-status-bg default
+set-window-option -g window-status-attr dim
+set-window-option -g window-status-current-fg white
+set-window-option -g window-status-current-bg red
+set-window-option -g window-status-attr dim
+set -g pane-border-fg green
+set -g pane-border-bg black
+set -g pane-active-border-fg white
+set -g pane-active-border-bg yellow
+set -g message-fg white
+set -g message-bg black
+set -g message-attr bright
+set -g status-left-length 40
+set -g status-left "#[fg=green]#S:#I.#P"
+{{- if eq .chezmoi.os "darwin" }}
+set -g status-right "#[fg=cyan]#(batt)  %R"
+{{- end }}
+{{- if ne .chezmoi.os "darwin" }}
+set -g status-right "#[fg=cyan] %R"
+{{- end }}
+#set -g status-utf8 on
+set -g status-justify centre
+set-window-option -g monitor-activity on
+set -g visual-activity on
+unbind [
+bind Escape copy-mode
+unbind p
+bind p paste-buffer
+#bind -t vi-copy 'v' begin-selection
+#bind -t vi-copy 'y' copy-selection
+unbind Up
+bind Up new-window -d -n tmp \; swap-pane -s tmp.1 \; select-window -t tmp
+unbind Down
+bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
+#bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
+#bindings to support splits while mainting the current directory
+#unbind v
+#unbind n
+#bind v send-keys " ~/bin/tmux-panes -h" C-m
+#bind n send-keys " ~/bin/tmux-panes -v" C-m
+bind C-l clear-history \; display "Buffer cleared"
+

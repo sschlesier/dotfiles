@@ -6,29 +6,70 @@ call vundle#begin()
 
 
 "Let vundle manage vundle
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 "My Plugins here
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-ragtag'
-Plugin 'tpope/vim-dispatch'
-Plugin 'scrooloose/nerdtree'
-Plugin 'wting/rust.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'vim-airline/vim-airline'
+Plugin 'blueyed/vim-diminactive'
 Plugin 'chriskempson/base16-vim'
-if $GOPATH != ''
-  Plugin 'fatih/vim-go'
-end
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'jeffkreeftmeijer/vim-numbertoggle'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'vim-airline/vim-airline'
 
 " All of your Plugins must be added before the following line
 call vundle#end() 
 
-filetype plugin on
-filetype indent on
+" Set leader shortcut to a comma ','. By default it's the backslash
+let mapleader = " "
+
+""""""""""""""""""""""
+"      Settings      "
+""""""""""""""""""""""
+set nocompatible                " Enables us Vim specific features
+filetype off                    " Reset filetype detection first ...
+filetype plugin indent on       " ... and enable filetype detection
+if has("nvim") == 0
+	set ttyfast                     " Indicate fast terminal conn for faster redraw
+	set ttymouse=xterm2             " Indicate terminal type for mouse codes
+	set ttyscroll=3                 " Speedup scrolling
+endif
+set laststatus=2                " Show status line always
+set encoding=utf-8              " Set default encoding to UTF-8
+set autoread                    " Automatically read changed files
+set autoindent                  " Enabile Autoindent
+set backspace=indent,eol,start  " Makes backspace key more powerful.
+set incsearch                   " Shows the match while typing
+set hlsearch                    " Highlight found searches
+set noerrorbells                " No beeps
+set number relativenumber       " Show line numbers
+set showcmd                     " Show me what I'm typing
+set noswapfile                  " Don't use swapfile
+set nobackup                    " Don't create annoying backup files
+set splitright                  " Vertical windows should be split to right
+set splitbelow                  " Horizontal windows should split to bottom
+set autowrite                   " Automatically save before :next, :make etc.
+set hidden                      " Buffer should still exist if window is closed
+set fileformats=unix,dos,mac    " Prefer Unix over Windows over OS 9 formats
+set noshowmatch                 " Do not show matching brackets by flickering
+set noshowmode                  " We show the mode with airline or lightline
+set ignorecase                  " Search case insensitive...
+set smartcase                   " ... but not it begins with upper case
+set completeopt=menu,menuone    " Show popup menu, even if there is one entry
+set pumheight=10                " Completion window max size
+set nocursorcolumn              " Do not highlight column (speeds up highlighting)
+set nocursorline                " Do not highlight cursor (speeds up highlighting)
+set lazyredraw                  " Wait to redraw
+
+" This enables us to undo files even if you exit Vim.
+if has('persistent_undo')
+  set undofile
+  set undodir=~/.config/vim/tmp/undo//
+endif
+
+" Colorscheme
 syntax enable
 set background=dark
 
@@ -37,65 +78,57 @@ try
   catch
 endtry
 
-"behave xterm
-set number
-set incsearch
-set hlsearch
-set linebreak
-set autoread
-set backupdir=/tmp
-set directory=/tmp
-imap jj <ESC>
-map <C-s> :w<CR>
-imap <C-s> <Esc>:w<CR>
-nnoremap <C-l> :nohlsearch<CR><C-l>
-set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-set gfn=Lucida_Console:h12:cANSI
-set bs=2 
-au BufNewFile,BufRead *.ahk set filetype=autohotkey
-set nowrap
+"  """"""""""""""""""""""
+"  Mappings      "
+"  """"""""""""""""""""""
 
-"vmap <C-c> y:call system("pbcopy", getreg("\""))<CR>
-"nmap <C-v> :call setreg("\"", system("pbpaste"))<CR>p
-set encoding=utf-8
+" jj to exit insert mode
+imap jj <Esc>
 
-"history sized and navigable via <C-p>, <C-n>
-set history=50
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
+"<C-s> to save
+noremap <silent> <C-s> :update<CR>
+vnoremap <silent> <C-s> <C-C>:update<CR>
+inoremap <silent> <C-s> <C-O>:update<CR>
 
-"toggle set list (show hidden characters)
-nmap <leader>l :set list!<CR>
+" <C-l> to clear search highlights
+map <leader>l :nohlsearch<CR>
 
-"if working on a golang project
-if $GOPATH != ''
-  "build go project
-  nmap <leader>b :GoBuild<CR>
+",q to quit buffer
+map <leader>q :q<CR>
 
-  "test go project
-  nmap <leader>t :GoTest<CR>
+"split motions to simple <C-h|j|k|l>
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-h> <C-w>h
+map <C-l> <C-w>l
 
-endif
+"highlight active split by enabling syntax higlighting
+let g:diminactive_use_syntax = 0
+let g:diminactive_use_colorcolumn = 1
+
+" Jump to next error with Ctrl-n and previous error with Ctrl-m. Close the
+" quickfix window with <leader>a
+" How does the <C-m> mapping break my q: window?????
+" noremap <C-n> :cnext<CR>
+" noremap <C-m> :cprevious<CR>
+" nnoremap <leader>a :cclose<CR>
+
+""Visual linewise up and down by default (and use gj gk to go quicker)
+noremap <Up> gk
+noremap <Down> gj
+noremap j gj
+noremap k gk
+
+"" Search mappings: These will make it so that going to the next one in a
+"" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Act like D and C
+nnoremap Y y$
+
+" Enter automatically into the files directory
+autocmd BufEnter * silent! lcd %:p:h
 
 "set symbols for tabs and EOL
 set listchars=tab:▸\ ,eol:¬
-
-"allow unwritten windows to be hidden
-set hidden
-
-"use smartcase senitivity on searches
-set ignorecase
-set smartcase
-
-"show filename at all times
-set modeline
-set ls=2
-
-"check if file needs reloaded after cursor is moved
-:au CursorHold * checktime
-
-"keep cursor a few lines from the edge of a buffer
-set scrolloff=5
-
-"enable easy access to NERDTree
-map <C-n> :NERDTreeToggle<CR>

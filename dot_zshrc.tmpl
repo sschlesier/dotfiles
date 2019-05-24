@@ -1,3 +1,5 @@
+# zmodload zsh/zprof
+
 #oh-my-zsh from antibody cache
 export ZSH="$(antibody home)/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
 
@@ -11,8 +13,8 @@ source "$HOME/.zsh_plugins.sh"
 DEFAULT_USER="{{ .chezmoi.username }}"
 
 #add'l git tools
-alias gitk='gitk --all &'
-alias gitgui='git gui &'
+#alias gitk='gitk --all &'
+#alias gitgui='git gui &'
 #alias gt='git tree --color=always | head -n$(($LINES - 4)) | color-cut $COLUMNS'
 alias gt='git tree --color=always | head -n$(($LINES - 4))'
 
@@ -54,6 +56,19 @@ source ~/.project-aliases
 
 #end work machine specific items
 {{- end }}
+
+#make directory and cd to it
+mcd() {
+  mkdir "$1"
+  cd "$1"
+}
+export mcd
+
+#make director w/ current date
+mdd() {
+  mcd $(date '+%Y-%m-%d')
+}
+export mdd
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/

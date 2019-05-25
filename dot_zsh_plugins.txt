@@ -5,6 +5,5 @@ robbyrussell/oh-my-zsh path:plugins/vi-mode
 robbyrussell/oh-my-zsh path:plugins/web-search
 robbyrussell/oh-my-zsh path:plugins/docker
 romkatv/powerlevel10k
-romkatv/dotfiles-public path:.purepower
 supercrabtree/k
 pepa65/tldr-bash-client kind:path

@@ -38,18 +38,18 @@ if [[ -d $C_ROOT/Program\ Files ]]; then
 fi
 
 #include /bin on path
-if [[ -e "$HOME/bin" && -z $PATHS_SET ]]; then
+if [[ -e "$HOME/bin" ]]; then
   PATH+=:"$HOME/bin"
   alias llb="ls -l $HOME/bin"
 fi
 
 #include /winbin on path
-if [[ -e "$HOME/winbin" && -z $PATHS_SET ]]; then
+if [[ -e "$HOME/winbin" ]]; then
   PATH+=:"$HOME/winbin"
   alias llw="ls -l $HOME/winbin"
 fi
 
-if [[ -n $C_ROOT && -z $PATHS_SET ]]; then
+if [[ -n $C_ROOT ]]; then
   #remove windows folders
   PATH=$(echo $PATH | tr ':' '\n' | grep -v $C_ROOT | tr '\n' ':')
   #strip trailing :
@@ -57,8 +57,8 @@ if [[ -n $C_ROOT && -z $PATHS_SET ]]; then
   export PATH
 fi
 
-#prevent paths from being set again
-export PATHS_SET=true
+#de-duplicate path
+typeset -aU path
 
 #disable tty XON/XOFF via ^S, ^Q
 stty -ixon

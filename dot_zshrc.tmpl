@@ -25,14 +25,6 @@ export EDITOR=nvim
 export LESS=-RFSMX
 alias vim=nvim
 
-{{- if eq .chezmoi.os "darwin" }}
-#set osx solarized color scheme for ls
-export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
-{{- end }}
-{{- if eq .chezmoi.os "linux" }}
-eval $(dircolors -b "$HOME/.dircolors.256dark")
-{{- end }}
-
 #define paths for windows file system access
 if [[ -d /mnt/c ]]; then
   export C_ROOT=/mnt/c

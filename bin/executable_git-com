@@ -1,0 +1,4 @@
+#! /bin/sh
+
+branch=$(git isbranch develop master)
+git checkout "$branch"

@@ -9,7 +9,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 "My Plugins here
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'

@@ -17,6 +17,7 @@ DEFAULT_USER="{{ .chezmoi.username }}"
 #alias gt='git tree --color=always | head -n$(($LINES - 4)) | color-cut $COLUMNS'
 alias gt='git tree --color=always | head -n$(($LINES - 4))'
 alias gta='git tree --all'
+unalias grv #expose the git repo viewer tool
 
 #set ls colors
 {{- if eq .chezmoi.os "linux" }}

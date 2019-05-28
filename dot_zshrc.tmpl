@@ -147,6 +147,7 @@ typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
 typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%(?.$ok.$err) "
 
+#on initial launch of TMUX go to $HOME
 if [[ -z $TMUX ]]; then
-  cd $HOME
+  cd "$HOME"
 fi

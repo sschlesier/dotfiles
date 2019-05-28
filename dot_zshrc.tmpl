@@ -9,7 +9,14 @@ if [[ ! -e "$HOME/.zsh_plugins.sh" || "$HOME/.zsh_plugins.sh" -ot "$HOME/.zsh_pl
   antibody bundle < "$HOME/.zsh_plugins.txt" > "$HOME/.zsh_plugins.sh"
 fi
 source "$HOME/.zsh_plugins.sh"
-autoload -U compinit && compinit
+# autoload -U compinit && compinit
+# completions checked once per day
+autoload -Uz compinit
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+  compinit
+else
+  compinit -C
+fi
 
 #user for theme to know when to display alternate username
 DEFAULT_USER="{{ .chezmoi.username }}"

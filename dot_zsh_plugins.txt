@@ -7,3 +7,5 @@ robbyrussell/oh-my-zsh path:plugins/web-search
 romkatv/powerlevel10k
 supercrabtree/k
 pepa65/tldr-bash-client kind:path
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions

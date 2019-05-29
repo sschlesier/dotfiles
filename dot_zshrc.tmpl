@@ -32,6 +32,9 @@ export CLICOLOR=1
 export EDITOR=nvim
 export LESS=-RFMX
 alias vim=nvim
+if [[ -n $(type open_command) ]]; then
+  alias opn="open_command"
+fi
 
 #define paths for windows file system access
 if [[ -d /mnt/c ]]; then

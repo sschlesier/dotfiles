@@ -127,6 +127,8 @@ export DOCKER_HOST=tcp://127.0.0.1:2375
 
 source ~/.custom_p10k
 
+#load autojump
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 #on initial launch of TMUX go to $HOME
 if [[ -z $TMUX ]]; then
   cd "$HOME"

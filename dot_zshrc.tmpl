@@ -25,6 +25,9 @@ alias gt='git tree --color=always | head -n$(($LINES - 4))'
 alias gta='git tree --all'
 unalias grv #expose the git repo viewer tool
 
+#k always human readable
+alias k='k -h'
+
 #set ls colors
 {{- if eq .chezmoi.os "linux" }}
 eval "$(dircolors $HOME/.dircolors.256dark)"

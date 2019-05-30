@@ -11,6 +11,11 @@ fi
 source "$HOME/.zsh_plugins.sh"
 # autoload -U compinit && compinit
 
+#set SHELL in docker containers
+if [[ -z $SHELL ]]; then
+  export SHELL=$(which zsh)
+fi
+
 #user for theme to know when to display alternate username
 DEFAULT_USER="{{ .chezmoi.username }}"
 
@@ -128,7 +133,10 @@ export DOCKER_HOST=tcp://127.0.0.1:2375
 source ~/.custom_p10k
 
 #load autojump
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+if [[ -f /usr/local/etc/profile.d/autojump.sh ]]; then
+  source /usr/local/etc/profile.d/autojump.sh
+fi
+
 #on initial launch of TMUX go to $HOME
 if [[ -z $TMUX ]]; then
   cd "$HOME"

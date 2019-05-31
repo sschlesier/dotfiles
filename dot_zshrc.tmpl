@@ -29,13 +29,13 @@ unalias grv #expose the git repo viewer tool
 alias k='k -h'
 
 #set ls colors
-{{- if eq .chezmoi.os "linux" }}
-eval "$(dircolors $HOME/.dircolors.256dark)"
-{{- end }}
-{{- if eq .chezmoi.os "darwin" }}
-export CLICOLOR=1
-#find LSCOLORS
-{{- end }}
+if [[ $(uname -s) =~ "[Ll]inux" ]]; then
+  eval "$(dircolors $HOME/.dircolors.256dark)"
+  echo dircolors
+fi
+if [[ $(uname -s) = "darwin" ]]; then
+  export CLICOLOR=1
+fi
 
 export EDITOR=nvim
 export LESS=-RFMX

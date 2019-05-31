@@ -4,25 +4,35 @@ if [[ -d "$2" ]]; then
 fi
 }
 
-aliasdir ams "$C_ROOT/src/AssetMediaService"
-aliasdir api "$C_ROOT/src/Azure.APIManagement"
-aliasdir bsn "$C_ROOT/src/BuildScripts.Net"
-aliasdir ca "$C_ROOT/src/Catalogs"
-aliasdir cn "$C_ROOT/src/CatalogNexus"
+if [[ -d "$C_ROOT"/src ]]; then
+  export SRC="$C_ROOT"/src
+elif [[ -d "$HOME"/src ]]; then
+  export SRC="$HOME"/src
+fi
+
+aliasdir ss "$SRC/shell-setup"
+aliasdir ams "$SRC/AssetMediaService"
+aliasdir api "$SRC/Azure.APIManagement"
+aliasdir bsn "$SRC/BuildScripts.Net"
+aliasdir ca "$SRC/Catalogs"
+aliasdir cn "$SRC/CatalogNexus"
 aliasdir de "$WIN_HOME/Desktop"
+aliasdir de "$HOME/Desktop"
 aliasdir dow "$WIN_HOME/Downloads"
+aliasdir dow "$HOME/Downloads"
 aliasdir dr "$WIN_HOME/Dropbox"
-aliasdir es "$C_ROOT/src/EntityStore"
-aliasdir exp "$C_ROOT/src/experiment"
-aliasdir fl "$C_ROOT/src/Foundation.Logging"
-aliasdir fm "$C_ROOT/src/Foundation.Messaging"
-aliasdir fo "$C_ROOT/src/Foundation"
-aliasdir fw "$C_ROOT/src/Foundation.WebApi"
-aliasdir im "$C_ROOT/src/IQ.Messaging"
-aliasdir mg "$C_ROOT/src/Monitoring.Graphite"
-aliasdir pe "$C_ROOT/src/product-excellence"
-aliasdir pl "$C_ROOT/src/ProductLibrary"
+aliasdir dr "$HOME/Dropbox"
+aliasdir es "$SRC/EntityStore"
+aliasdir exp "$SRC/experiment"
+aliasdir fl "$SRC/Foundation.Logging"
+aliasdir fm "$SRC/Foundation.Messaging"
+aliasdir fo "$SRC/Foundation"
+aliasdir fw "$SRC/Foundation.WebApi"
+aliasdir im "$SRC/IQ.Messaging"
+aliasdir mg "$SRC/Monitoring.Graphite"
+aliasdir pe "$SRC/product-excellence"
+aliasdir pl "$SRC/ProductLibrary"
 aliasdir prj "$C_ROOT/prj"
-aliasdir sbm "$C_ROOT/src/ServiceBusMonitor"
-aliasdir src "$C_ROOT/src"
-aliasdir sub "$C_ROOT/src/ProductSubscriptions"
+aliasdir sbm "$SRC/ServiceBusMonitor"
+aliasdir src "$SRC"
+aliasdir sub "$SRC/ProductSubscriptions"

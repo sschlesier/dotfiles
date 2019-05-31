@@ -1,60 +1,76 @@
-unbind C-b
+# ^A as leader
 set -g prefix C-a
+bind C-a send-prefix
+
+#vi mode
 set-window-option -g mode-keys vi
+
+#don't wait long for ESC to be in a key sequence
 set -sg escape-time 1
+
+#set base indexes to 1
 set -g base-index 1
 set-window-option -g pane-base-index 1
-bind r source-file ~/.tmux.conf \; display "Reloaded!"
-bind C-a send-prefix
+
+#splits and new window
 bind | split-window -hc "#{pane_current_path}"
 bind - split-window -vc "#{pane_current_path}"
 bind c new-window -c "#{pane_current_path}"
+
+#vi style pane navigtaion
 bind -r h select-pane -L
 bind -r j select-pane -D
 bind -r k select-pane -U
 bind -r l select-pane -R
+
+#vi style window navigation
 bind -r C-h select-window -t :-
 bind -r C-l select-window -t :+
+
+#vi style pane resize
 bind -r H resize-pane -L 5
 bind -r J resize-pane -D 5
 bind -r K resize-pane -U 5
 bind -r L resize-pane -R 5
+
+# 256 color compatible
 set -g default-terminal "screen-256color"
-set -g status-fg white
-set -g status-bg black
-set-window-option -g window-status-style fg=cyan,bg=default,dim
-set-window-option -g window-status-current-style fg=white,bg=red,dim
-set -g pane-border-style fg=green,bg=black
-set -g pane-active-border-style fg=white,bg=yellow
-set -g message-style fg=white,bg=black,bright
+
+#status bar
 set -g status-left-length 40
-set -g status-left "#[fg=green]#S:#I.#P"
+set -g status-left "#S:#I.#P"
 {{- if eq .chezmoi.os "darwin" }}
-set -g status-right "#[fg=cyan]#(batt)  %R"
+set -g status-right "#(batt) %R"
 {{- end }}
 {{- if ne .chezmoi.os "darwin" }}
-set -g status-right "#[fg=cyan] %R"
+set -g status-right "%R"
 {{- end }}
-#set -g status-utf8 on
+set-option -g status-interval 10
+set-option -g automatic-rename on
+set-option -g automatic-rename-format '#{b:pane_current_path}'
 set -g status-justify centre
+
+#alert when hidden windows active
 set-window-option -g monitor-activity on
 set -g visual-activity on
+
+#vi style ESC to change mode
 unbind [
 bind Escape copy-mode
-unbind p
-bind p paste-buffer
-#bind -t vi-copy 'v' begin-selection
-#bind -t vi-copy 'y' copy-selection
+
+#vi style copy paste
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+bind-key -T copy-mode-vi y send-keys -X copy-selection
+bind-key -T copy-mode-vi r send-keys -X rectangle-toggle
+
+# move pane to new window
 unbind Up
 bind Up new-window -d -n tmp \; swap-pane -s tmp.1 \; select-window -t tmp
+
+# move window into previous pane
 unbind Down
 bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
-#bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
-#bindings to support splits while mainting the current directory
-#unbind v
-#unbind n
-#bind v send-keys " ~/bin/tmux-panes -h" C-m
-#bind n send-keys " ~/bin/tmux-panes -v" C-m
+
 bind C-l clear-history \; display "Buffer cleared"
 source-file ~/.tmuxcolors-256.conf
 

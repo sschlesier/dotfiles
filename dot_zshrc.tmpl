@@ -40,6 +40,7 @@ export CLICOLOR=1
 export EDITOR=nvim
 export LESS=-RFMX
 alias vim=nvim
+alias v=nvim
 if [[ -n $(type open_command) ]]; then
   alias opn="open_command"
 fi
@@ -94,14 +95,8 @@ HISTIGNORE='l:gst: '
 export TERM={{ .term }}
 {{- end }}
 
-{{- if eq .email "scotts@iqmetrix.com" }}
-#begin work machine specific items
-
-# project folder aliases
-source ~/.project-aliases
-
-#end work machine specific items
-{{- end }}
+# folder aliases
+source ~/.dir-aliases
 
 #make directory and cd to it
 mcd() {

@@ -29,11 +29,10 @@ unalias grv #expose the git repo viewer tool
 alias k='k -h'
 
 #set ls colors
-if [[ $(uname -s) =~ "[Ll]inux" ]]; then
+if [[ $(uname -s) = "Linux" ]]; then
   eval "$(dircolors $HOME/.dircolors.256dark)"
-  echo dircolors
 fi
-if [[ $(uname -s) = "darwin" ]]; then
+if [[ $(uname -s) = "Darwin" ]]; then
   export CLICOLOR=1
 fi
 

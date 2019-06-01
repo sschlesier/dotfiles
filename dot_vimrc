@@ -9,6 +9,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 "My Plugins here
+Plugin 'airblade/vim-gitgutter'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
@@ -135,3 +136,6 @@ autocmd BufEnter * silent! lcd %:p:h
 
 "set symbols for tabs and EOL
 set listchars=tab:▸\ ,eol:¬
+
+" reduce updatetime for prompt git gutter
+set updatetime=250

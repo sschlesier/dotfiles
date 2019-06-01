@@ -89,11 +89,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 #omit l and git status from history
 HISTIGNORE='l:gst: '
 
-{{- if ne .term "" }}
-#set TERM
-export TERM={{ .term }}
-{{- end }}
-
 # folder aliases
 source ~/.dir-aliases
 

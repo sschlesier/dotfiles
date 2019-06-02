@@ -1,6 +1,9 @@
 set nocompatible
 filetype off
 
+" fuzzy finder
+set rtp+=/usr/local/opt/fzf
+
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -11,10 +14,10 @@ Plugin 'VundleVim/Vundle.vim'
 "My Plugins here
 Plugin 'airblade/vim-gitgutter'
 Plugin 'blueyed/vim-diminactive'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'jlanzarotta/bufexplorer'
+Plugin 'junegunn/fzf.vim'
 Plugin 'mhinz/vim-startify'
 Plugin 'morhetz/gruvbox'
 Plugin 'tpope/vim-commentary'

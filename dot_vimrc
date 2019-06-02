@@ -143,3 +143,16 @@ set listchars=tab:▸\ ,eol:¬
 
 " reduce updatetime for prompt git gutter
 set updatetime=250
+
+" fzf mappings
+nnoremap <silent> <leader>o :Files<CR>
+nnoremap <silent> <leader>O :Files!<CR>
+cnoremap <silent> <C-p> :History:<CR>
+cnoremap <silent> <C-_> <ESC>:History/<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>` :Marks<CR>
+nnoremap <silent> <leader>L :BLines<CR>
+nnoremap <silent> <F1> :Helptags<CR>
+inoremap <silent> <F1> <ESC>:Helptags<CR>
+noremap <silent> <leader>; :Commands<CR>
+inoremap <silent> <F3> <ESC>:Snippets<CR>

@@ -143,6 +143,9 @@ set listchars=tab:▸\ ,eol:¬
 " reduce updatetime for prompt git gutter
 set updatetime=250
 
+" C-D to close window like it does a shell in tmux
+nnoremap <silent> <C-d> :q<CR>
+
 " fzf mappings
 nnoremap <silent> <leader>o :Files<CR>
 nnoremap <silent> <leader>O :Files!<CR>

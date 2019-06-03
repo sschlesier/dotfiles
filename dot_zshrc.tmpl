@@ -62,6 +62,11 @@ if [[ -e "$HOME/bin" ]]; then
   alias llb="ls -l $HOME/bin"
 fi
 
+#include .cargo/bin on path
+if [[ -e "$HOME/.cargo/bin" ]]; then
+  PATH+=:"$HOME/.cargo/bin"
+fi
+
 #include /winbin on path
 if [[ -e "$HOME/winbin" ]]; then
   PATH+=:"$HOME/winbin"

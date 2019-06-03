@@ -2,7 +2,7 @@ set nocompatible
 filetype off
 
 " fuzzy finder
-set rtp+=/usr/local/opt/fzf
+set rtp+=$FZF_HOME
 
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()

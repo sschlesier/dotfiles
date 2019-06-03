@@ -1,22 +1,25 @@
 # Where is fzf installed
 if [[ -d /usr/share/fzf ]]; then
-  prefix=/usr/share/fzf
+  export FZF_HOME=/usr/share/fzf
 elif [[ -d /usr/local/opt/fzf ]]; then
-  prefix=/usr/local/opt/fzf
+  export FZF_HOME=/usr/local/opt/fzf
+elif [[ -d $HOME/.fzf ]]; then
+  export FZF_HOME=$HOME/.fzf
 else
-  exit
+  echo Can\'t find fzf
+  return
 fi
 
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == *$prefix/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}$prefix/bin"
+if [[ ! "$PATH" == *$FZF_HOME/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}$FZF_HOME/bin"
 fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "$prefix/shell/completion.zsh" 2> /dev/null
+[[ $- == *i* ]] && source "$FZF_HOME/shell/completion.zsh" 2> /dev/null
 
 # Key bindings
 # ------------
-source "$prefix/shell/key-bindings.zsh"
+source "$FZF_HOME/shell/key-bindings.zsh"

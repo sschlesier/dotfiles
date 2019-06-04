@@ -105,8 +105,11 @@ inoremap <silent> <C-s> <C-O>:update<CR>
 " <C-l> to clear search highlights
 map <leader>l :nohlsearch<CR>
 
-",q to quit buffer
+"q to quit buffer
 map <leader>q :q<CR>
+
+" C-D to close window like it does a shell in tmux
+nnoremap <silent> <C-d> :q<CR>
 
 "split motions to simple <C-h|j|k|l>
 map <C-j> <C-w>j
@@ -147,9 +150,6 @@ set listchars=tab:▸\ ,eol:¬
 
 " reduce updatetime for prompt git gutter
 set updatetime=250
-
-" C-D to close window like it does a shell in tmux
-nnoremap <silent> <C-d> :q<CR>
 
 " fzf mappings
 nnoremap <silent> <leader>o :Files<CR>

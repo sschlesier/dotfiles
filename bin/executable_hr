@@ -1,0 +1,5 @@
+#! /bin/zsh
+
+cols=$(tput cols)
+repeat $((cols - 1)) echo -n =
+echo =

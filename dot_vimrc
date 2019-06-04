@@ -18,11 +18,16 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'junegunn/fzf.vim'
 Plugin 'mhinz/vim-startify'
+Plugin 'mileszs/ack.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'vim-airline/vim-airline'
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 
 " All of your Plugins must be added before the following line
 call vundle#end() 

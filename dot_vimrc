@@ -72,6 +72,7 @@ set pumheight=10                " Completion window max size
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
 set nocursorline                " Do not highlight cursor (speeds up highlighting)
 set lazyredraw                  " Wait to redraw
+set inccommand=nosplit		" show previews inline
 
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')
@@ -141,6 +142,18 @@ nnoremap N Nzzzv
 
 " Act like D and C
 nnoremap Y y$
+
+" repeat macro
+nnoremap Q @@
+
+" vim window motions
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+" run the current line as a command
+nnoremap <leader>e :exe getline(line('.'))<cr>
 
 " Enter automatically into the files directory
 autocmd BufEnter * silent! lcd %:p:h

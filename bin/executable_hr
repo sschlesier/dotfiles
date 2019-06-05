@@ -1,4 +1,10 @@
 #! /bin/zsh
 
-repeat $(tput cols) l+==
+if [[ -n $1 ]]; then
+ c=${1[0,1]}
+else
+  c="="
+fi
+
+repeat $(tput cols) l+=$c
 printf $l"\n"

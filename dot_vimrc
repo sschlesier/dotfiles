@@ -13,6 +13,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 "My Plugins here
 Plugin 'airblade/vim-gitgutter'
+Plugin 'easymotion/vim-easymotion'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
@@ -104,7 +105,7 @@ vnoremap <silent> <C-s> <C-C>:update<CR>
 inoremap <silent> <C-s> <C-O>:update<CR>
 
 " <C-l> to clear search highlights
-map <leader>l :nohlsearch<CR>
+map <leader>; :nohlsearch<CR>
 
 "q to quit buffer
 map <leader>q :q<CR>
@@ -176,3 +177,28 @@ nnoremap <silent> <F1> :Helptags<CR>
 inoremap <silent> <F1> <ESC>:Helptags<CR>
 noremap <silent> <leader>; :Commands<CR>
 inoremap <silent> <F3> <ESC>:Snippets<CR>
+
+" easymotion mappings
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+nmap s <Plug>(easymotion-overwin-f)
+" or
+" `s{char}{char}{label}`
+" Need one more keystroke, but on average, it may be more comfortable.
+" nmap s <Plug>(easymotion-overwin-f2)
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+map <Leader>l <Plug>(easymotion-lineforward)
+
+" map  / <Plug>(easymotion-sn)
+" omap / <Plug>(easymotion-tn)
+" map  n <Plug>(easymotion-next)
+" map  N <Plug>(easymotion-prev)<Paste>

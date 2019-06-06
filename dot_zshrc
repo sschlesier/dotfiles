@@ -3,16 +3,17 @@ source $HOME/.shell_environment
 
 #setup git environment specific bits
 gitenv="$HOME/.gitconfig-env"
+
 if [[ ! -f $gitenv ]]; then
 cat <<EOF > "$gitenv"
 [user]
-  email = "$EMAIL"
+  email = $EMAIL
 EOF
 
 if [[ -n $CRED_HELPER ]]; then
-cat <<EOF > "$gitenv"
+cat <<EOF >> "$gitenv"
 [credential]
-  helper = "$CRED_HELPER"
+  helper = $CRED_HELPER
 EOF
 fi
 fi #[[ ! -f $gitenv ]];

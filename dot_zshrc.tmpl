@@ -76,7 +76,7 @@ fi
 
 #add gems to path
 if [[ -n $(type gem) ]]; then
-  PATH+=$(gem environment gempath)
+  PATH+=:$(gem environment gempath)
 fi
 
 if [[ -n $C_ROOT ]]; then

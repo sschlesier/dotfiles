@@ -17,7 +17,7 @@ if [[ -z $SHELL ]]; then
 fi
 
 #user for theme to know when to display alternate username
-DEFAULT_USER="{{ .chezmoi.username }}"
+DEFAULT_USER=$(whoami)
 
 #add'l git tools
 # \033?7l disables automargin like tput rmam but works in tmux
@@ -132,17 +132,15 @@ b() {
 }
 export b
 
-{{- if eq .launch_tmux "true" }}
 #launch tmux or attach to existing session
-if [[ -z "$TMUX" ]]; then
+if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then
   cd "$HOME"
   tmux attach 2>/dev/null || exec tmux new
 fi
-{{- end }}
 
-{{- if eq .insecure_docker "true" }}
-export DOCKER_HOST=tcp://127.0.0.1:2375
-{{- end }}
+if [[ $INSECURE_DOCKER -eq 1 ]]; then
+  export DOCKER_HOST=tcp://127.0.0.1:2375 
+fi
 
 source ~/.custom_p10k
 

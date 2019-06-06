@@ -1,0 +1,4 @@
+export EMAIL=scott@schlesier.ca
+export LAUNCH_TMUX=1
+export INSECURE_DOCKER=0
+export CRED_HELPER=

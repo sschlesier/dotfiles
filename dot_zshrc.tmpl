@@ -58,25 +58,35 @@ if [[ -d $C_ROOT/Program\ Files ]]; then
 fi
 
 #include /bin on path
-if [[ -e "$HOME/bin" ]]; then
+if [[ -d "$HOME/bin" ]]; then
   PATH+=:"$HOME/bin"
   alias llb="ls -l $HOME/bin"
 fi
 
 #include .cargo/bin on path
-if [[ -e "$HOME/.cargo/bin" ]]; then
+if [[ -d "$HOME/.cargo/bin" ]]; then
   PATH+=:"$HOME/.cargo/bin"
 fi
 
 #include /winbin on path
-if [[ -e "$HOME/winbin" ]]; then
+if [[ -d "$HOME/winbin" ]]; then
   PATH+=:"$HOME/winbin"
   alias llw="ls -l $HOME/winbin"
 fi
 
 #add gems to path
-if [[ -n $(type gem) ]]; then
-  PATH+=:$(gem environment gempath)
+gempath="$HOME/.gempath"
+#write path into a file
+if [[ ! -f $gempath ]]; then
+  if [[ -n $(type gem) ]]; then
+    gem environment gempath > "$gempath"
+  else
+    #no gems here so blank the file
+    touch "$gempath"
+  fi
+fi
+if [[ -f $gempath ]]; then
+  PATH+=:$(cat "$gempath")
 fi
 
 if [[ -n $C_ROOT ]]; then

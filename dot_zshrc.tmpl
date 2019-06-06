@@ -74,6 +74,11 @@ if [[ -e "$HOME/winbin" ]]; then
   alias llw="ls -l $HOME/winbin"
 fi
 
+#add gems to path
+if [[ -n $(type gem) ]]; then
+  PATH+=$(gem environment gempath)
+fi
+
 if [[ -n $C_ROOT ]]; then
   #remove windows folders
   PATH=$(echo $PATH | tr ':' '\n' | grep -v $C_ROOT | tr '\n' ':')
@@ -96,7 +101,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 HISTIGNORE='l:gst: '
 
 # folder aliases
-source ~/.dir-aliases
+source "$HOME/dir-aliases"
 
 #make directory and cd to it
 mcd() {

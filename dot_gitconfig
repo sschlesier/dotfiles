@@ -1,11 +1,11 @@
 [user]
 	name = Scott S.
-	email = {{ .email }}
 [core]
 	autocrlf = input
 	excludesfile = /Users/scotts/.gitignore_global
 [include]
 	path = ~/.git-alias.config
+	path = ~/.gitconfig-env
 [push]
 	default = upstream
 [rerere]
@@ -26,7 +26,3 @@
 	prompt = false
 [diff]
 	tool = vimdiff
-{{- if ne .cred_helper "" }}
-[credential]
-	helper = {{ .cred_helper }}
-{{- end }}

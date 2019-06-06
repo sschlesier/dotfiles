@@ -105,7 +105,7 @@ vnoremap <silent> <C-s> <C-C>:update<CR>
 inoremap <silent> <C-s> <C-O>:update<CR>
 
 " <C-l> to clear search highlights
-map <leader>; :nohlsearch<CR>
+map <leader><leader>l :nohlsearch<CR>
 
 "q to quit buffer
 map <leader>q :q<CR>

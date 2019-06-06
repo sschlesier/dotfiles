@@ -6,5 +6,5 @@ else
   c="="
 fi
 
-repeat $(tput cols) l+=$c
-printf $l"\n"
+repeat $(tput cols) l+="$c"
+printf -- "$l\n"

@@ -62,39 +62,24 @@ alias k='k -h'
 if [[ $(uname -s) = "Linux" ]]; then
   eval "$(dircolors $HOME/.dircolors.256dark)"
 fi
-if [[ $(uname -s) = "Darwin" ]]; then
-  export CLICOLOR=1
-fi
+export CLICOLOR=1
 
 export EDITOR=nvim
 export LESS=-RFMX
 alias vim=nvim
 alias v=nvim
-if [[ -n $(type open_command) ]]; then
-  alias opn="open_command"
-fi
+alias opn="open_command"
 
 #define paths for windows file system access
 if [[ -d /mnt/c ]]; then
   export C_ROOT=/mnt/c
-fi
-if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
-  export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
-  alias wh="cd $WIN_HOME"
-fi
-if [[ -d $C_ROOT/Program\ Files ]]; then
-  export PRG_FILES=$C_ROOT/Program\ Files
-fi
-
-#include /bin on path
-if [[ -d "$HOME/bin" ]]; then
-  PATH+=:"$HOME/bin"
-  alias llb="ls -l $HOME/bin"
-fi
-
-#include .cargo/bin on path
-if [[ -d "$HOME/.cargo/bin" ]]; then
-  PATH+=:"$HOME/.cargo/bin"
+  if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
+    export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
+    alias wh="cd $WIN_HOME"
+  fi
+  if [[ -d $C_ROOT/Program\ Files ]]; then
+    export PRG_FILES=$C_ROOT/Program\ Files
+  fi
 fi
 
 #include /winbin on path
@@ -103,10 +88,20 @@ if [[ -d "$HOME/winbin" ]]; then
   alias llw="ls -l $HOME/winbin"
 fi
 
+#include /bin on path
+PATH+=:"$HOME/bin"
+alias llb="ls -l $HOME/bin"
+
+#include .cargo/bin on path
+if [[ -d "$HOME/.cargo/bin" ]]; then
+  PATH+=:"$HOME/.cargo/bin"
+fi
+
 #add gems to path
-gempath="$HOME/.gempath"
+gempath="$ZSH_CACHE_DIR/.gempath"
 #write path into a file
 if [[ ! -f $gempath ]]; then
+  echo updating gempath
   if [[ -n $(type gem) ]]; then
     gem environment gempath > "$gempath"
   else
@@ -114,7 +109,7 @@ if [[ ! -f $gempath ]]; then
     touch "$gempath"
   fi
 fi
-if [[ -f $gempath ]]; then
+if [[ -s $gempath ]]; then
   PATH+=:$(cat "$gempath")
 fi
 

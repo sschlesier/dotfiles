@@ -177,6 +177,7 @@ nnoremap <silent> <F1> :Helptags<CR>
 inoremap <silent> <F1> <ESC>:Helptags<CR>
 noremap <silent> <leader>; :Commands<CR>
 inoremap <silent> <F3> <ESC>:Snippets<CR>
+nnoremap <silent> <leader>f :Ag<CR>
 
 " easymotion mappings
 let g:EasyMotion_do_mapping = 0 " Disable default mappings

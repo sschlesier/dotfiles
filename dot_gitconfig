@@ -5,7 +5,7 @@
 	excludesfile = /Users/scotts/.gitignore_global
 [include]
 	path = ~/.git-alias.config
-	path = ~/.gitconfig-env
+	path = ~/.git-indirection
 [push]
 	default = upstream
 [rerere]

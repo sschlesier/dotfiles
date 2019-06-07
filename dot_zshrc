@@ -5,31 +5,7 @@ source $HOME/.zsh/shell_environment
 export ZSH="$(antibody home)/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
 export ZSH_CACHE_DIR="$ZSH/cache"
 
-#setup git environment specific bits
-gitenv="$ZSH_CACHE_DIR/gitconfig-env"
-
-if [[ ! -f $gitenv ]]; then
-  echo setting up git include
-
-cat <<EOF > "$HOME/.git-indirection" 
-[include]
-  path = $gitenv
-EOF
-
-cat <<EOF > "$gitenv"
-[user]
-  email = $EMAIL
-EOF
-
-  if [[ -n $CRED_HELPER ]]; then
-
-cat <<EOF >> "$gitenv"
-[credential]
-  helper = $CRED_HELPER
-EOF
-
-  fi
-fi #[[ ! -f $gitenv ]];
+source "$HOME/.zsh/gitenv.zsh"
 
 #update plugins when out of date
 plugins_file="$ZSH_CACHE_DIR/zsh_plugins.zsh"

@@ -83,7 +83,7 @@ if [[ $INSECURE_DOCKER -eq 1 ]]; then
   export DOCKER_HOST=tcp://127.0.0.1:2375 
 fi
 
-source ~/.custom_p10k
+source "$HOME/.zsh/custom_p10k"
 
 #setup fuzzy finder
 # fd follow links always exclude .git

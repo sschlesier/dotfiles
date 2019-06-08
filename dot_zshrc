@@ -16,6 +16,27 @@ source $plugins_file
 # autoload -U compinit && compinit
 
 source "$ZSH_INIT/gitenv.zsh"
+source "$ZSH_INIT/path.zsh"
+source "$ZSH_INIT/dir-aliases.zsh"
+source "$ZSH_INIT/funcs.zsh"
+source "$ZSH_INIT/custom_p10k.zsh"
+source "$ZSH_INIT/fzf.zsh"
+
+#launch tmux or attach to existing session
+if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then
+  cd "$HOME"
+  tmux attach 2>/dev/null || exec tmux new
+fi
+
+if [[ $INSECURE_DOCKER -eq 1 ]]; then
+  export DOCKER_HOST=tcp://127.0.0.1:2375 
+fi
+
+#disable tty XON/XOFF via ^S, ^Q
+stty -ixon
+
+#omit l and git status from history
+HISTIGNORE='l:gst: '
 
 #set SHELL in docker containers
 if [[ -z $SHELL ]]; then
@@ -28,38 +49,8 @@ DEFAULT_USER=$(whoami)
 #k always human readable
 alias k='k -h'
 
-#set ls colors
-if [[ $(uname -s) = "Linux" ]]; then
-  eval "$(dircolors $HOME/.dircolors.256dark)"
-fi
-export CLICOLOR=1
-
 export EDITOR=nvim
 export LESS=-RFMX
 alias vim=nvim
 alias v=nvim
 alias opn="open_command"
-
-source "$ZSH_INIT/path.zsh"
-
-#disable tty XON/XOFF via ^S, ^Q
-stty -ixon
-
-#omit l and git status from history
-HISTIGNORE='l:gst: '
-
-source "$ZSH_INIT/dir-aliases.zsh"
-source "$ZSH_INIT/funcs.zsh"
-
-#launch tmux or attach to existing session
-if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then
-  cd "$HOME"
-  tmux attach 2>/dev/null || exec tmux new
-fi
-
-if [[ $INSECURE_DOCKER -eq 1 ]]; then
-  export DOCKER_HOST=tcp://127.0.0.1:2375 
-fi
-
-source "$ZSH_INIT/custom_p10k.zsh"
-source "$ZSH_INIT/fzf.zsh"

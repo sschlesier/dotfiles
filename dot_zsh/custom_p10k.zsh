@@ -27,3 +27,8 @@ DISABLE_AUTO_TITLE="true"
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+#set ls colors
+if [[ $(uname -s) = "Linux" ]]; then
+  eval "$(dircolors $HOME/.dircolors.256dark)"
+fi
+export CLICOLOR=1

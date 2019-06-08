@@ -45,10 +45,6 @@ source "$ZSH_INIT/path.zsh"
 #disable tty XON/XOFF via ^S, ^Q
 stty -ixon
 
-DISABLE_AUTO_TITLE="true"
-COMPLETION_WAITING_DOTS="true"
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
 #omit l and git status from history
 HISTIGNORE='l:gst: '
 

@@ -8,9 +8,9 @@ export ZSH_CACHE_DIR="$ZSH/cache"
 
 #update plugins when out of date
 plugins_file="$ZSH_CACHE_DIR/zsh_plugins.zsh"
-if [[ ! -e $plugins_file || $plugins_file -ot "$ZSH_INIT_plugins.txt" ]]; then
+if [[ ! -e $plugins_file || $plugins_file -ot "$ZSH_INIT/zsh_plugins.txt" ]]; then
   echo updating plugins...
-  antibody bundle < "$ZSH_INIT_plugins.txt" > $plugins_file
+  antibody bundle < "$ZSH_INIT/zsh_plugins.txt" > $plugins_file
 fi
 source $plugins_file
 # autoload -U compinit && compinit

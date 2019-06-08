@@ -1,5 +1,5 @@
+#fill in and name as shell_environment.zsh
 export EMAIL=scott@schlesier.ca
 export LAUNCH_TMUX=1
 export INSECURE_DOCKER=0
-export CRED_HELPER=
 # export CRED_HELPER="/mnt/c/Program\\\\ Files/Git/mingw64/libexec/git-core/git-credential-wincred.exe"

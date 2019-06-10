@@ -28,7 +28,7 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 #set ls colors
-if [[ $(uname -s) = "Linux" ]]; then
+if hash dircolors 2> /dev/null; then
   eval "$(dircolors $HOME/.dircolors.256dark)"
 fi
 export CLICOLOR=1

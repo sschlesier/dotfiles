@@ -23,8 +23,9 @@ if [[ ! -e $plugins_file || $plugins_file -ot "$ZSH_INIT/zsh_plugins.txt" ]]; th
   echo updating plugins...
   antibody bundle < "$ZSH_INIT/zsh_plugins.txt" > $plugins_file
 fi
+
+autoload -U compinit && compinit
 source $plugins_file
-# autoload -U compinit && compinit
 
 source "$ZSH_INIT/gitenv.zsh"
 source "$ZSH_INIT/path.zsh"
@@ -32,6 +33,9 @@ source "$ZSH_INIT/dir-aliases.zsh"
 source "$ZSH_INIT/funcs.zsh"
 source "$ZSH_INIT/custom_p10k.zsh"
 source "$ZSH_INIT/fzf.zsh"
+source "$ZSH/lib/functions.zsh"
+source "$ZSH/lib/directories.zsh"
+source "$ZSH/lib/history.zsh"
 
 #launch tmux or attach to existing session
 if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then

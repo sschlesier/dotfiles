@@ -11,6 +11,12 @@ if [[ -z $SHELL ]]; then
   export SHELL=$(which zsh)
 fi
 
+if [[ -n $TMUX ]]; then
+  #checking for insecure completion folders is slow so disable it
+  #in tmux sub-shells keep it at startup to notice bad folders
+  export ZSH_DISABLE_COMPFIX=true
+fi
+
 #update plugins when out of date
 plugins_file="$ZSH_CACHE_DIR/zsh_plugins.zsh"
 if [[ ! -e $plugins_file || $plugins_file -ot "$ZSH_INIT/zsh_plugins.txt" ]]; then

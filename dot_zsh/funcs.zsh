@@ -16,3 +16,6 @@ b() {
 	open_command .
 }
 export b
+
+## super user alias
+alias _='sudo'

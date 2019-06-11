@@ -28,7 +28,8 @@ COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 #set ls colors
-if hash dircolors 2> /dev/null; then
+if type dircolors &> /dev/null; then
   eval "$(dircolors $HOME/.dircolors.256dark)"
+  alias ls='ls --color=tty'
 fi
 export CLICOLOR=1

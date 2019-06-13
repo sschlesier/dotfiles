@@ -38,3 +38,17 @@ aliasdir src "$SRC"
 aliasdir ss "$SRC/experiment/shell-setup"
 aliasdir ss "$SRC/shell-setup"
 aliasdir sub "$SRC/ProductSubscriptions"
+
+# List directory contents
+if type exa &> /dev/null; then
+  alias ls='exa --color-scale'
+  alias lg='l --git'
+  alias l='ls -la'
+  alias ll='ls -l'
+  alias la='ls -la'
+else
+  alias ls='ls --color=tty'
+  alias l='ls -lah'
+  alias ll='ls -lh'
+  alias la='ls -lah'
+fi

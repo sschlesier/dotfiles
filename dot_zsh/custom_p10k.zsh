@@ -30,11 +30,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 #set ls colors
 if type dircolors &> /dev/null; then
   eval "$(dircolors $ZSH_INIT/dircolors.256dark)"
-  alias ls='ls --color=tty'
 fi
 export CLICOLOR=1
 
-if type exa &> /dev/null; then
-  alias ls='exa'
-  alias lg='l --git'
-fi

@@ -13,6 +13,9 @@ export FZF_DEFAULT_COMMAND="git ls-files --cached --others --exclude-standard | 
 export FZF_CTRL_T_COMMAND="fd $FD_OPTIONS"
 export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
 
+export FZF_TMUX=1
+export FZF_TMUX_HEIGHT=33%
+
 # Where is fzf installed
 if [[ -d /usr/share/fzf ]]; then
   export FZF_HOME=/usr/share/fzf

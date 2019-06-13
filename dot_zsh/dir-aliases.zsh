@@ -43,12 +43,10 @@ aliasdir sub "$SRC/ProductSubscriptions"
 if type exa &> /dev/null; then
   alias ls='exa --color-scale'
   alias lg='l --git'
-  alias l='ls -la'
-  alias ll='ls -l'
+  alias l='ls -l'
   alias la='ls -la'
 else
   alias ls='ls --color=tty'
-  alias l='ls -lah'
-  alias ll='ls -lh'
+  alias l='ls -lh'
   alias la='ls -lah'
 fi

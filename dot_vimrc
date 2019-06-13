@@ -13,11 +13,12 @@ Plugin 'VundleVim/Vundle.vim'
 
 "My Plugins here
 Plugin 'airblade/vim-gitgutter'
-Plugin 'easymotion/vim-easymotion'
 Plugin 'blueyed/vim-diminactive'
+Plugin 'easymotion/vim-easymotion'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 Plugin 'junegunn/fzf.vim'
+Plugin 'lifepillar/vim-solarized8'
 Plugin 'mileszs/ack.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'tpope/vim-commentary'

@@ -25,6 +25,7 @@ if [[ ! -e $plugins_file || $plugins_file -ot "$ZSH_INIT/zsh_plugins.txt" ]]; th
 fi
 
 autoload -U compinit && compinit
+fpath+=( "$ZSH_INIT" )
 source $plugins_file
 
 source "$ZSH_INIT/gitenv.zsh"

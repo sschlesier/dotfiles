@@ -1,0 +1,4 @@
+#! /usr/bin/env zsh
+
+update_git_plugin $(antibody home)
+update_git_plugin "$HOME/.vim/bundle/"

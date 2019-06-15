@@ -1,17 +1,16 @@
 #! /usr/bin/evn zsh
 
-update_file="$ZSH_CACHE_DIR/plugins_updated"
+fileName=plugins_updated
+updateFile="$ZSH_CACHE_DIR/$fileName"
 
-if [[ -f "$update_file" ]]; then
-  oldfile=$(find $ZSH_CACHE_DIR -maxdepth 1 -name "plugins_updated" -mtime +1w -print -quit)
+foundFile=$(find $ZSH_CACHE_DIR -maxdepth 1 -name $fileName -mtime +1w -print -quit)
 
-  if [[ -n $oldfile ]]; then
-    read "REPLY?Would you like to update all plugins? "
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-      update_all_plugins
-      touch "$update_file"
-    fi
+if [[ -n "$foundFile" ]]; then
+  read "REPLY?Would you like to update all plugins? "
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    update_all_plugins
+    touch "$updateFile"
   fi
-else
-  touch "$update_file"
+elif [[ ! -f $updateFile ]]; then
+  touch "$updateFile"
 fi

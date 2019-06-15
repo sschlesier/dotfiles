@@ -1,11 +1,15 @@
 #! /usr/bin/evn zsh
 
+zmodload zsh/datetime
+
+daysTillUpdate=7
 update_file="$ZSH_CACHE_DIR/plugins_updated"
 
-if [[ -f "$update_file" ]]; then
-  oldfile=$(find $ZSH_CACHE_DIR -maxdepth 1 -name "plugins_updated" -mtime +1w -print -quit)
+let "targetTime = $EPOCHSECONDS - (60 * 60 * 24 * $daysTillUpdate)"
 
-  if [[ -n $oldfile ]]; then
+if [[ -f "$update_file" ]]; then
+  lastUpdated=$(date -r $update_file +%s)
+  if [[ $lastUpdated < $targetTime ]]; then
     read "REPLY?Would you like to update all plugins? "
     if [[ $REPLY =~ ^[Yy]$ ]]; then
       update_all_plugins

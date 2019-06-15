@@ -34,6 +34,7 @@ source "$ZSH_INIT/dir-aliases.zsh"
 source "$ZSH_INIT/funcs.zsh"
 source "$ZSH_INIT/custom_p10k.zsh"
 source "$ZSH_INIT/fzf.zsh"
+source "$ZSH_INIT/check_plugin_update.zsh"
 source "$ZSH/lib/functions.zsh"
 source "$ZSH/lib/history.zsh"
 

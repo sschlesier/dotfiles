@@ -93,6 +93,9 @@ try
   catch
 endtry
 
+" allow tmux dimming to affect vim
+highlight Normal ctermbg=NONE ctermfg=NONE
+
 "  """"""""""""""""""""""
 "  Mappings      "
 "  """"""""""""""""""""""

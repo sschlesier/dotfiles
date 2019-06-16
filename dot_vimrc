@@ -4,34 +4,30 @@ filetype off
 " fuzzy finder
 set rtp+=$FZF_HOME
 
-set runtimepath+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
 
+" Declare the list of plugins.
+Plug 'airblade/vim-gitgutter'
+Plug 'blueyed/vim-diminactive'
+Plug 'easymotion/vim-easymotion'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'junegunn/fzf.vim'
+Plug 'lifepillar/vim-solarized8'
+Plug 'mileszs/ack.vim'
+Plug 'morhetz/gruvbox'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-airline/vim-airline'
 
-"Let vundle manage vundle
-Plugin 'VundleVim/Vundle.vim'
-
-"My Plugins here
-Plugin 'airblade/vim-gitgutter'
-Plugin 'blueyed/vim-diminactive'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'jeffkreeftmeijer/vim-numbertoggle'
-Plugin 'junegunn/fzf.vim'
-Plugin 'lifepillar/vim-solarized8'
-Plugin 'mileszs/ack.vim'
-Plugin 'morhetz/gruvbox'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'vim-airline/vim-airline'
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
-
-" All of your Plugins must be added before the following line
-call vundle#end() 
 
 " Set leader shortcut to a comma ','. By default it's the backslash
 let mapleader = " "

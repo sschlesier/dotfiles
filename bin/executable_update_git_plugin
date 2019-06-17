@@ -4,10 +4,4 @@ if [[ -n $1 ]]; then
   cd "$1"
 fi
 
-for dir in ./*/
-do
-  echo "\nupdating $dir"
-  cd "$dir"
-  git pull
-  cd ..
-done
+fd --type d --max-depth=1 | parallel "echo {}; cd {}; git pull"

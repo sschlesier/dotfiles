@@ -1,3 +1,4 @@
 #! /usr/bin/env zsh
 
-parallel update_git_plugin ::: $(antibody home) "$HOME/.vim/plugged/"
+antibody update
+nvim +PlugUpdate +qall

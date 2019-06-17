@@ -1,7 +1,0 @@
-#! /usr/bin/env zsh
-
-if [[ -n $1 ]]; then
-  cd "$1"
-fi
-
-fd --type d --max-depth=1 | parallel "echo {}; cd {}; git pull"

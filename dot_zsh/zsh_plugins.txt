@@ -1,8 +1,12 @@
 djui/alias-tips
-robbyrussell/oh-my-zsh path:plugins/docker kind:fpath #keep this before oh-my-zsh so compinit works
+# robbyrussell/oh-my-zsh path:plugins/docker kind:fpath
+robbyrussell/oh-my-zsh path:lib/functions.zsh
+robbyrussell/oh-my-zsh path:lib/history.zsh
 robbyrussell/oh-my-zsh path:plugins/git
 robbyrussell/oh-my-zsh path:plugins/vi-mode
 robbyrussell/oh-my-zsh path:plugins/web-search
+docker/docker-ce path:components/cli/contrib/completion/zsh kind:fpath
+docker/compose path:contrib/completion/zsh kind:fpath
 shyiko/commacd
 romkatv/powerlevel10k
 zsh-users/zsh-syntax-highlighting

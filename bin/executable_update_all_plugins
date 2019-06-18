@@ -1,4 +1,4 @@
 #! /usr/bin/env zsh
 
 antibody update
-nvim +PlugUpdate +qall
+nvim +PlugUpdate +PlugUpgrade +qall

@@ -20,6 +20,7 @@ Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'tweekmonster/fzf-filemru'
 Plug 'vim-airline/vim-airline'
 
 " List ends here. Plugins become visible to Vim after this call.
@@ -160,8 +161,8 @@ set listchars=tab:▸\ ,eol:¬
 set updatetime=250
 
 " fzf mappings
-nnoremap <silent> <leader>o :Files<CR>
-nnoremap <silent> <leader>O :Files!<CR>
+nnoremap <silent> <leader>o :FilesMru<CR>
+nnoremap <silent> <leader>O :FilesMru!<CR>
 cnoremap <silent> <C-p> :History:<CR>
 cnoremap <silent> <C-_> <ESC>:History/<CR>
 nnoremap <silent> <leader>y :History<CR>

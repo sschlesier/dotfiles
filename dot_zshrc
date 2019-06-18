@@ -15,17 +15,18 @@ if [[ -n $TMUX ]]; then
 fi
 
 #update plugins when out of date
-plugins_file="$ZSH_CACHE_DIR/zsh_plugins.zsh"
-plugins_src="$ZSH_INIT/zsh_plugins.txt"
+plugins_file="$ZSH_CACHE_DIR/pre_compinit_plugins.zsh"
+plugins_src="$ZSH_INIT/pre_compinit_plugins.txt"
 if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
   echo updating "$plugins_file" ...
   antibody bundle < "$plugins_src" > $plugins_file
 fi
 source $plugins_file
+
 autoload -Uz compinit && compinit
 
-plugins_file="$ZSH_CACHE_DIR/omz_plugins.zsh"
-plugins_src="$ZSH_INIT/omz_plugins.txt"
+plugins_file="$ZSH_CACHE_DIR/post_compinit_plugins.zsh"
+plugins_src="$ZSH_INIT/post_compinit_plugins.txt"
 if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
   echo updating "$plugins_file" ...
   antibody bundle < "$plugins_src" > $plugins_file

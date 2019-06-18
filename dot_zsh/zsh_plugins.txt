@@ -1,6 +1,0 @@
-djui/alias-tips
-docker/docker-ce path:components/cli/contrib/completion/zsh kind:fpath
-docker/compose path:contrib/completion/zsh kind:fpath
-shyiko/commacd
-romkatv/powerlevel10k
-zsh-users/zsh-syntax-highlighting

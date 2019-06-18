@@ -1,0 +1,6 @@
+djui/alias-tips
+robbyrussell/oh-my-zsh path:plugins/docker kind:fpath
+robbyrussell/oh-my-zsh path:plugins/docker-compose
+shyiko/commacd
+romkatv/powerlevel10k
+zsh-users/zsh-syntax-highlighting

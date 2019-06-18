@@ -2,4 +2,5 @@
 export EMAIL=scott@schlesier.ca
 export LAUNCH_TMUX=1
 export INSECURE_DOCKER=0
+export WSL=0
 # export CRED_HELPER="/mnt/c/Program\\\\ Files/Git/mingw64/libexec/git-core/git-credential-wincred.exe"

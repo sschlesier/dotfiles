@@ -26,7 +26,7 @@ if [[ -d "$HOME/.cargo/bin" ]]; then
 fi
 
 #add gems to path
-gempath="$ZSH_CACHE_DIR/.gempath"
+gempath="$ZSH_CACHE_DIR/gempath"
 #write path into a file
 if [[ ! -f $gempath ]]; then
   echo updating gempath

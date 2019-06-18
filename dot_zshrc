@@ -16,12 +16,20 @@ fi
 
 #update plugins when out of date
 plugins_file="$ZSH_CACHE_DIR/zsh_plugins.zsh"
-if [[ ! -e $plugins_file || $plugins_file -ot "$ZSH_INIT/zsh_plugins.txt" ]]; then
-  echo updating plugins...
-  antibody bundle < "$ZSH_INIT/zsh_plugins.txt" > $plugins_file
+plugins_src="$ZSH_INIT/zsh_plugins.txt"
+if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
+  echo updating "$plugins_file" ...
+  antibody bundle < "$plugins_src" > $plugins_file
 fi
+source $plugins_file
+autoload -Uz compinit && compinit
 
-autoload -U compinit && compinit
+plugins_file="$ZSH_CACHE_DIR/omz_plugins.zsh"
+plugins_src="$ZSH_INIT/omz_plugins.txt"
+if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
+  echo updating "$plugins_file" ...
+  antibody bundle < "$plugins_src" > $plugins_file
+fi
 source $plugins_file
 
 source "$ZSH_INIT/gitenv.zsh"

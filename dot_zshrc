@@ -1,6 +1,10 @@
 # zmodload zsh/zprof
 export ZSH_INIT="$HOME/.zsh"
 export ZSH_CACHE_DIR="$ZSH_INIT/cache"
+if [[ ! -d $ZSH_CACHE_DIR ]]; then
+  mkdir -p "$ZSH_CACHE_DIR"
+fi
+
 source "$ZSH_INIT/shell_environment.zsh"
 
 #set SHELL in docker containers

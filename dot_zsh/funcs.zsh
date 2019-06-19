@@ -31,3 +31,11 @@ expand-aliases() {
 
 zle -N expand-aliases
 bindkey '\e^A' expand-aliases
+
+darkmode() {
+  export LIGHT_MODE=0
+}
+
+lightmode() {
+  export LIGHT_MODE=1
+}

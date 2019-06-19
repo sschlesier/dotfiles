@@ -48,6 +48,8 @@ source "$ZSH_INIT/custom_p10k.zsh"
 source "$ZSH_INIT/fzf.zsh"
 source "$ZSH_INIT/check_plugin_update.zsh"
 
+darkmode
+
 #launch tmux or attach to existing session
 if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then
   cd "$HOME"

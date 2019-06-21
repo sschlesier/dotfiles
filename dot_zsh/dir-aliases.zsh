@@ -10,6 +10,15 @@ elif [[ -d "$HOME"/src ]]; then
   export SRC="$HOME"/src
 fi
 
+#cdpath
+cdpath=("$SRC" "$HOME")
+if [[ -n $WIN_HOME ]]; then
+  cdpath+=("$WIN_HOME")
+fi
+zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format %B%d%b
+
 aliasdir ams "$SRC/AssetMediaService"
 aliasdir ap "$SRC/IQ.Auth.Packages"
 aliasdir api "$SRC/Azure.APIManagement"

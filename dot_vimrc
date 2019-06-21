@@ -72,6 +72,7 @@ set cursorline                  " highlight cursor line
 set lazyredraw                  " Wait to redraw
 set inccommand=nosplit		" show previews inline
 set nomodeline			" disable mode line I don't use and it has vulnerability
+set colorcolumn=80		" highlight column 80
 
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')

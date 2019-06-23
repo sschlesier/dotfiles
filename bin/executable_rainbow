@@ -1,10 +1,22 @@
 #! /usr/bin/env zsh
 
-for ((i = 0; i != 32; ++i)); do
-  (( val = i * 8 ))
+if [[ $COLUMNS -ge (( 16 * 4 - 1 )) ]]; then
+  cols=16
+elif [[ $COLUMNS -ge (( 8 * 4 - 1 )) ]]; then
+  cols=8
+elif [[ $COLUMNS -ge (( 4 * 4 - 1 )) ]]; then
+  cols=4
+elif [[ $COLUMNS -ge (( 2 * 4 - 1 )) ]]; then
+  cols=2
+else
+  cols=1
+fi
+
+for ((i = 0; i != (( 256 / $cols )); ++i)); do
+  (( val = i * $cols ))
   line=( )
-  for ((j = 0; j != 8; ++j)); do
-    line+=( "%F{${(l:3::0:)val}}${(l:3::0:)val} " )
+  for ((j = 0; j != $cols; ++j)); do
+    line+=( "%F{${(l:3::0:)val}}${(l:3::0:)val}" )
     (( val = val + 1 ))
   done
   line+=( "%f" )

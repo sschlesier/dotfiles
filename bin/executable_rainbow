@@ -1,3 +1,12 @@
 #! /usr/bin/env zsh
 
-for ((i = 0; i != 256; ++i)); do print -P "%F{${(l:3::0:)i}}${(l:3::0:)i} TEST%f"; done
+for ((i = 0; i != 32; ++i)); do
+  (( val = i * 8 ))
+  line=( )
+  for ((j = 0; j != 8; ++j)); do
+    line+=( "%F{${(l:3::0:)val}}${(l:3::0:)val} " )
+    (( val = val + 1 ))
+  done
+  line+=( "%f" )
+  print -P $line
+done

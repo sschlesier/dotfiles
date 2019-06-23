@@ -33,9 +33,18 @@ zle -N expand-aliases
 bindkey '\e^A' expand-aliases
 
 darkmode() {
-  export LIGHT_MODE=0
+  if [[ -z $1 ]]; then
+    it2prof gruvbox-dark
+  fi
 }
 
 lightmode() {
-  export LIGHT_MODE=1
+  if [[ -z $1 ]]; then
+    it2prof gruvbox-light
+  fi
+}
+
+# Change iterm2 profile. Usage it2prof ProfileName (case sensitive)
+it2prof() { 
+  echo -e "\033]50;SetProfile=$1\a" 
 }

@@ -82,7 +82,7 @@ endif
 
 " Colorscheme
 syntax enable
-if $LIGHT_MODE == 1
+if $ITERM_PROFILE =~# "-light$"
   set background=light
 else
   set background=dark

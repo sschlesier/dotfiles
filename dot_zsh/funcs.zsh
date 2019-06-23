@@ -29,22 +29,25 @@ expand-aliases() {
     CURSOR=$#BUFFER
 }
 
+#turn alias into full command at prompt
 zle -N expand-aliases
 bindkey '\e^A' expand-aliases
 
 darkmode() {
-  if [[ -z $1 ]]; then
-    it2prof gruvbox-dark
-  fi
+  it2prof gruvbox-dark
 }
 
 lightmode() {
-  if [[ -z $1 ]]; then
-    it2prof gruvbox-light
-  fi
+  it2prof papercolor-light
 }
 
 # Change iterm2 profile. Usage it2prof ProfileName (case sensitive)
 it2prof() { 
   echo -e "\033]50;SetProfile=$1\a" 
+  export ITERM_PROFILE=$1
+}
+
+#update tmux environment from current server state
+tmux-update-env() {
+  source <(tmux show-environment -s)
 }

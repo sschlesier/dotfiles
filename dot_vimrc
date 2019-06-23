@@ -8,6 +8,7 @@ set rtp+=$FZF_HOME
 call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins.
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'airblade/vim-gitgutter'
 Plug 'blueyed/vim-diminactive'
 Plug 'easymotion/vim-easymotion'
@@ -84,16 +85,17 @@ endif
 syntax enable
 if $ITERM_PROFILE =~# "-light$"
   set background=light
+  try
+    colorscheme PaperColor
+    catch
+  endtry
 else
   set background=dark
+  try
+    colorscheme gruvbox
+    catch
+  endtry
 endif
-let g:solarized_termtrans = 1
-let g:solarized_termcolors=256
-
-try
-  colorscheme gruvbox
-  catch
-endtry
 
 " allow tmux dimming to affect vim
 highlight Normal ctermbg=NONE ctermfg=NONE
@@ -164,6 +166,9 @@ set listchars=tab:▸\ ,eol:¬
 
 " reduce updatetime for prompt git gutter
 set updatetime=250
+
+" allow the . to execute once for each line of a visual selection
+vnoremap . :normal .<CR>
 
 " fzf mappings
 nnoremap <silent> <leader>o :FilesMru<CR>

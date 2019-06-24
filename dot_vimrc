@@ -105,7 +105,7 @@ highlight Normal ctermbg=NONE ctermfg=NONE
 "  """"""""""""""""""""""
 
 " jj to exit insert mode
-imap jj <Esc>
+" inoremap jj <Esc>
 
 "<C-s> to save
 noremap <silent> <C-s> :update<CR>

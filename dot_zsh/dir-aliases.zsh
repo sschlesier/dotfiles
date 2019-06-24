@@ -59,3 +59,7 @@ else
   alias l='ls -lh'
   alias la='ls -lah'
 fi
+
+# change directories
+alias -- -='cd -'
+alias ..='cd ../'

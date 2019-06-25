@@ -2,4 +2,4 @@
 
 antibody update
 nvim +PlugUpdate +PlugUpgrade +qall
-"$HOME/.tmux/plugins/tpm/bin/update_plugins all"
+"$HOME/.tmux/plugins/tpm/bin/update_plugins" all

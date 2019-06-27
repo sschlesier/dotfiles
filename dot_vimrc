@@ -125,6 +125,9 @@ map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
 
+" allow the . to execute once for each line of a visual selection
+vnoremap . :normal .<CR>
+
 "highlight active split by enabling syntax higlighting
 let g:diminactive_use_syntax = 0
 let g:diminactive_use_colorcolumn = 1

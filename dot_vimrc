@@ -13,7 +13,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'blueyed/vim-diminactive'
 Plug 'easymotion/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
+" Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'junegunn/fzf.vim'
 Plug 'lifepillar/vim-solarized8'
 Plug 'mileszs/ack.vim'
@@ -54,7 +54,7 @@ set backspace=indent,eol,start  " Makes backspace key more powerful.
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
 set noerrorbells                " No beeps
-set number relativenumber       " Show line numbers
+set nonumber norelativenumber   " Show line numbers
 set showcmd                     " Show me what I'm typing
 set noswapfile                  " Don't use swapfile
 set nobackup                    " Don't create annoying backup files
@@ -70,11 +70,11 @@ set smartcase                   " ... but not it begins with upper case
 set completeopt=menu,menuone    " Show popup menu, even if there is one entry
 set pumheight=10                " Completion window max size
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
-set cursorline                  " highlight cursor line
+set nocursorline                " highlight cursor line
 set lazyredraw                  " Wait to redraw
 set inccommand=nosplit		" show previews inline
 set nomodeline			" disable mode line I don't use and it has vulnerability
-set colorcolumn=80		" highlight column 80
+" set colorcolumn=80		" highlight column 80
 
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')

@@ -8,11 +8,12 @@ set rtp+=$FZF_HOME
 call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins.
+" Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'airblade/vim-gitgutter'
 Plug 'blueyed/vim-diminactive'
+Plug 'bronson/vim-trailing-whitespace'
 Plug 'editorconfig/editorconfig-vim'
-" Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'junegunn/fzf.vim'
 Plug 'lifepillar/vim-solarized8'
 Plug 'mileszs/ack.vim'

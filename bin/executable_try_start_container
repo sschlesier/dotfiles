@@ -1,0 +1,7 @@
+#! /bin/sh
+
+if docker container inspect $1 > /dev/null 2>&1; then
+  docker start $1
+else
+  exit 1
+fi

@@ -1,6 +1,8 @@
 #! /bin/sh
 
-docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=MyPassw0rd!' \
-   -p 1433:1433 --name sqlserver --rm -d \
-   -v sqlserver:/var/opt/mssql \
-   mcr.microsoft.com/mssql/server:2017-latest
+if ! try_start_container sqlserver; then
+  docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=MyPassw0rd!' \
+     -p 1433:1433 --name sqlserver -d \
+     -v sqlserver:/var/opt/mssql \
+     mcr.microsoft.com/mssql/server:2017-latest
+fi

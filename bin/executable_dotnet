@@ -1,0 +1,3 @@
+#! /bin/bash
+
+$C_ROOT/Program\ Files/dotnet/dotnet.exe "$@"

@@ -1,0 +1,3 @@
+#! /bin/bash
+
+$WIN_HOME/Dropbox/tools/sbutils/sbutils.exe "$@"

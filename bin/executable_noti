@@ -1,0 +1,3 @@
+#! /bin/sh
+
+$WIN_HOME/Dropbox/tools/noti.exe "$@"

@@ -1,0 +1,3 @@
+#! /bin/sh
+
+$C_ROOT/Windows/System32/clip.exe

@@ -30,4 +30,5 @@ fi #[[ ! -f $gitenv ]];
 alias gt='printf "\033[?7l$(git tree --color=always | head -n$(($LINES - 4)))\033[?7h"'
 alias gta='git tree --all'
 unalias grv #expose the git repo viewer tool
+alias gh='gitit'
 

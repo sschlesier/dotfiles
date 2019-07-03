@@ -18,6 +18,9 @@ if [[ -n $TMUX ]]; then
   export ZSH_DISABLE_COMPFIX=true
 fi
 
+#redefine xdg-open
+alias xdg-open='open_command'
+
 #update plugins when out of date
 #pre-compinit seems to make compinit SLOW on WSL
 if [[ $WSL -ne 1 ]]; then

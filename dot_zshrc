@@ -6,6 +6,7 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 
 source "$ZSH_INIT/shell_environment.zsh"
+source "$ZSH_INIT/path.zsh"
 
 #set SHELL in docker containers
 if [[ -z $SHELL ]]; then
@@ -44,7 +45,6 @@ fi
 source $plugins_file
 
 source "$ZSH_INIT/gitenv.zsh"
-source "$ZSH_INIT/path.zsh"
 source "$ZSH_INIT/dir-aliases.zsh"
 source "$ZSH_INIT/funcs.zsh"
 source "$ZSH_INIT/custom_p10k.zsh"

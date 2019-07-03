@@ -75,3 +75,4 @@ export LESS=-RFMX
 alias vim=nvim
 alias v=nvim
 alias opn="open_command"
+alias ddgr='ddgr -n 5'

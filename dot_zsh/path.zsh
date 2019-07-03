@@ -1,3 +1,10 @@
+#only define paths once
+if [[ -n $PATHS_DEFINED ]]; then
+  return
+else
+  export PATHS_DEFINED=1
+fi
+
 #define paths for windows file system access
 if [[ -d /mnt/c ]]; then
   export C_ROOT=/mnt/c
@@ -8,12 +15,6 @@ if [[ -d /mnt/c ]]; then
   if [[ -d $C_ROOT/Program\ Files ]]; then
     export PRG_FILES=$C_ROOT/Program\ Files
   fi
-fi
-
-#include /winbin on path
-if [[ -d "$HOME/winbin" ]]; then
-  PATH+=:"$HOME/winbin"
-  alias llw="ls -l $HOME/winbin"
 fi
 
 #include /bin on path
@@ -44,8 +45,8 @@ fi
 if [[ -n $C_ROOT ]]; then
   #remove windows folders
   PATH=$(echo $PATH | tr ':' '\n' | grep -v $C_ROOT | tr '\n' ':')
-  #strip trailing :
-  PATH=${PATH%:}
+  #restore system32
+  PATH+=$C_ROOT/Windows/System32
   export PATH
 fi
 

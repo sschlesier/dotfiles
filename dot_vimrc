@@ -71,9 +71,11 @@ set pumheight=10                " Completion window max size
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
 set nocursorline                " highlight cursor line
 set lazyredraw                  " Wait to redraw
-set inccommand=nosplit		" show previews inline
-set nomodeline			" disable mode line I don't use and it has vulnerability
-" set colorcolumn=80		" highlight column 80
+set inccommand=nosplit          " show previews inline
+set nomodeline                  " disable mode line I don't use and it has vulnerability
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+set list                        " show whitespace
+" set colorcolumn=80            " highlight column 80
 
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')
@@ -163,9 +165,6 @@ nnoremap <c-l> <c-w>l
 
 " run the current line as a command
 nnoremap <leader>e :exe getline(line('.'))<cr>
-
-"set symbols for tabs and EOL
-set listchars=tab:▸\ ,eol:¬
 
 " reduce updatetime for prompt git gutter
 set updatetime=250

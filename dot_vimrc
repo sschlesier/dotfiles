@@ -11,6 +11,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'airblade/vim-gitgutter'
+Plug 'aklt/plantuml-syntax'
 Plug 'blueyed/vim-diminactive'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'editorconfig/editorconfig-vim'

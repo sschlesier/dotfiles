@@ -1,4 +1,4 @@
-{{- if eq .chezmoi.os "darwin" }}#!/usr/bin/env ruby
+#!/usr/bin/env ruby
 
 output = `pmset -g batt`
 powerSource = output.match( /'(\w+)/ )[1][0,4]
@@ -15,4 +15,3 @@ display += ':' + percent if percent != '100%'
 display += '-' + time if time != '' && time != '0:00'
 
 puts display
-{{- end }}

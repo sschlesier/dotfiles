@@ -1,0 +1,9 @@
+#! /usr/bin/env zsh
+
+echo checking for updates
+for changed in $(fd $@ --changed-within=10s)
+do
+	plantuml "$changed"
+	echo updated "$changed"
+done
+echo done

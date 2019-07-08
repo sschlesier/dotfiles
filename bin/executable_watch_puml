@@ -1,0 +1,8 @@
+#! /usr/bin/env zsh
+
+extensions=(-e puml -e pml)
+
+while true;
+	do fd $extensions | \
+		entr -d -c puml $extensions
+done

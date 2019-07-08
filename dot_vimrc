@@ -103,7 +103,7 @@ endif
 "<C-s> to save
 noremap <silent> <C-s> :update<CR>
 vnoremap <silent> <C-s> <C-C>:update<CR>
-inoremap <silent> <C-s> <C-O>:update<CR>
+inoremap <silent> <C-s> <Esc>:update<CR>
 
 " clear search highlights
 map <leader>l :nohlsearch<CR>

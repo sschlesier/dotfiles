@@ -5,7 +5,7 @@ mcd() {
 }
 export mcd
 
-#make director w/ current date
+#make directory w/ current date
 mdd() {
   mcd $(date '+%Y-%m-%d')
 }
@@ -42,12 +42,17 @@ lightmode() {
 }
 
 # Change iterm2 profile. Usage it2prof ProfileName (case sensitive)
-it2prof() { 
-  echo -e "\033]50;SetProfile=$1\a" 
+it2prof() {
+  echo -e "\033]50;SetProfile=$1\a"
   export ITERM_PROFILE=$1
 }
 
 #update tmux environment from current server state
 tmux-update-env() {
   source <(tmux show-environment -s)
+}
+
+#search dash
+dash() {
+	open dash://"$1"
 }

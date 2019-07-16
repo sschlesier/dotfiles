@@ -18,6 +18,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
@@ -169,3 +170,8 @@ inoremap <silent> <F1> <ESC>:Helptags<CR>
 noremap <silent> <leader>; :Commands<CR>
 inoremap <silent> <F3> <ESC>:Snippets<CR>
 nnoremap <silent> <leader>f :Ag<CR>
+
+" Fugitive Conflict Resolution
+nnoremap <leader>gd :Gvdiff<CR>
+nnoremap gdh :diffget //2<CR>
+nnoremap gdl :diffget //3<CR>

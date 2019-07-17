@@ -8,7 +8,6 @@ set rtp+=$FZF_HOME
 call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins.
-" Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'airblade/vim-gitgutter'
 Plug 'aklt/plantuml-syntax'
@@ -69,6 +68,8 @@ set nocursorline                " highlight cursor line
 set lazyredraw                  " Wait to redraw
 set inccommand=nosplit          " show previews inline
 set nomodeline                  " disable mode line I don't use and it has vulnerability
+
+" visible whitespace
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
 set list                        " show whitespace
 
@@ -97,10 +98,13 @@ endif
 " allow tmux dimming to affect vim
 " highlight Normal ctermbg=NONE ctermfg=NONE
 
+"highlight active split by enabling syntax higlighting
+let g:diminactive_use_syntax = 0
+let g:diminactive_use_colorcolumn = 1
+
 "  """"""""""""""""""""""
 "  Mappings      "
 "  """"""""""""""""""""""
-
 "<C-s> to save
 noremap <silent> <C-s> :update<CR>
 vnoremap <silent> <C-s> <C-C>:update<CR>
@@ -121,9 +125,8 @@ map <C-l> <C-w>l
 " allow the . to execute once for each line of a visual selection
 vnoremap . :normal .<CR>
 
-"highlight active split by enabling syntax higlighting
-let g:diminactive_use_syntax = 0
-let g:diminactive_use_colorcolumn = 1
+"toggle whitespace
+nnoremap <leader>w :set list!<CR>
 
 ""Move up and down by displayed lines (e.g. don't skip through a wrapped line)
 noremap <Up> gk

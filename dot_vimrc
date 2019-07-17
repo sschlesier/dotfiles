@@ -68,6 +68,7 @@ set nocursorline                " highlight cursor line
 set lazyredraw                  " Wait to redraw
 set inccommand=nosplit          " show previews inline
 set nomodeline                  " disable mode line I don't use and it has vulnerability
+set scrolloff=10                " minimum 10 lines around cursor when jumping
 
 " visible whitespace
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣

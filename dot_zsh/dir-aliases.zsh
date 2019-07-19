@@ -48,7 +48,7 @@ aliasdir sub "$SRC/ProductSubscriptions"
 
 # List directory contents
 if type exa &> /dev/null; then
-  alias ls='exa --color-scale'
+  alias ls='exa --color-scale --icons'
   alias lg='l --git'
   alias l='ls -l'
   alias la='ls -la'

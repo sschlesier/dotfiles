@@ -22,6 +22,7 @@ zstyle ':completion:*:descriptions' format %B%d%b
 aliasdir ams "$SRC/AssetMediaService"
 aliasdir ap "$SRC/IQ.Auth.Packages"
 aliasdir api "$SRC/Azure.APIManagement"
+aliasdir au "$SRC/Auth"
 aliasdir bsn "$SRC/BuildScripts.Net"
 aliasdir ca "$SRC/Catalogs"
 aliasdir cn "$SRC/CatalogNexus"

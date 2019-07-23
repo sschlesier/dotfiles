@@ -5,5 +5,6 @@ if ! try_start_container elastic; then
 	-e "discovery.type=single-node" \
 	--name elastic \
 	-v elasticsearch:/usr/share/elasticsearch/data \
+	--restart=unless-stopped \
 	elasticsearch:5.6
 fi

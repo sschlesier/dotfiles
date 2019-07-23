@@ -4,5 +4,6 @@ if ! try_start_container mongo; then
   docker run -d --name mongo \
 	-p 27017:27017 \
 	-v mongo:/data/db \
+	--restart=unless-stopped \
 	mongo:4.0
 fi

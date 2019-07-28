@@ -17,6 +17,13 @@ if [[ -d /mnt/c ]]; then
   fi
 fi
 
+if [[ -n $C_ROOT ]]; then
+  #remove windows folders
+  PATH=$(echo $PATH | tr ':' '\n' | grep -v $C_ROOT | tr '\n' ':')
+  #restore system32
+  PATH+=$C_ROOT/Windows/System32
+fi
+
 #include /bin on path
 PATH+=:"$HOME/bin"
 alias llb="ls -l $HOME/bin"
@@ -42,12 +49,10 @@ if [[ -s $gempath ]]; then
   PATH+=:$(cat "$gempath")
 fi
 
-if [[ -n $C_ROOT ]]; then
-  #remove windows folders
-  PATH=$(echo $PATH | tr ':' '\n' | grep -v $C_ROOT | tr '\n' ':')
-  #restore system32
-  PATH+=$C_ROOT/Windows/System32
-  export PATH
+#add golang to path
+if type go > /dev/null; then
+  export GOPATH=$HOME/go
+  PATH+=:"$GOPATH/bin"
 fi
 
 #de-duplicate path

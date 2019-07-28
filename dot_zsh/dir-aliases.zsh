@@ -1,19 +1,19 @@
 aliasdir() {
-if [[ -d "$2" ]]; then
-  alias "$1"="cd $2"
-fi
+	if [[ -d "$2" ]]; then
+		alias "$1"="cd $2"
+	fi
 }
 
 if [[ -d "$C_ROOT"/src ]]; then
-  export SRC="$C_ROOT"/src
+	export SRC="$C_ROOT"/src
 elif [[ -d "$HOME"/src ]]; then
-  export SRC="$HOME"/src
+	export SRC="$HOME"/src
 fi
 
 #cdpath
 cdpath=("$SRC" "$HOME")
 if [[ -n $WIN_HOME ]]; then
-  cdpath+=("$WIN_HOME")
+	cdpath+=("$WIN_HOME")
 fi
 zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
 zstyle ':completion:*' group-name ''
@@ -49,16 +49,24 @@ aliasdir sub "$SRC/ProductSubscriptions"
 
 # List directory contents
 if type exa &> /dev/null; then
-  alias ls='exa --color-scale --icons'
-  alias lg='l --git'
-  alias l='ls -l'
-  alias la='ls -la'
+	alias ls='exa --color-scale --icons'
+	alias lg='l --git'
+	alias l='ls -l'
+	alias la='ls -la'
 else
-  alias ls='ls --color=tty'
-  alias l='ls -lh'
-  alias la='ls -lah'
+	alias ls='ls --color=tty'
+	alias l='ls -lh'
+	alias la='ls -lah'
 fi
 
 # change directories
 alias -- -='cd -'
 alias ..='cd ../'
+
+#Windows Home dir
+if [[ -n $WIN_HOME ]]; then
+	alias wh="cd $WIN_HOME"
+fi
+
+#list files in ~/bin
+alias llb="ls -l $HOME/bin"

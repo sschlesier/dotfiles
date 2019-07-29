@@ -33,3 +33,7 @@ if type dircolors &> /dev/null; then
 fi
 export CLICOLOR=1
 
+typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
+typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
+typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=40

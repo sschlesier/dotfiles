@@ -72,6 +72,5 @@ DEFAULT_USER=$(whoami)
 
 export EDITOR=nvim
 export LESS=-RFMX
-alias vim=nvim
 alias v=nvim
 alias open="open_command"

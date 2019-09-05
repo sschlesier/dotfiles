@@ -51,3 +51,8 @@ it2prof() {
 tmux-update-env() {
 source <(tmux show-environment -s)
 }
+
+#ensure files are unix line endings before staging them in git
+gle() {
+	dos2unix --keep-bom $(git status --short | awk --field-separator ' ' '{print $2}')
+}

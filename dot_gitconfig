@@ -26,3 +26,5 @@
 	prompt = false
 [diff]
 	tool = vimdiff
+[alias]
+	ignore = "!gi() { curl -sL https://www.gitignore.io/api/$@ ;}; gi"

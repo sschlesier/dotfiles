@@ -55,6 +55,7 @@ if type exa &> /dev/null; then
 	alias lg='l --git'
 	alias l='ls -l'
 	alias la='ls -la'
+	alias lt='ls -T'
 else
 	alias ls='ls --color=tty'
 	alias l='ls -lh'

@@ -14,9 +14,6 @@ Plug 'aklt/plantuml-syntax'
 Plug 'blueyed/vim-diminactive'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'editorconfig/editorconfig-vim'
-if $GOPATH != ""
-	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-endif
 Plug 'gruvbox-community/gruvbox'
 Plug 'junegunn/fzf.vim'
 Plug 'pgdouyon/vim-yin-yang'

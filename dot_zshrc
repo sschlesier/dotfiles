@@ -51,7 +51,7 @@ source "$ZSH_INIT/check_plugin_update.zsh"
 #launch tmux or attach to existing session
 if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then
   cd "$HOME"
-  tmux attach 2>/dev/null || exec tmux new
+  tmux attach 2>/dev/null || exec tmux new -s misc
 fi
 
 if [[ $INSECURE_DOCKER -eq 1 ]]; then

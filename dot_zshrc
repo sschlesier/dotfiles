@@ -71,3 +71,4 @@ export EDITOR=nvim
 export LESS=-RFMX
 alias v=nvim
 alias open="open_command"
+alias ag="ag --color"

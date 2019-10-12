@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
 
-nvim $WIN_HOME/Dropbox/AHK/startup.ahk
+nvim $WIN_HOME/OneDrive/settings/AHK/startup.ahk

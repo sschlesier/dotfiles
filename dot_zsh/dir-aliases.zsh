@@ -43,12 +43,14 @@ aliasdir fo "$SRC/Foundation.Outbox"
 aliasdir fw "$SRC/Foundation.WebApi"
 aliasdir im "$SRC/IQ.Messaging"
 aliasdir mg "$SRC/Monitoring.Graphite"
+aliasdir od "$WIN_HOME/OneDrive"
 aliasdir pe "$SRC/product-excellence"
 aliasdir pl "$SRC/ProductLibrary"
 aliasdir sbm "$SRC/ServiceBusMonitor"
 aliasdir src "$SRC"
 aliasdir ss "$SRC/shell-setup"
 aliasdir sub "$SRC/ProductSubscriptions"
+aliasdir to "$WIN_HOME/tools"
 
 # List directory contents
 if type exa &> /dev/null; then

@@ -1,6 +1,6 @@
 #make directory and cd to it
 mcd() {
-	mkdir "$1"
+	mkdir -p "$1"
 	cd "$1"
 }
 export mcd

@@ -1,4 +1,4 @@
 #! /usr/bin/env zsh
 
-bkupdir=$WIN_HOME/Desktop/WSLbkup
-cp -vr $bkupdir/. ~/
+bkupdir="$DESKTOP/WSLbkup"
+cp -vr "$bkupdir/." ~/

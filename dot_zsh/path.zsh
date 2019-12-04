@@ -10,6 +10,12 @@ if [[ -n $(type wslpath) ]]; then
 	export C_ROOT=$(wslpath "$(wslvar --sys SystemDrive)\\")
 	export WIN_HOME=$(wslpath "$(wslvar --sys USERPROFILE)")
 	export PRG_FILES=$(wslpath "$(wslvar --sys PROGRAMFILES)")
+	export DESKTOP=$(wslpath "$(wslvar --shell Desktop)")
+fi
+
+#set Desktop for non-windows
+if [[ -z $DESKTOP ]]; then
+	export DESKTOP="$HOME/Desktop"
 fi
 
 if [[ -n $C_ROOT ]]; then

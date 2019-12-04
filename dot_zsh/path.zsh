@@ -6,14 +6,10 @@ else
 fi
 
 #define paths for windows file system access
-if [[ -d /mnt/c ]]; then
-	export C_ROOT=/mnt/c
-	if [[ -d $C_ROOT/Users/Scott.Schlesier ]]; then
-		export WIN_HOME=$C_ROOT/Users/Scott.Schlesier
-	fi
-	if [[ -d $C_ROOT/Program\ Files ]]; then
-		export PRG_FILES=$C_ROOT/Program\ Files
-	fi
+if [[ -n $(type wslpath) ]]; then
+	export C_ROOT=$(wslpath "$(wslvar --sys SystemDrive)\\")
+	export WIN_HOME=$(wslpath "$(wslvar --sys USERPROFILE)")
+	export PRG_FILES=$(wslpath "$(wslvar --sys PROGRAMFILES)")
 fi
 
 if [[ -n $C_ROOT ]]; then

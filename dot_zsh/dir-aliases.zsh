@@ -1,6 +1,6 @@
 aliasdir() {
 	if [[ -d "$2" ]]; then
-		alias "$1"="cd $2"
+		alias "$1"="cd \"$2\""
 	fi
 }
 
@@ -29,8 +29,7 @@ aliasdir ca "$SRC/Catalogs"
 aliasdir cc "$SRC/CodingChallenge1"
 aliasdir cn "$SRC/CatalogNexus"
 aliasdir cost "$SRC/IQ.Platform.Cost"
-aliasdir de "$HOME/Desktop"
-aliasdir de "$Desktop"
+aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"
 aliasdir dow "$WIN_HOME/Downloads"
 aliasdir dr "$HOME/Dropbox"

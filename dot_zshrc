@@ -48,6 +48,9 @@ if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
 fi
 source $plugins_file
 
+#disable LS_COLORS
+unset LS_COLORS
+
 source "$ZSH_INIT/gitenv.zsh"
 source "$ZSH_INIT/dir-aliases.zsh"
 source "$ZSH_INIT/funcs.zsh"

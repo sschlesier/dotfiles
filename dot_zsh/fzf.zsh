@@ -36,7 +36,11 @@ fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "$FZF_HOME/shell/completion.zsh" 2> /dev/null
+# if interactive shell
+if [[ $- == *i* ]]; then
+	[[ -e "$FZF_HOME/shell/completion.zsh" ]] && source "$FZF_HOME/shell/completion.zsh" 2> /dev/null
+	[[ -e /usr/share/zsh/site-functions/fzf ]] && source /usr/share/zsh/site-functions/fzf 2> /dev/null
+fi
 
 # Key bindings
 # ------------

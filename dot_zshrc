@@ -1,3 +1,6 @@
+#disable tty XON/XOFF via ^S, ^Q
+stty -ixon
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
@@ -66,9 +69,6 @@ fi
 if [[ $INSECURE_DOCKER -eq 1 ]]; then
   export DOCKER_HOST=tcp://127.0.0.1:2375
 fi
-
-#disable tty XON/XOFF via ^S, ^Q
-stty -ixon
 
 #omit l and git status from history
 HISTIGNORE='l:gst: '

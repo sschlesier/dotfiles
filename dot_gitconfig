@@ -3,6 +3,7 @@
 [core]
 	autocrlf = input
 	excludesfile = /Users/scotts/.gitignore_global
+	safecrlf = false
 [include]
 	path = ~/.git-alias.config
 	path = ~/.git-indirection

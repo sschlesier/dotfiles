@@ -6,7 +6,7 @@ else
 fi
 
 #define paths for windows file system access
-if [[ -n $(type wslpath) ]]; then
+if type wslpath > /dev/null; then
 	export C_ROOT=$(wslpath "$(wslvar --sys SystemDrive)\\")
 	export WIN_HOME=$(wslpath "$(wslvar --sys USERPROFILE)")
 	export PRG_FILES=$(wslpath "$(wslvar --sys PROGRAMFILES)")

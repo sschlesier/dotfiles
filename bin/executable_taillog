@@ -1,4 +1,17 @@
 #! /bin/bash
 
-#tail -f $(find . -wholename "./**/logs/*.log") | lch -c ~/bin/lch.conf
+trap completion_trap 1 2 3 9 15
+
+completion_trap()
+{
+	#allows script to complete
+	:
+}
+
+#disable automargin in a tmux compatible fashion
+printf "\033[?7l"
+
 tail -f $(findlogs) | lch -c ~/bin/lch.conf
+
+#enable automargin again
+printf "\033[?7h"

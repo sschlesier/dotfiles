@@ -28,6 +28,11 @@ fi
 #include /bin on path
 PATH+=:"$HOME/bin"
 
+#include .local/bin on path
+if [[ -d "$HOME/.local/bin" ]]; then
+	PATH+=:"$HOME/.local/bin"
+fi
+
 #include .cargo/bin on path
 if [[ -d "$HOME/.cargo/bin" ]]; then
 	PATH+=:"$HOME/.cargo/bin"

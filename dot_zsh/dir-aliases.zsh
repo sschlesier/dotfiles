@@ -54,7 +54,7 @@ aliasdir to "$WIN_HOME/tools"
 
 # List directory contents
 if type exa &> /dev/null; then
-	alias ls='exa --color-scale --icons'
+	alias ls='exa --color-scale --icons --group-directories-first'
 	alias lg='l --git'
 	alias l='ls -l'
 	alias la='ls -la'

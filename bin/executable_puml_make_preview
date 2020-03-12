@@ -1,0 +1,8 @@
+#! /usr/bin/env zsh
+
+echo '# Preview puml\n' > preview.md
+
+for png in ./*.png; do
+	echo '## '$png:t >> preview.md
+	echo '!['$png:t']('$png')' >> preview.md
+done

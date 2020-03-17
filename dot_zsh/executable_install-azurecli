@@ -1,7 +1,7 @@
 #! /usr/bin/env zsh
 
-read -p "Do you want to install Azure CLI? " -n 1 -r -t 15
-if [[ $REPLY =~^[Yy]$ ]]; then
+read -p "?Do you want to install Azure CLI? " -q
+if [[ $REPLY == "y" ]]; then
 	sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 
 	sudo sh -c 'echo -e "[azure-cli]

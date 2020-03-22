@@ -4,12 +4,12 @@
 bind -n M-n split-window -t :.1 -c "#{pane_current_path}" \;\
         swap-pane -s :.1 -t :.2 \;\
         select-layout main-vertical \;\
-        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}/2/1\" | bc)\""
+        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""
 
 # Kill pane
 bind -n C-d kill-pane -t :. \;\
         select-layout main-vertical \;\
-        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}/2/1\" | bc)\"" \;\
+        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\"" \;\
         select-pane -t :.1
 
 

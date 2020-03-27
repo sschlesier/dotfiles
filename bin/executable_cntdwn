@@ -1,0 +1,33 @@
+#! /usr/bin/env zsh
+
+statefile="$HOME/.cntdwn"
+zparseopts -E -A args u=cntup -up=cntup t::=timer
+
+#echo args: ${(kv)args}
+
+if [[ -z $cntup ]] && [[ -z $timer ]]; then
+	read target <$statefile
+
+	if [[ $target -gt 0 ]]; then
+		((remain = $target - $(date +%s) ))
+		if [[ $remain -lt 0 ]]; then
+			remain=0
+		fi
+	else
+		((remain = $(date +%s) - -1 * target ))
+	fi
+
+	echo $(date -r $remain +%Mm:%Ss)
+	exit 0
+
+elif [[ -n $timer ]]; then
+	limit=$args[-t]
+	if [[ -z $limit ]]; then
+		limit=1200
+	fi
+	((target = $(date +%s) + $limit ))
+else
+	((target = $(date +%s) * -1 ))
+fi
+
+echo $target >$statefile

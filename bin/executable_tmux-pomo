@@ -1,0 +1,59 @@
+#! /usr/bin/env zsh
+
+statefile="$HOME/.pomo"
+short_break=300
+long_break=1800
+pomo=1200
+first_state=1
+last_state=8
+
+function startTimeAndWriteState() {
+	cntdwn -t $1
+	(( expiry = $(date +%s) + $1 ))
+	echo "$2\n$expiry" >$statefile
+}
+
+# schedule
+# 0 - uninit
+# 1 - 20m pomo
+# 2 - 5m break
+# 3 - 20m pomo
+# 4 - 5m break
+# 5 - 20m pomo
+# 6 - 5m break
+# 7 - 20m pomo
+# 8 - 30m break
+function advanceState() {
+	(( nextState = $curState + 1 ))
+	if [[ $nextState -gt $last_state ]]; then
+		nextState=$first_state
+	fi
+
+	(( remainder = $nextState % 2 ))
+
+	#big break
+	if [[ $nextState -eq $last_state ]]; then
+		startTimeAndWriteState $long_break $nextState
+	elif [[ $remainder -eq 1 ]]; then
+		startTimeAndWriteState $pomo $nextState
+	else
+		startTimeAndWriteState $short_break $nextState
+	fi
+}
+
+if [[ -e $statefile ]]; then
+	exec {fd} <$statefile
+	read curState <&$fd
+	read expiry <&$fd
+	# exec $fd <&-
+else
+	curState=0
+	expiry=0
+fi
+
+if [[ $expiry -le $(date +%s) ]]; then
+	advanceState $curState
+else
+	echo Still running $curState
+fi
+

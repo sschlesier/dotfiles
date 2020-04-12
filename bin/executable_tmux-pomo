@@ -13,8 +13,7 @@ zparseopts -E -A args a=advance -advance=advance
 
 function startTimerAndWriteState() {
 	cntdwn -t $1 > /dev/null
-	stateCnt=$2
-	echo "$stateCnt" >$statefile
+	echo "$currentState" >$statefile
 }
 
 # schedule
@@ -28,30 +27,30 @@ function startTimerAndWriteState() {
 # 7 - 20m pomo
 # 8 - 30m break
 function advanceState() {
-	(( nextState = $stateCnt + 1 ))
-	if [[ $nextState -gt $last_state ]]; then
-		nextState=$first_state
+	(( currentState = $currentState + 1 ))
+	if [[ $currentState -gt $last_state ]]; then
+		currentState=$first_state
 	fi
 
-	(( remainder = $nextState % 2 ))
-	(( stepNum = ($nextState + $remainder) / 2 ))
+	(( remainder = $currentState % 2 ))
+	(( stepNum = ($currentState + $remainder) / 2 ))
 
-	if [[ $nextState -eq $last_state ]]; then
-		startTimerAndWriteState $long_break $nextState
+	if [[ $currentState -eq $last_state ]]; then
+		startTimerAndWriteState $long_break
 	elif [[ $remainder -eq 1 ]]; then
-		startTimerAndWriteState $pomo $nextState
+		startTimerAndWriteState $pomo
 	else
-		startTimerAndWriteState $short_break $nextState
+		startTimerAndWriteState $short_break
 	fi
 }
 
 function setStateName() {
-	(( remainder = $stateCnt % 2 ))
-	(( stepNum = ($stateCnt + $remainder) / 2 ))
+	(( remainder = $currentState % 2 ))
+	(( stepNum = ($currentState + $remainder) / 2 ))
 
-	if [[ $stateCnt = 0 ]]; then
+	if [[ $currentState = 0 ]]; then
 		stateName="Not started"
-	elif [[ $stateCnt -eq $last_state ]]; then
+	elif [[ $currentState -eq $last_state ]]; then
 		stateName="Big break"
 	elif [[ $remainder -eq 1 ]]; then
 		stateName="Pomo $stepNum"
@@ -66,14 +65,14 @@ function printState() {
 }
 
 if [[ -e $statefile ]]; then
-	read stateCnt <$statefile
+	read currentState <$statefile
 else
-	stateCnt=0
+	currentState=0
 fi
 
 if [[ -n $advance ]]; then
 	if [[ $(cntdwn -e) = 0 ]]; then
-		advanceState $stateCnt
+		advanceState $currentState
 	else
 		print Still running
 	fi

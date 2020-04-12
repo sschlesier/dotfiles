@@ -7,10 +7,14 @@ pomo=1200
 first_state=1
 last_state=8
 
-function startTimeAndWriteState() {
-	cntdwn -t $1
-	(( expiry = $(date +%s) + $1 ))
-	echo "$2\n$expiry" >$statefile
+zparseopts -E -A args a=advance -advance=advance
+
+# echo args: ${(kv)args}
+
+function startTimerAndWriteState() {
+	cntdwn -t $1 > /dev/null
+	stateCnt=$2
+	echo "$stateCnt" >$statefile
 }
 
 # schedule
@@ -24,36 +28,55 @@ function startTimeAndWriteState() {
 # 7 - 20m pomo
 # 8 - 30m break
 function advanceState() {
-	(( nextState = $curState + 1 ))
+	(( nextState = $stateCnt + 1 ))
 	if [[ $nextState -gt $last_state ]]; then
 		nextState=$first_state
 	fi
 
 	(( remainder = $nextState % 2 ))
+	(( stepNum = ($nextState + $remainder) / 2 ))
 
-	#big break
 	if [[ $nextState -eq $last_state ]]; then
-		startTimeAndWriteState $long_break $nextState
+		startTimerAndWriteState $long_break $nextState
 	elif [[ $remainder -eq 1 ]]; then
-		startTimeAndWriteState $pomo $nextState
+		startTimerAndWriteState $pomo $nextState
 	else
-		startTimeAndWriteState $short_break $nextState
+		startTimerAndWriteState $short_break $nextState
 	fi
 }
 
+function setStateName() {
+	(( remainder = $stateCnt % 2 ))
+	(( stepNum = ($stateCnt + $remainder) / 2 ))
+
+	if [[ $stateCnt = 0 ]]; then
+		stateName="Not started"
+	elif [[ $stateCnt -eq $last_state ]]; then
+		stateName="Big break"
+	elif [[ $remainder -eq 1 ]]; then
+		stateName="Pomo $stepNum"
+	else
+		stateName="Break $stepNum"
+	fi
+}
+
+function printState() {
+	setStateName
+	print $stateName: $(cntdwn)
+}
+
 if [[ -e $statefile ]]; then
-	exec {fd} <$statefile
-	read curState <&$fd
-	read expiry <&$fd
-	# exec $fd <&-
+	read stateCnt <$statefile
 else
-	curState=0
-	expiry=0
+	stateCnt=0
 fi
 
-if [[ $expiry -le $(date +%s) ]]; then
-	advanceState $curState
-else
-	echo Still running $curState
+if [[ -n $advance ]]; then
+	if [[ $(cntdwn -e) = 0 ]]; then
+		advanceState $stateCnt
+	else
+		print Still running
+	fi
 fi
 
+printState

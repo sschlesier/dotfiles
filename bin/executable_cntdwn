@@ -1,9 +1,22 @@
 #! /usr/bin/env zsh
 
 statefile="$HOME/.cntdwn"
-zparseopts -E -A args u=cntup -up=cntup t::=timer
+zparseopts -E -A args u=cntup -up=cntup t::=timer e=epoch
 
-#echo args: ${(kv)args}
+# echo args: ${(kv)args}
+
+function printRemain() {
+	local remain=$1
+	if [[ -n $epoch ]]; then
+		print $remain
+	else
+		if [[ $(uname) = Linux ]]; then
+			print $(date -d "@$remain" +%Mm:%Ss)
+		else
+			print $(date -r $remain +%Mm:%Ss)
+		fi
+	fi
+}
 
 if [[ -z $cntup ]] && [[ -z $timer ]]; then
 	read target <$statefile
@@ -17,7 +30,7 @@ if [[ -z $cntup ]] && [[ -z $timer ]]; then
 		((remain = $(date +%s) - -1 * target ))
 	fi
 
-	echo $(date -r $remain +%Mm:%Ss)
+	printRemain $remain
 	exit 0
 
 elif [[ -n $timer ]]; then
@@ -31,3 +44,4 @@ else
 fi
 
 echo $target >$statefile
+printRemain $limit

@@ -36,5 +36,5 @@ bind -n M-r select-layout main-vertical \;\
         run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}/2/1\" | bc)\""
 
 # Zoom selected pane
-bind -n M-s resize-pane -Z
+bind -n M-z resize-pane -Z
 

@@ -1,81 +1,45 @@
 #! /usr/bin/env zsh
 
 statefile="$HOME/.pomo"
-short_break=300
-long_break=1800
-pomo=1200
-first_state=1
-last_state=8
+pomo_length=1200
 
 zparseopts -E -A args a=advance -advance=advance
 
 # echo args: ${(kv)args}
 
-function startTimerAndWriteState() {
+function startCountdownAndUpdateState() {
 	cntdwn -t $1 > /dev/null
-	echo "$currentState" >$statefile
+	echo "$stateName" >$statefile
 }
 
-# schedule
-# 0 - uninit
-# 1 - 20m pomo
-# 2 - 5m break
-# 3 - 20m pomo
-# 4 - 5m break
-# 5 - 20m pomo
-# 6 - 5m break
-# 7 - 20m pomo
-# 8 - 30m break
+function startBreakTimeAndUpdateState() {
+	cntdwn -up > /dev/null
+	echo "$stateName" >$statefile
+}
+
 function advanceState() {
-	(( currentState = $currentState + 1 ))
-	if [[ $currentState -gt $last_state ]]; then
-		currentState=$first_state
-	fi
-
-	(( remainder = $currentState % 2 ))
-	(( stepNum = ($currentState + $remainder) / 2 ))
-
-	if [[ $currentState -eq $last_state ]]; then
-		startTimerAndWriteState $long_break
-	elif [[ $remainder -eq 1 ]]; then
-		startTimerAndWriteState $pomo
+	if [[ $stateName = Pomo ]]; then
+		stateName=Break
+		startBreakTimeAndUpdateState
 	else
-		startTimerAndWriteState $short_break
+		stateName=Pomo
+		startCountdownAndUpdateState $pomo_length
 	fi
 }
 
-function setStateName() {
-	(( remainder = $currentState % 2 ))
-	(( stepNum = ($currentState + $remainder) / 2 ))
-
-	if [[ $currentState = 0 ]]; then
-		stateName="Not started"
-	elif [[ $currentState -eq $last_state ]]; then
-		stateName="Big break"
-	elif [[ $remainder -eq 1 ]]; then
-		stateName="Pomo $stepNum"
-	else
-		stateName="Break $stepNum"
-	fi
-}
-
-function printState() {
-	setStateName
-	print $stateName: $(cntdwn)
-}
-
+#Starts here
 if [[ -e $statefile ]]; then
-	read currentState <$statefile
+	read stateName <$statefile
 else
-	currentState=0
+	return 0
 fi
 
 if [[ -n $advance ]]; then
+	advanceState $stateName
+elif [[ $stateName = Pomo ]]; then
 	if [[ $(cntdwn -e) = 0 ]]; then
-		advanceState $currentState
-	else
-		print Still running
+		advanceState $stateName
 	fi
 fi
 
-printState
+print $stateName: $(cntdwn)

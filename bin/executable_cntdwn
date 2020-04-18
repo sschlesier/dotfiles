@@ -10,10 +10,18 @@ function printRemain() {
 	if [[ -n $epoch ]]; then
 		print $remain
 	else
-		if [[ $(uname) = Linux ]]; then
-			print $(date -d "@$remain" +%Mm:%Ss)
+		if [[ $remain -gt 3559 ]]; then
+			fmt="+%H:%M:%S"
+		elif [[ $remain -gt 59 ]]; then
+			fmt="+%M:%S"
 		else
-			print $(date -r $remain +%Mm:%Ss)
+			fmt="+%Ss"
+		fi
+
+		if [[ $(uname) = Linux ]]; then
+			print $(date -d "@$remain" $fmt)
+		else
+			print $(date -r $remain $fmt)
 		fi
 	fi
 }
@@ -40,6 +48,7 @@ elif [[ -n $timer ]]; then
 	fi
 	((target = $(date +%s) + $limit ))
 else
+	limit=0
 	((target = $(date +%s) * -1 ))
 fi
 

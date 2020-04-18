@@ -2,28 +2,30 @@
 
 statefile="$HOME/.pomo"
 pomo_length=1200
+pomo_label="" #\ue002
+break_label="" #\ue006
 
 zparseopts -E -A args a=advance -advance=advance
 
 # echo args: ${(kv)args}
 
-function startCountdownAndUpdateState() {
+function startCountdownAndWriteState() {
 	cntdwn -t $1 > /dev/null
-	echo "$stateName" >$statefile
+	echo -e "$stateName" >$statefile
 }
 
-function startBreakTimeAndUpdateState() {
+function startBreakTimeAndWriteState() {
 	cntdwn -up > /dev/null
-	echo "$stateName" >$statefile
+	echo -e "$stateName" >$statefile
 }
 
 function advanceState() {
-	if [[ $stateName = Pomo ]]; then
-		stateName=Break
-		startBreakTimeAndUpdateState
+	if [[ "$stateName" == "$pomo_label" ]]; then
+		stateName=$break_label
+		startBreakTimeAndWriteState
 	else
-		stateName=Pomo
-		startCountdownAndUpdateState $pomo_length
+		stateName=$pomo_label
+		startCountdownAndWriteState $pomo_length
 	fi
 }
 
@@ -31,15 +33,15 @@ function advanceState() {
 if [[ -e $statefile ]]; then
 	read stateName <$statefile
 else
-	return 0
+	advanceState
 fi
 
 if [[ -n $advance ]]; then
 	advanceState $stateName
-elif [[ $stateName = Pomo ]]; then
+elif [[ $stateName = $pomo_label ]]; then
 	if [[ $(cntdwn -e) = 0 ]]; then
 		advanceState $stateName
 	fi
 fi
 
-print $stateName: $(cntdwn)
+print $stateName $(cntdwn)

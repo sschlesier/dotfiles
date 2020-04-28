@@ -19,7 +19,7 @@ function printRemain() {
 		fi
 
 		if [[ $(uname) = Linux ]]; then
-			print $(date -d "@$remain" $fmt)
+			print $(date -u -d "@$remain" $fmt)
 		else
 			print $(date -r $remain $fmt)
 		fi

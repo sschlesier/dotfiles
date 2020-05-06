@@ -23,10 +23,10 @@ bind -n M-j select-pane -t :.+
 bind -n M-k select-pane -t :.-
 
 # Rotate counterclockwise
-bind -n M-i rotate-window -U \; select-pane -t 0
+bind -n M-u rotate-window -U \; select-pane -t {left}
 
 # Rotate clockwise
-bind -n M-u rotate-window -D \; select-pane -t 0
+bind -n M-i rotate-window -D \; select-pane -t {left}
 
 # Focus selected pane
 bind -n M-f swap-pane -s :. -t :.1 \; select-pane -t :.1

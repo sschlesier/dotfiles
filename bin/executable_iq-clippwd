@@ -1,0 +1,5 @@
+#! /usr/bin/env zsh
+
+lpuser=$(lpass show --json adfs.iqmetrix.com)
+echo $lpuser | jq -r '.[0].password' | clip
+

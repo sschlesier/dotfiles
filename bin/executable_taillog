@@ -1,6 +1,6 @@
-#! /bin/bash
+#! /usr/bin/env sh
 
-trap completion_trap 1 2 3 9 15
+trap completion_trap 1 2 3 15
 
 completion_trap()
 {
@@ -11,7 +11,7 @@ completion_trap()
 #disable automargin in a tmux compatible fashion
 printf "\033[?7l"
 
-tail -f $(findlogs) | lch -c ~/bin/lch.conf
+tail -f "$(findlogs)" | lch -c ~/bin/lch.conf
 
 #enable automargin again
 printf "\033[?7h"

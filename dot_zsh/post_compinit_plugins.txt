@@ -9,4 +9,3 @@ shyiko/commacd
 peterhurford/git-it-on.zsh
 romkatv/powerlevel10k
 zsh-users/zsh-syntax-highlighting
-marlonrichert/zsh-autocomplete

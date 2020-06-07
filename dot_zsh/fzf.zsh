@@ -1,4 +1,10 @@
 #setup fuzzy finder
+if [[ -n $FZF_INIT ]]; then
+	return
+else
+	export FZF_INIT=1
+fi
+
 # fd follow links always exclude .git
 FD_OPTIONS="--follow --exclude .git"
 
@@ -16,32 +22,15 @@ export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
 export FZF_TMUX=0
 export FZF_TMUX_HEIGHT=33%
 
-# Where is fzf installed
-if [[ -d /usr/share/fzf ]]; then
-  export FZF_HOME=/usr/share/fzf
-elif [[ -d /usr/local/opt/fzf ]]; then
-  export FZF_HOME=/usr/local/opt/fzf
-elif [[ -d $HOME/.fzf ]]; then
-  export FZF_HOME=$HOME/.fzf
-else
-  echo Can\'t find fzf
-  return
-fi
-
-# Setup fzf
-# ---------
-if [[ ! "$PATH" == *$FZF_HOME/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}$FZF_HOME/bin"
-fi
-
-# Auto-completion
-# ---------------
-# if interactive shell
-if [[ $- == *i* ]]; then
-	[[ -e "$FZF_HOME/shell/completion.zsh" ]] && source "$FZF_HOME/shell/completion.zsh" 2> /dev/null
-	[[ -e /usr/share/zsh/site-functions/fzf ]] && source /usr/share/zsh/site-functions/fzf 2> /dev/null
-fi
-
-# Key bindings
-# ------------
-source "$FZF_HOME/shell/key-bindings.zsh"
+# Where are fzf scripts
+# fedora, homebrew, freebsd
+script_opts=( "/usr/share/fzf/shell" "/usr/local/opt/fzf/shell" "/usr/local/share/examples/fzf/shell" )
+for dir in ${script_opts[@]};
+do
+	if [[ -d $dir ]]; then
+		export FZF_SCRIPT_HOME="$dir"
+		file="$dir/completion.zsh" && [[ -e "$file" ]] && source "$file"
+		file="$dir/key-bindings.zsh" && [[ -e "$file" ]] && source "$file"
+		break
+	fi
+done

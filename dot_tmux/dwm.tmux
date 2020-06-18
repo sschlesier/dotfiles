@@ -1,20 +1,12 @@
-# original from https://github.com/saysjonathan/dwm.tmux/blob/master/dwm.tmux
-
 # Create new pane in current directory
-bind -n M-n split-window -b -t :.{top-left} -c "#{pane_current_path}" \;\
-        select-layout main-vertical \;\
-        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""
+bind -n M-n split-window -b -t :.{top-left} -c "#{pane_current_path}"
 
 # Create new pane at end of stack
-bind -n M-e split-window -t :.{bottom-right} -c "#{pane_current_path}" \;\
-        select-layout main-vertical \;\
-        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""
+bind -n M-e split-window -t :.{bottom-right} -c "#{pane_current_path}"
 
-# Kill pane
-bind -n C-d kill-pane \;\
-        select-layout main-vertical \;\
-        run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\"" \;\
-
+# adjust layout when split or pane killed
+set-hook -g after-split-window 'select-layout main-vertical; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
+set-hook -g pane-exited 'select-layout main-vertical; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
 
 # Next pane
 bind -n M-j select-pane -t :.+

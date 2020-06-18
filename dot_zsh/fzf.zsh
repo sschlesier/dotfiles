@@ -1,10 +1,4 @@
 #setup fuzzy finder
-if [[ -n $FZF_INIT ]]; then
-	return
-else
-	export FZF_INIT=1
-fi
-
 # fd follow links always exclude .git
 FD_OPTIONS="--follow --exclude .git"
 
@@ -22,15 +16,20 @@ export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
 export FZF_TMUX=0
 export FZF_TMUX_HEIGHT=33%
 
-# Where are fzf scripts
-# fedora, homebrew, freebsd
-script_opts=( "/usr/share/fzf/shell" "/usr/local/opt/fzf/shell" "/usr/local/share/examples/fzf/shell" )
-for dir in ${script_opts[@]};
-do
-	if [[ -d $dir ]]; then
-		export FZF_SCRIPT_HOME="$dir"
-		file="$dir/completion.zsh" && [[ -e "$file" ]] && source "$file"
-		file="$dir/key-bindings.zsh" && [[ -e "$file" ]] && source "$file"
-		break
-	fi
-done
+if [[ -z FZF_SCRIPT_HOME ]]; then
+	# Where are fzf scripts
+	# fedora, homebrew, freebsd
+	script_opts=( "/usr/share/fzf/shell" "/usr/local/opt/fzf/shell" "/usr/local/share/examples/fzf/shell" )
+	for dir in ${script_opts[@]};
+	do
+		if [[ -d $dir ]]; then
+			export FZF_SCRIPT_HOME="$dir"
+			break
+		fi
+	done
+fi
+
+if [[ -n $FZF_SCRIPT_HOME ]]; then
+	file="$FZF_SCRIPT_HOME/completion.zsh" && [[ -e "$file" ]] && source "$file"
+	file="$FZF_SCRIPT_HOME/key-bindings.zsh" && [[ -e "$file" ]] && source "$file"
+fi

@@ -86,7 +86,6 @@ export EDITOR=nvim
 export LESS=-RFMX
 alias v=nvim
 alias open="open_command"
-alias ag="ag --color"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

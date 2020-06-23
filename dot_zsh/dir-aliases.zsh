@@ -35,13 +35,14 @@ zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b
 
-aliasdir cur ~/current
+aliasdir cur "$HOME/current"
 aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"
 aliasdir dow "$WIN_HOME/Downloads"
 aliasdir dr "$HOME/Dropbox"
 aliasdir dr "$WIN_HOME/Dropbox"
 aliasdir od "$WIN_HOME/OneDrive"
+aliasdir sa "$WIN_HOME/iQmetrix Software Development Corp/Security Architecture - Documents"
 aliasdir src "$SRC"
 aliasdir to "$WIN_HOME/tools"
 

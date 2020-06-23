@@ -16,7 +16,7 @@ export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
 export FZF_TMUX=0
 export FZF_TMUX_HEIGHT=33%
 
-if [[ -z FZF_SCRIPT_HOME ]]; then
+if [[ -z $FZF_SCRIPT_HOME ]]; then
 	# Where are fzf scripts
 	# fedora, homebrew, freebsd
 	script_opts=( "/usr/share/fzf/shell" "/usr/local/opt/fzf/shell" "/usr/local/share/examples/fzf/shell" )

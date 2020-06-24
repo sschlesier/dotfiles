@@ -1,1 +1,2 @@
 fish_vi_key_bindings
+theme_gruvbox dark

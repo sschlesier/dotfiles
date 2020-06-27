@@ -2,5 +2,8 @@
 
 sln=$(find-sln)
 sln=$(wslpath -aw "$sln")
+echo opening "$sln"
 
-"$C_ROOT"/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Professional/Common7/IDE/devenv.exe "$sln" >/dev/null 2>&1 &
+if [ -n "$sln" ]; then
+	"$C_ROOT"/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Professional/Common7/IDE/devenv.exe "$sln" >/dev/null 2>&1 &
+fi

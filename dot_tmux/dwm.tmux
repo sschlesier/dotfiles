@@ -5,8 +5,8 @@ bind -n M-n split-window -b -t :.{top-left} -c "#{pane_current_path}"
 bind -n M-e split-window -t :.{bottom-right} -c "#{pane_current_path}"
 
 # adjust layout when split or pane killed
-set-hook -g after-split-window 'select-layout main-vertical; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
-set-hook -g pane-exited 'select-layout main-vertical; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
+set-hook -g after-split-window 'select-layout; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
+set-hook -g pane-exited 'select-layout; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
 
 # Next pane
 bind -n M-j select-pane -t :.+

@@ -57,6 +57,9 @@ if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
 fi
 source $plugins_file
 
+#zsh-autocomplete don't magic correct things
+zstyle ':autocomplete:*' magic off
+
 #disable LS_COLORS
 unset LS_COLORS
 

@@ -1,3 +1,10 @@
+#only define paths once
+if [[ -n $PATHS_DEFINED ]]; then
+	return
+else
+	export PATHS_DEFINED=1
+fi
+
 #define paths for windows file system access
 if type wslpath > /dev/null; then
 	export C_ROOT=$(wslpath "$(wslvar --sys SystemDrive)\\")

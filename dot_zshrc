@@ -2,13 +2,6 @@
 #disable tty XON/XOFF via ^S, ^Q
 stty -ixon
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block, everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
 # zmodload zsh/zprof
 export ZSH_INIT="$HOME/.zsh"
 export ZSH_CACHE_DIR="$ZSH_INIT/cache"
@@ -57,9 +50,6 @@ if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
 fi
 source $plugins_file
 
-#zsh-autocomplete don't magic correct things
-zstyle ':autocomplete:*' magic off
-
 #disable LS_COLORS
 unset LS_COLORS
 
@@ -73,10 +63,6 @@ source "$ZSH_INIT/check_plugin_update.zsh"
 if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]]; then
   cd "$HOME"
   tmux attach 2>/dev/null || exec tmux new -s misc
-fi
-
-if [[ $INSECURE_DOCKER -eq 1 ]]; then
-  export DOCKER_HOST=tcp://127.0.0.1:2375
 fi
 
 #omit l and git status from history

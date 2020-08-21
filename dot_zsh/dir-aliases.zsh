@@ -41,10 +41,14 @@ aliasdir dow "$HOME/Downloads"
 aliasdir dow "$WIN_HOME/Downloads"
 aliasdir dr "$HOME/Dropbox"
 aliasdir dr "$WIN_HOME/Dropbox"
-aliasdir od "$WIN_HOME/OneDrive"
-aliasdir sa "$WIN_HOME/iQmetrix Software Development Corp/Security Architecture - Documents"
 aliasdir src "$SRC"
 aliasdir to "$WIN_HOME/tools"
+
+#iq specific
+aliasdir en "$HOME/current/entity-store-sub"
+aliasdir od "$WIN_HOME/OneDrive"
+aliasdir sa "$WIN_HOME/iQmetrix Software Development Corp/Security Architecture - Documents"
+aliasdir sq "$WIN_HOME/OneDrive/sql-encrypted"
 
 srcdir ams AssetMediaService
 srcdir ap IQ.Auth.Packages

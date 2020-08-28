@@ -16,7 +16,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -171,7 +171,7 @@ nnoremap <silent> <F1> :Helptags<CR>
 inoremap <silent> <F1> <ESC>:Helptags<CR>
 noremap <silent> <leader>; :Commands<CR>
 inoremap <silent> <F3> <ESC>:Snippets<CR>
-" nnoremap <silent> <leader>f :Ag<CR>
+nnoremap <silent> <leader>f :Ag<CR>
 noremap <silent> <leader>s yiw:Ag <C-r>"<CR>
 
 " Fugitive Conflict Resolution
@@ -179,4 +179,4 @@ nnoremap <leader>gd :Gvdiff<CR>
 nnoremap gdh :diffget //2<CR>
 nnoremap gdl :diffget //3<CR>
 
-source ~/.vim/coc.vim
+" source ~/.vim/coc.vim

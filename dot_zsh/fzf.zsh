@@ -19,7 +19,7 @@ export FZF_TMUX_HEIGHT=33%
 if [[ -z $FZF_SCRIPT_HOME ]]; then
 	# Where are fzf scripts
 	# fedora, homebrew, freebsd
-	script_opts=( "/usr/share/fzf/shell" "/usr/local/opt/fzf/shell" "/usr/local/share/examples/fzf/shell" )
+	script_opts=( "/usr/share/fzf/shell" "/usr/local/opt/fzf/shell" "/usr/local/share/examples/fzf/shell" "$HOMEBREW_PREFIX/opt/fzf/shell" )
 	for dir in ${script_opts[@]};
 	do
 		if [[ -d $dir ]]; then

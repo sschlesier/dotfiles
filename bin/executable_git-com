@@ -1,4 +1,4 @@
 #! /usr/bin/env sh
 
-branch=$(git isbranch develop master)
+branch=$(git isbranch develop main master)
 git checkout "$branch"

@@ -12,6 +12,11 @@ fi
 source "$ZSH_INIT/shell_environment.zsh"
 source "$ZSH_INIT/path.zsh"
 
+# setup homebrew
+if [[ -e /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+	eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+fi
+
 # set LANG on WSL
 if type wslpath > /dev/null; then
 	export LANG=en_US.UTF-8

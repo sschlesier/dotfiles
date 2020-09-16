@@ -5,7 +5,6 @@
 	excludesfile = /Users/scotts/.gitignore_global
 	safecrlf = false
 	pager = diff-so-fancy | less --tabs=4 -RFX
-	filemode = false
 [include]
 	path = ~/.git-alias.config
 	path = ~/.git-indirection

@@ -13,9 +13,14 @@ source "$ZSH_INIT/shell_environment.zsh"
 source "$ZSH_INIT/path.zsh"
 
 # setup homebrew
-if [[ -e /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-	eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-fi
+brewpaths=( "/home/linuxbrew/.linuxbrew/bin/brew" "/usr/local/bin/brew" )
+for pth in "${brewpaths[@]}";
+do
+	if [[ -e "$pth" ]]; then
+		eval $("$pth" shellenv)
+		break
+	fi
+done
 
 # set LANG on WSL
 if type wslpath > /dev/null; then

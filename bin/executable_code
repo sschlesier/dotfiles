@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 codepath="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
 if [[ ! -e $codepath ]]; then

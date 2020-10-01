@@ -1,0 +1,4 @@
+#! /bin/bash
+
+"/mnt/c/Program Files/SonicWall/Global VPN Client/SWGVC.exe" -Q
+

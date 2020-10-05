@@ -2,4 +2,5 @@
 
 vpnName=${1:-vcvpn}
 
-nohup "/mnt/c/Program Files/SonicWall/Global VPN Client/SWGVC.exe" -E "$vpnName.iqmetrix.com" -U Scott.Schlesier -P "$(lp-getpwd adfs.iqmetrix.com)" &>/dev/null &
+pwd="$(lp-getpwd adfs.iqmetrix.com)"
+nohup "/mnt/c/Program Files/SonicWall/Global VPN Client/SWGVC.exe" -E "$vpnName.iqmetrix.com" -U Scott.Schlesier -P "$pwd"  &>/dev/null &

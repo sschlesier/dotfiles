@@ -1,4 +1,4 @@
-#! /bin/zsh
+#! /usr/bin/env zsh
 
 if [[ -n $1 ]]; then
  c=${1[0,1]}

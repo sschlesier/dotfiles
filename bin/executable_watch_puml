@@ -1,3 +1,8 @@
 #! /usr/bin/env zsh
 
-watchexec --clear --no-shell -e puml,pml -- puml -e puml -e pml
+extensions=(-e puml -e pml)
+
+while true;
+	do fd $extensions | \
+		entr -d -c puml $extensions
+done

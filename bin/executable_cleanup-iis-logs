@@ -1,0 +1,4 @@
+#! /bin/sh
+
+dos2unix --quiet "$1"
+tail -n +2 <"$1" | sed '0,/#Fields: /{s/#Fields: //}' | tr ' ' '\t' > log.tmp && mv log.tmp "$1"

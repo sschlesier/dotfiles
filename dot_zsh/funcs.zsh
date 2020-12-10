@@ -56,3 +56,12 @@ source <(tmux show-environment -s)
 gle() {
 	dos2unix --keep-bom $(git status --short | awk --field-separator ' ' '{print $2}')
 }
+
+# make a new BIA on desktop
+newbia() {
+
+	name="$DESKTOP/$1 - Business Impact Assessment.xlsx"
+	cp "$(wslpath "C:\Users\Scott.Schlesier\iQmetrix Software Development Corp\Security Architecture - Documents\Shared Folder\Public Documents\Public Templates\Business Impact Assessment Template.xlsx")" "$name"
+
+	open_command "$name"
+}

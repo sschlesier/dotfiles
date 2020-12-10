@@ -1,3 +1,0 @@
-#! /usr/bin/env sh
-
-cp "$(wslpath "C:\Users\Scott.Schlesier\iQmetrix Software Development Corp\Security Architecture - Documents\Shared Folder\Public Documents\Public Templates\Business Impact Assessment Template.xlsx")" "$DESKTOP/$1 - Business Impact Assessment.xlsx"

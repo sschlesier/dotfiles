@@ -60,7 +60,7 @@ gle() {
 # make a new BIA on desktop
 newbia() {
 
-	name="$DESKTOP/$1 - Business Impact Assessment.xlsx"
+	local name="$DESKTOP/$1 - Business Impact Assessment.xlsx"
 	cp "$(wslpath "C:\Users\Scott.Schlesier\iQmetrix Software Development Corp\Security Architecture - Documents\Shared Folder\Public Documents\Public Templates\Business Impact Assessment Template.xlsx")" "$name"
 
 	open_command "$name"

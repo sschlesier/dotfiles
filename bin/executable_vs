@@ -1,6 +1,6 @@
-#! /usr/bin/env sh
+#! /bin/sh
 
-sln=$(find-sln)
+sln=$(find-sln | head -n 1)
 sln=$(wslpath -aw "$sln")
 echo opening "$sln"
 

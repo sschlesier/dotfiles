@@ -1,7 +1,12 @@
 #! /bin/sh
 
-sln=$(find-sln | head -n 1)
-sln=$(wslpath -aw "$sln")
+if [ -z "$1" ]; then
+	sln=$(find-sln | head -n 1)
+	sln=$(wslpath -aw "$sln")
+else
+	sln="$1"
+fi
+
 echo opening "$sln"
 
 if [ -n "$sln" ]; then

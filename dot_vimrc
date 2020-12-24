@@ -38,6 +38,8 @@ if has("nvim") == 0
 	set ttyfast                     " Indicate fast terminal conn for faster redraw
 	set ttymouse=xterm2             " Indicate terminal type for mouse codes
 	set ttyscroll=3                 " Speedup scrolling
+else
+	set inccommand=nosplit          " show previews inline
 endif
 set laststatus=2                " Show status line always
 set encoding=utf-8              " Set default encoding to UTF-8
@@ -64,7 +66,6 @@ set pumheight=10                " Completion window max size
 set nocursorcolumn              " Do not highlight column (speeds up highlighting)
 set nocursorline                " highlight cursor line
 set lazyredraw                  " Wait to redraw
-set inccommand=nosplit          " show previews inline
 set nomodeline                  " disable mode line I don't use and it has vulnerability
 set scrolloff=3	                " minimum 10 lines around cursor when jumping
 

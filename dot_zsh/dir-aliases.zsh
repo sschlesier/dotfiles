@@ -52,21 +52,15 @@ aliasdir sq "$WIN_HOME/OneDrive/sql-encrypted"
 
 srcdir ams AssetMediaService
 srcdir ap IQ.Auth.Packages
-srcdir api Azure.APIManagement
 srcdir au Auth
 srcdir av IQ.Platform.Availability
 srcdir bsn BuildScripts.Net
 srcdir ca Catalogs
-srcdir cc CodingChallenge1
 srcdir cn CatalogNexus
-srcdir cost IQ.Platform.Cost
-srcdir crm IQ.Platform.CRM
 srcdir es EntityStore
 srcdir exp experiment
-srcdir fl Foundation.Logging
 srcdir fm Foundation.Messaging
 srcdir fo Foundation.Outbox
-srcdir fw Foundation.WebApi
 srcdir im IQ.Messaging
 srcdir mg Monitoring.Graphite
 srcdir pe product-excellence
@@ -83,7 +77,6 @@ if type exa &> /dev/null; then
 	alias la='ls -la'
 	alias lt='ls -T'
 else
-	alias ls='ls --color=tty'
 	alias l='ls -lh'
 	alias la='ls -lah'
 fi
@@ -99,3 +92,6 @@ fi
 
 #list files in ~/bin
 alias llb="ls -l $HOME/bin"
+
+#intel brew alias
+alias ibrew='arch -x86_64 /usr/local/bin/brew'

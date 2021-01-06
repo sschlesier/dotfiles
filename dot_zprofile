@@ -1,8 +1,0 @@
-if [[ -d /home/user/.linuxbrew ]]; then
-	export HOMEBREW_PREFIX="/home/user/.linuxbrew";
-	export HOMEBREW_CELLAR="/home/user/.linuxbrew/Cellar";
-	export HOMEBREW_REPOSITORY="/home/user/.linuxbrew/Homebrew";
-	export PATH="/home/user/.linuxbrew/bin:/home/user/.linuxbrew/sbin:$PATH";
-	export MANPATH="/home/user/.linuxbrew/share/man:$MANPATH";
-	export INFOPATH="/home/user/.linuxbrew/share/info:$INFOPATH";
-fi

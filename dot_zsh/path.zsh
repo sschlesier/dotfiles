@@ -38,6 +38,22 @@ if [[ -d "$HOME/.cargo/bin" ]]; then
 	PATH+=:"$HOME/.cargo/bin"
 fi
 
+# setup homebrew
+# skip brew shellenv if there are both intel and Apple Silicon homebrews present
+if [[ ! -d /opt/homebrew ]] || [[ ! -d /usr/local/Homebrew ]]; then
+	brewpaths=( "/home/linuxbrew/.linuxbrew/bin/brew" \
+		"/usr/local/bin/brew" \
+		"/opt/homebrew/bin/brew" )
+
+	for pth in "${brewpaths[@]}";
+	do
+		if [[ -x "$pth" ]]; then
+			eval $("$pth" shellenv)
+			break
+		fi
+	done
+end
+
 #add gems to path
 gempath="$ZSH_CACHE_DIR/gempath"
 #write path into a file

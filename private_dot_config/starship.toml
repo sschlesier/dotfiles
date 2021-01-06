@@ -1,0 +1,12 @@
+# Disable the newline at the start of the prompt
+add_newline = false
+
+[directory]
+truncation_symbol = "…/"
+
+[status]
+symbol = "🔴"
+# format = '[\[$symbol $status_common_meaning$status_signal_name$status_maybe_int\]]($style) '
+format = '[{$symbol $status} ]($style)'
+map_symbol = true
+disabled = false

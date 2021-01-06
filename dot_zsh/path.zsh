@@ -52,7 +52,7 @@ if [[ ! -d /opt/homebrew ]] || [[ ! -d /usr/local/Homebrew ]]; then
 			break
 		fi
 	done
-end
+fi
 
 #add gems to path
 gempath="$ZSH_CACHE_DIR/gempath"

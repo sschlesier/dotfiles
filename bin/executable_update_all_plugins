@@ -1,6 +1,6 @@
-#! /usr/bin/env zsh
+#! /bin/sh
 
 antibody update
-nvim +PlugUpdate +PlugUpgrade +qall
+vim +PlugUpdate +PlugUpgrade +qall
 "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
 tldr --update

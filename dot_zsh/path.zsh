@@ -25,8 +25,11 @@ if [[ -n $C_ROOT ]]; then
 	PATH+=$C_ROOT/Windows/System32
 fi
 
-#include /bin on path
-PATH+=:"$HOME/bin"
+#include ~/bin and all bins under that folder on path
+while read -r binpath
+do
+	PATH+=:"$binpath"
+done < <(find "$HOME/bin" -type d -name bin)
 
 #include .local/bin on path
 if [[ -d "$HOME/.local/bin" ]]; then

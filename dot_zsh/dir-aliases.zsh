@@ -91,7 +91,11 @@ if [[ -n $WIN_HOME ]]; then
 fi
 
 #list files in ~/bin
-alias llb="ls -l $HOME/bin"
+function llb () {
+	pushd -q ~/bin
+	fd --type executable | column
+	popd -q
+}
 
 #intel brew alias
 alias ibrew='arch -x86_64 /usr/local/bin/brew'

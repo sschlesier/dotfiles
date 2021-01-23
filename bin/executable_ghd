@@ -1,4 +1,5 @@
 #! /bin/bash
+#ghd - GitHub Diff opens git hub with a diff to main
 
 URL=`git remote get-url origin` #assumes origin is a http path
 #remove .git suffix if it is present

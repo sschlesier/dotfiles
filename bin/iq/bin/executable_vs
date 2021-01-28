@@ -1,7 +1,7 @@
 #! /bin/sh
 
 if [ -z "$1" ]; then
-	sln=$(find-sln | head -n 1)
+	sln=$(find-sln | fzf)
 	sln=$(wslpath -aw "$sln")
 else
 	sln="$1"

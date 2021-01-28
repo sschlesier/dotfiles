@@ -1,4 +1,6 @@
 #! /bin/sh
 
-bat $(which "$@")
-
+path=$(which "$@")
+if [ -n "$path" ]; then
+	bat "$path"
+fi

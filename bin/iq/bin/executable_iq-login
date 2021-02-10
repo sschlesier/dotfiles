@@ -1,8 +1,8 @@
 #! /usr/bin/env zsh
 
 clientNote=$(lpass show --json APIServiceProduction-Client | jq -r '.[0].note')
-clientKey=$(echo $clientNote | jq -r '.clientKey')
-clientSecret=$(echo $clientNote | jq -r '.secret')
+clientKey=$(echo $clientNote | jq -r '.Key')
+clientSecret=$(echo $clientNote | jq -r '.Secret')
 unset clientNote
 
 lpuser=$(lpass show --json adfs.iqmetrix.com)

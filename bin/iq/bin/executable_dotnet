@@ -1,3 +1,0 @@
-#! /usr/bin/env sh
-
-"$C_ROOT"/Program\ Files/dotnet/dotnet.exe "$@"

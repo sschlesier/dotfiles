@@ -65,6 +65,7 @@ srcdir im IQ.Messaging
 srcdir mg Monitoring.Graphite
 srcdir pe product-excellence
 srcdir pl ProductLibrary
+srcdir rq RQ
 srcdir sbm ServiceBusMonitor
 srcdir ss shell-setup
 srcdir sub ProductSubscriptions

@@ -56,7 +56,7 @@ source "$ZSH_INIT/gitenv.zsh"
 source "$ZSH_INIT/dir-aliases.zsh"
 source "$ZSH_INIT/funcs.zsh"
 source "$ZSH_INIT/fzf.zsh"
-source "$ZSH_INIT/check_plugin_update.zsh"
+source "$ZSH_INIT/check_plugin_update.sh"
 
 #launch tmux or attach to existing session
 if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]] && type tmux >/dev/null; then

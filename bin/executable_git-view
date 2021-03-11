@@ -1,0 +1,13 @@
+#! /bin/bash
+
+branch=$(git branch --show-current)
+remote=$(git remote get-url origin)
+
+if [[ $remote =~ git@github\.com:(.*)\.git ]]; then
+	repo=${BASH_REMATCH[1]}
+	url=https://github.com/$repo/tree/$branch
+elif [[ $remote =~ (https://github.com/.*)\.git ]]; then
+	url=${BASH_REMATCH[1]}/tree/$branch
+fi
+
+echo "$url"

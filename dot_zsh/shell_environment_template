@@ -1,3 +1,0 @@
-#fill in and name as shell_environment.zsh
-export EMAIL=scott@schlesier.ca
-export LAUNCH_TMUX=1

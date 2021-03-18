@@ -1,0 +1,16 @@
+#persist a an ssh connection socket in /tmp for 5 minutes
+ControlMaster auto
+ControlPath /tmp/%r@%h:%p
+ControlPersist 300
+
+#show randomart for host keys
+VisualHostKey=yes
+
+#add ssh keys to ssh-agent as they are used
+AddKeysToAgent yes
+
+#explicit key file for azure devops
+Host ssh.dev.azure.com
+  IdentityFile ~/.ssh/id_rsa.pub
+  IdentitiesOnly yes
+  PubkeyAcceptedKeyTypes +rsa-sha2-256,rsa-sha2-512

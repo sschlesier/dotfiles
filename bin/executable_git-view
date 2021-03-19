@@ -3,11 +3,20 @@
 branch=$(git branch --show-current)
 remote=$(git remote get-url origin)
 
+#github
 if [[ $remote =~ git@github\.com:(.*)\.git ]]; then
 	repo=${BASH_REMATCH[1]}
-	url=https://github.com/$repo/tree/$branch
+	url="https://github.com/$repo/tree/$branch"
 elif [[ $remote =~ (https://github.com/.*)\.git ]]; then
 	url=${BASH_REMATCH[1]}/tree/$branch
+#AzDo
+elif [[ $remote =~ git@ssh.dev.azure.com:v3/([^/]+)/([^/]+)/([^/]+)$ ]]; then
+	company=${BASH_REMATCH[1]}
+	project=${BASH_REMATCH[2]}
+	repo=${BASH_REMATCH[3]}
+	url="https://dev.azure.com/$company/$project/_git/$repo?version=GB$branch&_a=contents"
+elif [[ $remote =~ https://.*@(dev.azure.com/.*) ]]; then
+	url="https://${BASH_REMATCH[1]}?version=GB$branch&_a=contents"
 fi
 
-open "$url"
+echo "$url"

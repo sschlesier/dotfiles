@@ -1,8 +1,7 @@
-#! /usr/bin/env zsh
+#! /bin/sh
 
-if [[ -n $(type hyperfine) ]]; then
-  hyperfine 'zsh -i -c exit'
-  exit
+if type hyperfine >/dev/null; then
+	hyperfine 'zsh -i -c exit'
+else
+	for i in $(seq 10); do /usr/bin/time zsh -i -c exit; done
 fi
-
-for i in $(seq 1 10); do /usr/bin/time zsh -i -c exit; done

@@ -3,4 +3,6 @@
 path=$(which "$@")
 if [ -n "$path" ]; then
 	bat "$path"
+else
+	echo unable to find "$@"
 fi

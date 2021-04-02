@@ -1,3 +1,8 @@
 #! /bin/sh
 
-$EDITOR $(which "$@")
+path=$(which "$@")
+if [ -n "$path" ]; then
+	$EDITOR "$path"
+else
+	echo unable to find "$@"
+fi

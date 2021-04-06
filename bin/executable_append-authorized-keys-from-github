@@ -1,0 +1,3 @@
+#! /bin/bash
+
+curl https://github.com/sschlesier.keys | tee -a "$HOME/.ssh/authorized_keys"

@@ -19,4 +19,4 @@ elif [[ $remote =~ https://.*@(dev.azure.com/.*) ]]; then
 	url="https://${BASH_REMATCH[1]}?version=GB$branch&_a=contents"
 fi
 
-echo "$url"
+open "$url"

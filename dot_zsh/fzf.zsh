@@ -3,7 +3,7 @@
 FD_OPTIONS="--follow --exclude .git"
 
 # Change behavior of fzf dialogue
-export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info"
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all"
 
 # Change find backend
 # Use 'git ls-files' when inside GIT repo, or fd otherwise

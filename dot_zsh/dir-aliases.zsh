@@ -94,7 +94,11 @@ fi
 #list files in ~/bin
 function llb () {
 	pushd -q ~/bin
-	fd --type executable | column
+	if [ -t 1 ]; then
+		fd --type executable | column
+	else
+		fd --type executable
+	fi
 	popd -q
 }
 

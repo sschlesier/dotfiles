@@ -1,8 +1,8 @@
 # Create new pane in current directory
-bind -n M-n split-window -b -t :.{top-left} -c "#{pane_current_path}"
+bind -n M-n split-window -b -t ':.{top-left}' -c '#{pane_current_path}'
 
 # Create new pane at end of stack
-bind -n M-e split-window -t :.{bottom-right} -c "#{pane_current_path}"
+bind -n M-e split-window -t ':.{bottom-right}' -c '#{pane_current_path}'
 
 # adjust layout when split or pane killed
 set-hook -g after-split-window 'select-layout; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
@@ -18,10 +18,10 @@ bind -n M-j select-pane -t :.+
 bind -n M-k select-pane -t :.-
 
 # Rotate counterclockwise
-bind -n M-u rotate-window -U \; select-pane -t {left}
+bind -n M-u rotate-window -U \; select-pane -t '{left}'
 
 # Rotate clockwise
-bind -n M-i rotate-window -D \; select-pane -t {left}
+bind -n M-i rotate-window -D \; select-pane -t '{left}'
 
 # Focus selected pane
 bind -n M-f swap-pane -s :. -t :.1 \; select-pane -t :.1

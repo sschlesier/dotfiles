@@ -8,8 +8,8 @@ bind -n M-e split-window -t ':.{bottom-right}' -c '#{pane_current_path}'
 set-hook -g after-split-window 'select-layout; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
 set-hook -g pane-exited 'select-layout; run "tmux resize-pane -t :.1 -x \"$(echo \"#{window_width}*0.6/1\" | bc)\""'
 
-#new session default to main-vertical layout
-set-hook -g after-new-session 'select-layout main-vertical'
+#new window default to main-vertical layout
+set-hook -g window-linked 'select-layout main-vertical'
 
 # Next pane
 bind -n M-j select-pane -t :.+

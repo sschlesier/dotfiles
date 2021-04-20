@@ -1,7 +1,10 @@
 #! /bin/sh
 
 if [ -z "$1" ]; then
-	sln=$(find-sln | fzf)
+	sln=$(find-sln | fzf -0)
+	if [ -z "$sln" ]; then
+		sln=$(fd -e csproj | fzf -0)
+	fi
 	sln=$(wslpath -aw "$sln")
 else
 	sln="$1"

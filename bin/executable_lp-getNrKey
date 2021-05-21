@@ -1,0 +1,3 @@
+#! /bin/sh
+
+lpass show --json NR-QueryKey | jq -r '.[0].note'

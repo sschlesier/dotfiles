@@ -1,4 +1,4 @@
 #! /usr/bin/env zsh
 
-token_response=$(lpass show --json iqtoken | jq -r '.[0].note')
+token_response=$(lp-getnote iqtoken)
 echo $(echo $token_response | jq -r .access_token)

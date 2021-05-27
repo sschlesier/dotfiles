@@ -7,7 +7,7 @@ remote=$(git remote get-url origin)
 if [[ $remote =~ git@github\.com:(.*)\.git ]]; then
 	repo=${BASH_REMATCH[1]}
 	url="https://github.com/$repo/tree/$branch"
-elif [[ $remote =~ (https://github.com/.*)\.git ]]; then
+elif [[ $remote =~ (https://github.com/.*) ]]; then
 	url=${BASH_REMATCH[1]}/tree/$branch
 #AzDo
 elif [[ $remote =~ git@ssh.dev.azure.com:v3/([^/]+)/([^/]+)/([^/]+)$ ]]; then
@@ -19,4 +19,8 @@ elif [[ $remote =~ https://.*@(dev.azure.com/.*) ]]; then
 	url="https://${BASH_REMATCH[1]}?version=GB$branch&_a=contents"
 fi
 
-open "$url"
+if [[ -n $url ]]; then
+	open "$url"
+else
+	echo "Unable to decipher git repo"
+fi

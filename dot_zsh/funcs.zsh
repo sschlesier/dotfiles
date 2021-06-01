@@ -1,5 +1,9 @@
 #make directory and cd to it
 mcd() {
+	if [[ -z $1 ]]; then
+		echo No directory specified
+		return
+	fi
 	mkdir -p "$1"
 	cd "$1"
 }

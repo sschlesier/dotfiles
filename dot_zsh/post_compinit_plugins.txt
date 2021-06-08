@@ -5,3 +5,4 @@ robbyrussell/oh-my-zsh path:plugins/ssh-agent
 robbyrussell/oh-my-zsh path:plugins/web-search
 romkatv/powerlevel10k
 zsh-users/zsh-syntax-highlighting
+mollifier/cd-gitroot

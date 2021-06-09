@@ -15,7 +15,7 @@ srcdir() {
 setsrcdirs() {
 	if [[ -z $SRC ]] && [[ -d $1 ]]; then
 		export SRC="$1"
-	elif [[ -z $ALTSRC ]] && [[ -d $1 ]] && [[ $SRC -ne $1 ]]; then
+	elif [[ -z $ALTSRC ]] && [[ -d $1 ]] && [[ $SRC != $1 ]]; then
 		export ALTSRC="$1"
 	fi
 }

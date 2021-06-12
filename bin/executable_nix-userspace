@@ -3,7 +3,6 @@
 nix-shell -p \
 	antibody \
 	bat \
-	bat \
 	chezmoi \
 	diff-so-fancy \
 	dog \

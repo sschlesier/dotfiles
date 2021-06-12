@@ -101,6 +101,3 @@ function llb () {
 	fi
 	popd -q
 }
-
-#intel brew alias
-alias ibrew='arch -x86_64 /usr/local/bin/brew'

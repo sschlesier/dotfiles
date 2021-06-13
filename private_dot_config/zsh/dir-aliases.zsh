@@ -35,6 +35,7 @@ zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b
 
+aliasdir cfg "$HOME/.config"
 aliasdir cur "$HOME/current"
 aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"

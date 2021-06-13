@@ -33,7 +33,7 @@ alias xdg-open='open_command'
 #update plugins when out of date
 plugins_file="$ZSH_CACHE_DIR/pre_compinit_plugins.zsh"
 plugins_src="$ZSH_INIT/pre_compinit_plugins.txt"
-if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
+if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]] && type antibody >/dev/null; then
   echo updating "$plugins_file" ...
   antibody bundle < "$plugins_src" > $plugins_file
 fi
@@ -43,7 +43,7 @@ autoload -Uz compinit && compinit
 
 plugins_file="$ZSH_CACHE_DIR/post_compinit_plugins.zsh"
 plugins_src="$ZSH_INIT/post_compinit_plugins.txt"
-if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]]; then
+if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]] && type antibody >/dev/null; then
   echo updating "$plugins_file" ...
   antibody bundle < "$plugins_src" > $plugins_file
 fi

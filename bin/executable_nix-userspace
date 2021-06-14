@@ -1,26 +1,3 @@
 #! /bin/sh
 
-nix-shell -p \
-	antibody \
-	bat \
-	chezmoi \
-	diff-so-fancy \
-	dog \
-	entr \
-	exa \
-	fd \
-	file \
-	fzf \
-	httpie \
-	hyperfine \
-	jq \
-	lazygit \
-	neovim \
-	nodePackages.npm \
-	nodejs \
-	parallel \
-	shellcheck \
-	silver-searcher \
-	tealdeer \
-	tmux \
-	wget
+nix-shell ~/bin/userspace-shell.nix

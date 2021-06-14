@@ -29,7 +29,7 @@ if [[ -z $FZF_SCRIPT_HOME ]]; then
 	fi
 
 	#add folder for nix installs
-	if [[ -n $IN_NIX_SHELL ]]; then
+	if type nix-store >/dev/null; then
 		script_opts=( "$(nix-store -r $(which fzf) 2>/dev/null)/share/fzf" "$script_opts" )
 	fi
 

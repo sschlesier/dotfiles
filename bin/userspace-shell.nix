@@ -12,6 +12,7 @@ pkgs.mkShell {
     pkgs.fd
     pkgs.file
     pkgs.fzf
+    pkgs.htop
     pkgs.httpie
     pkgs.hyperfine
     pkgs.jq

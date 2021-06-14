@@ -28,6 +28,11 @@ if [[ -z $FZF_SCRIPT_HOME ]]; then
 		script_opts=( "/opt/homebrew/opt/fzf/shell" "/usr/local/bin/opt/fzf/shell" "$script_opts" )
 	fi
 
+	#add folder for nix installs
+	if [[ -n $IN_NIX_SHELL ]]; then
+		script_opts=( "$(nix-store -r $(which fzf) 2>/dev/null)/share/fzf" "$script_opts" )
+	fi
+
 	for dir in ${script_opts[@]};
 	do
 		if [[ -d $dir ]]; then

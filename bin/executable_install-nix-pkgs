@@ -1,0 +1,32 @@
+#! /usr/bin/env bash
+
+while read -r pkg
+do
+	nix-env -iA "$pkg"
+done << EOF
+nixpkgs.antibody
+nixpkgs.bat
+nixpkgs.chezmoi
+nixpkgs.diff-so-fancy
+nixpkgs.dogdns
+nixpkgs.entr
+nixpkgs.exa
+nixpkgs.fd
+nixpkgs.file
+nixpkgs.fzf
+nixpkgs.htop
+nixpkgs.httpie
+nixpkgs.hyperfine
+nixpkgs.jq
+nixpkgs.lazygit
+nixpkgs.neovim
+nixpkgs.nodePackages.npm
+nixpkgs.nodejs
+nixpkgs.parallel
+nixpkgs.shellcheck
+nixpkgs.silver-searcher
+nixpkgs.tealdeer
+nixpkgs.tmux
+nixpkgs.wget
+nixpkgs.zsh
+EOF

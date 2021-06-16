@@ -28,5 +28,4 @@ nixpkgs.silver-searcher
 nixpkgs.tealdeer
 nixpkgs.tmux
 nixpkgs.wget
-nixpkgs.zsh
 EOF

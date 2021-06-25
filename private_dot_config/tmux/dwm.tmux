@@ -1,3 +1,6 @@
+# Create new window in current directory
+bind c new-window -c '#{pane_current_path}'
+
 # Create new pane in current directory
 bind -n M-n split-window -b -t ':.{top-left}' -c '#{pane_current_path}'
 

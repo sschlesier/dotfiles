@@ -11,11 +11,19 @@ if type wslpath > /dev/null; then
 	export WIN_HOME=$(wslpath "$(wslvar --sys USERPROFILE)")
 	export PRG_FILES=$(wslpath "$(wslvar --sys PROGRAMFILES)")
 	export DESKTOP=$(wslpath "$(wslvar --shell Desktop)")
+	if [[ -d $WIN_HOME/Downloads ]]; then
+		export DOWNLOADS="$WIN_HOME/Downloads"
+	fi
 fi
 
 #set Desktop for non-windows
 if [[ -z $DESKTOP ]]; then
 	export DESKTOP="$HOME/Desktop"
+fi
+
+#set downloads for non-windows
+if [[ -z $DOWNLOADS && -d $HOME/Downloads ]]; then
+	export DOWNLOADS="$HOME/Downloads"
 fi
 
 if [[ -n $C_ROOT ]]; then

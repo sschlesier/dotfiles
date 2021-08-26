@@ -1,6 +1,6 @@
 aliasdir() {
 	if [[ -d "$2" ]]; then
-		alias "$1"="cd \"$2\""
+		alias "$1"="tm \"$1\" \"$2\""
 	fi
 }
 

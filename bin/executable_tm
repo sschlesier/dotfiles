@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# original found at https://gist.github.com/jyurek/7be666a88e06f68d45cf
+
+tm() {
+  if [ -z "$1" ]; then
+    tmux switch-client -l
+  else
+    if [ -z "$TMUX" ]; then
+      tmux new-session -As "$1" -c "$2"
+    else
+      if ! tmux has-session -t "$1" 2>/dev/null; then
+        tmux new-session -c "$2" -ds "$1"
+      fi
+      tmux switch-client -t "$1"
+    fi
+  fi
+}
+
+tm "$1"

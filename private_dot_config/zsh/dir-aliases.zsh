@@ -1,15 +1,21 @@
 aliasdir() {
 	if [[ -d "$2" ]]; then
+		alias "$1"="cd \"$2\""
+	fi
+}
+
+sessiondir() {
+	if [[ -d "$2" ]]; then
 		alias "$1"="tm \"$1\" \"$2\""
 	fi
 }
 
 srcdir() {
 	if [[ -n $ALTSRC ]]; then
-		aliasdir "$1" "$ALTSRC"/"$2"
+		sessiondir "$1" "$ALTSRC"/"$2"
 	fi
 	#let main $SRC override alt if they both exist
-	aliasdir "$1" "$SRC"/"$2"
+	sessiondir "$1" "$SRC"/"$2"
 }
 
 setsrcdirs() {

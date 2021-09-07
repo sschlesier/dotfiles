@@ -10,7 +10,7 @@ tm() {
       tmux new-session -As "$1" -c "$2"
     else
       if ! tmux has-session -t "$1" 2>/dev/null; then
-        echo tmux new-session -d -s "$1" -c "$2"
+        # echo tmux new-session -d -s "$1" -c "$2"
         tmux new-session -d -s "$1" -c "$2"
       fi
       tmux switch-client -t "$1"

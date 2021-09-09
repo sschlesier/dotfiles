@@ -3,19 +3,20 @@
 # original found at https://gist.github.com/jyurek/7be666a88e06f68d45cf
 
 tm() {
-  if [ -z "$1" ]; then
-    tmux switch-client -l
-  else
     if [ -z "$TMUX" ]; then
-      tmux new-session -As "$1" -c "$2"
+      tmux new-session -As "${1:-misc}" -c "$2"
     else
-      if ! tmux has-session -t "$1" 2>/dev/null; then
-        # echo tmux new-session -d -s "$1" -c "$2"
-        tmux new-session -d -s "$1" -c "$2"
-      fi
-      tmux switch-client -t "$1"
+        if [ -z "$1" ]; then
+            tmux switch-client -l
+        else
+          if ! tmux has-session -t "$1" 2>/dev/null; then
+            # echo tmux new-session -d -s "$1" -c "$2"
+            tmux new-session -d -s "$1" -c "$2"
+          fi
+
+          tmux switch-client -t "$1"
+        fi
     fi
-  fi
 }
 
 tm "$1" "$2"

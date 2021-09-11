@@ -22,5 +22,5 @@ fi
 if [[ -n $url ]]; then
 	open "$url"
 else
-	echo "Unable to decipher git repo"
+	echo "Unable to decipher git repo $remote"
 fi

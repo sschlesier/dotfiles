@@ -21,9 +21,20 @@ if [ -e /home/scott/.nix-profile/etc/profile.d/nix.sh ]; then
   source /home/scott/.nix-profile/etc/profile.d/nix.sh;
 fi
 
-# set LANG on WSL
+# WSL specific config
 if [[ -n WSL ]]; then
   export LANG=en_US.UTF-8
+
+  # launch cron if not already running
+  if [[ -z $(pgrep crond) ]]; then
+    sudo crond
+  fi
+
+  # start Alpine if mounts are missing
+  if [[ ! -e ~/current/.exists ]]; then
+    echo starting Alpine
+    wsl.exe -d Alpine --exec logout
+  fi
 fi
 
 if [[ -n $TMUX ]]; then

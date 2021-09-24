@@ -1,0 +1,5 @@
+# set WSL
+if type wslpath > /dev/null; then
+	export WSL=1
+fi
+

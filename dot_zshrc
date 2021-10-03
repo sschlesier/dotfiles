@@ -22,7 +22,7 @@ if [ -e /home/scott/.nix-profile/etc/profile.d/nix.sh ]; then
 fi
 
 # WSL specific config
-if [[ -n WSL ]]; then
+if [[ -n $WSL ]]; then
   export LANG=en_US.UTF-8
 
   # launch cron if not already running

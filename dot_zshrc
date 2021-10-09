@@ -81,6 +81,8 @@ fi
 
 #omit l and git status from history
 HISTIGNORE='l:gst: '
+setopt HIST_IGNORE_ALL_DUPS  #never duplicate a history command
+setopt HIST_SAVE_NO_DUPS     #never save duplicate commands
 
 #user for theme to know when to display alternate username
 DEFAULT_USER=$(whoami)

@@ -1,5 +1,5 @@
 # set WSL
-if type wslpath > /dev/null; then
+if [[ $(uname -r) =~ icrosoft ]]; then
 	export WSL=1
 fi
 

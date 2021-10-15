@@ -6,16 +6,6 @@ stty -ixon
 bindkey -v
 export KEYTIMEOUT=1	#wait 10ms when switching to vi-mode
 
-# zmodload zsh/zprof
-export ZSH_INIT="$HOME/.config/zsh"
-export ZSH_CACHE_DIR="$ZSH_INIT/cache"
-if [[ ! -d $ZSH_CACHE_DIR ]]; then
-  mkdir -p "$ZSH_CACHE_DIR"
-fi
-
-source "$ZSH_INIT/shell_environment.zsh"
-source "$ZSH_INIT/path.zsh"
-
 # load nix if present
 if [ -e /home/scott/.nix-profile/etc/profile.d/nix.sh ]; then
   source /home/scott/.nix-profile/etc/profile.d/nix.sh;

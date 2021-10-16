@@ -6,7 +6,7 @@ else
 fi
 
 #define paths for windows file system access
-if type wslpath > /dev/null; then
+if [[ -n $WSL ]]; then
 	export C_ROOT=$(wslpath "$(wslvar --sys SystemDrive)\\")
 	export WIN_HOME=$(wslpath "$(wslvar --sys USERPROFILE)")
 	export PRG_FILES=$(wslpath "$(wslvar --sys PROGRAMFILES)")
@@ -50,20 +50,17 @@ if [[ -d "$HOME/.cargo/bin" ]]; then
 fi
 
 # setup homebrew
-# skip brew shellenv if there are both intel and Apple Silicon homebrews present
-if [[ ! -d /opt/homebrew ]] || [[ ! -d /usr/local/Homebrew ]]; then
-	brewpaths=( "/home/linuxbrew/.linuxbrew/bin/brew" \
-		"/usr/local/bin/brew" \
-		"/opt/homebrew/bin/brew" )
+brewpaths=( "/home/linuxbrew/.linuxbrew/bin/brew" \
+	"/usr/local/bin/brew" \
+	"/opt/homebrew/bin/brew" )
 
-	for pth in "${brewpaths[@]}";
-	do
-		if [[ -x "$pth" ]]; then
-			eval $("$pth" shellenv)
-			break
-		fi
-	done
-fi
+for pth in "${brewpaths[@]}";
+do
+	if [[ -x "$pth" ]]; then
+		eval $("$pth" shellenv)
+		break
+	fi
+done
 
 #add gems to path
 gempath="$ZSH_CACHE_DIR/gempath"

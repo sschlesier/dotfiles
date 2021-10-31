@@ -58,11 +58,9 @@ source $plugins_file
 #disable LS_COLORS
 unset LS_COLORS
 
-source "$ZSH_INIT/gitenv.zsh"
-source "$ZSH_INIT/dir-aliases.zsh"
-source "$ZSH_INIT/funcs.zsh"
-source "$ZSH_INIT/fzf.zsh"
-source "$ZSH_INIT/check_plugin_update.sh"
+for sh in $ZSH_INIT/[0-9]*-*sh; do
+	source "$sh"
+done
 
 #launch tmux or attach to existing session
 if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]] && type tmux >/dev/null; then

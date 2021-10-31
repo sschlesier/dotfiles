@@ -69,3 +69,25 @@ newbia() {
 
 	open_command "$name"
 }
+
+# switch to specified tmux session optional default dir
+tm() {
+    if [ -z "$TMUX" ]; then
+      tmux new-session -As "${1:-misc}" -c "$2"
+    else
+        if [ -z "$1" ]; then
+            tmux switch-client -l
+        else
+          if ! tmux has-session -t "$1" 2>/dev/null; then
+            tmux new-session -d -s "$1" -c "$2"
+          fi
+
+          curSession=$(tmux display-message -p "#{session_name}")
+          if [ "$curSession" = "$1" ]; then
+              cd "$2" || exit
+          else
+              tmux switch-client -t "$1"
+          fi
+        fi
+    fi
+}

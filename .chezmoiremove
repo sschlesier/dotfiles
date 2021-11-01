@@ -1,1 +1,6 @@
 .git-alias.config
+.config/zsh/check_plugin_update.sh
+.config/zsh/dir-aliases.zsh
+.config/zsh/funcs.zsh
+.config/zsh/fzf.zsh
+.config/zsh/gitenv.zsh

@@ -61,7 +61,6 @@ do
 		break
 	fi
 done
-export HOMEBREW_INSTALL_FROM_API=1
 
 #add gems to path
 gempath="$ZSH_CACHE_DIR/gempath"

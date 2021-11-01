@@ -2,88 +2,8 @@
 #disable tty XON/XOFF via ^S, ^Q
 stty -ixon
 
-#enable and configure vi mode
-bindkey -v
-export KEYTIMEOUT=1	#wait 10ms when switching to vi-mode
-
-# load nix if present
-if [ -e /home/scott/.nix-profile/etc/profile.d/nix.sh ]; then
-  source /home/scott/.nix-profile/etc/profile.d/nix.sh;
-fi
-
-# WSL specific config
-if [[ -n $WSL ]]; then
-  export LANG=en_US.UTF-8
-
-  # launch cron if not already running
-  if type crond >/dev/null && [[ -z $(pgrep crond) ]]; then
-    sudo crond
-  fi
-
-  # start Alpine if mounts are missing
-  if [[ -d ~/current ]] && [[ ! -e ~/current/.exists ]]; then
-    echo starting Alpine
-    wsl.exe -d Alpine --exec logout
-  fi
-fi
-
-if [[ -n $TMUX ]]; then
-  #checking for insecure completion folders is slow so disable it
-  #in tmux sub-shells keep it at startup to notice bad folders
-  export ZSH_DISABLE_COMPFIX=true
-fi
-
-#redefine xdg-open
-alias xdg-open='open_command'
-
-#update plugins when out of date
-plugins_file="$ZSH_CACHE_DIR/pre_compinit_plugins.zsh"
-plugins_src="$ZSH_INIT/pre_compinit_plugins.txt"
-if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]] && type antibody >/dev/null; then
-  echo updating "$plugins_file" ...
-  antibody bundle < "$plugins_src" > $plugins_file
-fi
-source $plugins_file
-
-autoload -Uz compinit && compinit
-
-plugins_file="$ZSH_CACHE_DIR/post_compinit_plugins.zsh"
-plugins_src="$ZSH_INIT/post_compinit_plugins.txt"
-if [[ ! -e $plugins_file || $plugins_file -ot "$plugins_src" ]] && type antibody >/dev/null; then
-  echo updating "$plugins_file" ...
-  antibody bundle < "$plugins_src" > $plugins_file
-fi
-source $plugins_file
-
-#disable LS_COLORS
-unset LS_COLORS
-
+#auto-load shell scripts
 for sh in $ZSH_INIT/[0-9]*-*sh; do
 	source "$sh"
 done
 
-#launch tmux or attach to existing session
-if [[ $LAUNCH_TMUX -eq 1 ]] && [[ -z "$TMUX" ]] && type tmux >/dev/null; then
-  tmux attach 2>/dev/null || exec tmux new -s misc -c "$HOME"
-fi
-
-#omit l and git status from history
-HISTIGNORE='l:gst: '
-setopt HIST_IGNORE_ALL_DUPS  #never duplicate a history command
-setopt HIST_SAVE_NO_DUPS     #never save duplicate commands
-
-#user for theme to know when to display alternate username
-DEFAULT_USER=$(whoami)
-
-if type nvim > /dev/null; then
-	export EDITOR=nvim
-else
-	export EDITOR=vim
-fi
-export LESS=-RFMX
-alias v=$EDITOR
-
-alias lg=lazygit
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

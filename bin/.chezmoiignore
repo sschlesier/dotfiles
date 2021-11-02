@@ -1,0 +1,3 @@
+{{- if ne .iq 1 }}
+iq/ # only manage iq/ on work laptop
+{{- end }}

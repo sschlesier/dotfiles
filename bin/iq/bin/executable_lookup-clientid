@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+https --ignore-stdin --body "accounts.iqmetrix.net/v1/clientApplications($1)" \
+	"Authorization:Bearer $(iq-gettoken)" | \
+    jq 'del(.Secret)'

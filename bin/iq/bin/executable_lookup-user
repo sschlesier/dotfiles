@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+
+https --ignore-stdin --body "usermanager.iqmetrix.net/v1/users($1)" \
+	"Authorization:Bearer $(iq-gettoken)"

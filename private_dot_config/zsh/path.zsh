@@ -33,6 +33,11 @@ if [[ -n $C_ROOT ]]; then
 	PATH+=$C_ROOT/Windows/System32
 fi
 
+#iCloud
+if [[ -d $HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs ]]; then
+	export ICLOUD=$HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs
+fi
+
 #include ~/bin and all bins under that folder on path
 while read -r binpath
 do

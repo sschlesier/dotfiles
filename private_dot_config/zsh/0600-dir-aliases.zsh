@@ -57,25 +57,10 @@ aliasdir od "$WIN_HOME/OneDrive"
 aliasdir sa "$WIN_HOME/iQmetrix Software Development Corp/Security Architecture - Documents"
 aliasdir sq "$WIN_HOME/OneDrive/sql-encrypted"
 
-srcdir ams AssetMediaService
-srcdir ap IQ.Auth.Packages
-srcdir au Auth
-srcdir av IQ.Platform.Availability
-srcdir bsn BuildScripts.Net
-srcdir ca Catalogs
-srcdir cn CatalogNexus
-srcdir es EntityStore
-srcdir exp experiment
-srcdir fm Foundation.Messaging
-srcdir fo Foundation.Outbox
-srcdir im IQ.Messaging
-srcdir mg Monitoring.Graphite
+srcdir ah arthana
+srcdir pr practice
 srcdir pe product-excellence
-srcdir pl ProductLibrary
-srcdir rq RQ
-srcdir sbm ServiceBusMonitor
 srcdir ss shell-setup
-srcdir sub ProductSubscriptions
 
 # List directory contents
 if type exa &> /dev/null; then

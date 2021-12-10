@@ -64,7 +64,7 @@ srcdir pr practice
 srcdir pe product-excellence
 srcdir ss shell-setup
 
-gosrcdir gt golang-tour
+gosrcdir got golang-tour
 
 # List directory contents
 if type exa &> /dev/null; then

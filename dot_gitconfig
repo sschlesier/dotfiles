@@ -1,5 +1,5 @@
 [user]
-	name = Scott S.
+	name = Scott Schlesier
 [core]
 	autocrlf = input
 	excludesfile = /Users/scotts/.gitignore_global

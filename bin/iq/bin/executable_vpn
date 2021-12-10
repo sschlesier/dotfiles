@@ -1,10 +1,10 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
-vpnName=${1:-vcvpn}
+vpnName=${1:-Winnipegvpn.iqmetrix.com}
 
 pwd="$(lp-getpwd adfs.iqmetrix.com)"
 if [[ -n $pwd ]]; then
-	nohup "/mnt/c/Program Files/SonicWall/Global VPN Client/SWGVC.exe" -E "$vpnName.iqmetrix.com" -U Scott.Schlesier -P "$pwd"  &>/dev/null &
+	echo -e "0\n\n$pwd\n" | /opt/cisco/anyconnect/bin/vpn -s connect "$vpnName"
 else
 	echo Could not retreive credentials
 fi

@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
-"/mnt/c/Program Files/SonicWall/Global VPN Client/SWGVC.exe" -Q
+/opt/cisco/anyconnect/bin/vpn disconnect
 

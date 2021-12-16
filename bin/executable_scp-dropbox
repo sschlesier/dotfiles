@@ -1,3 +1,0 @@
-#! /usr/bin/env sh
-
-scp "$1" scott@mini.schlesier.ca:~/Dropbox

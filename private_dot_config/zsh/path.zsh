@@ -5,7 +5,13 @@ else
 	export PATHS_DEFINED=1
 fi
 
+export DESKTOP="$HOME/Desktop"
+if [[ -d $HOME/Downloads ]]; then
+	export DOWNLOADS="$HOME/Downloads"
+fi
+
 #define paths for windows file system access
+#override assumed non-windows paths
 if [[ -n $WSL ]]; then
 	export C_ROOT=$(wslpath "$(wslvar --sys SystemDrive)\\")
 	export WIN_HOME=$(wslpath "$(wslvar --sys USERPROFILE)")
@@ -14,16 +20,6 @@ if [[ -n $WSL ]]; then
 	if [[ -d $WIN_HOME/Downloads ]]; then
 		export DOWNLOADS="$WIN_HOME/Downloads"
 	fi
-fi
-
-#set Desktop for non-windows
-if [[ -z $DESKTOP ]]; then
-	export DESKTOP="$HOME/Desktop"
-fi
-
-#set downloads for non-windows
-if [[ -z $DOWNLOADS && -d $HOME/Downloads ]]; then
-	export DOWNLOADS="$HOME/Downloads"
 fi
 
 if [[ -n $C_ROOT ]]; then

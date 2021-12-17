@@ -4,7 +4,7 @@ if [[ $(uname -r) =~ icrosoft ]]; then
 fi
 
 export ZSH_INIT="$HOME/.config/zsh"
-export ZSH_CACHE_DIR="$ZSH_INIT/cache"
+export ZSH_CACHE_DIR="$HOME/.cache"
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p "$ZSH_CACHE_DIR"
 fi

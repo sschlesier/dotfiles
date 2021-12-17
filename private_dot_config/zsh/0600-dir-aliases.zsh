@@ -41,23 +41,17 @@ fi
 if [[ -n $ALTSRC ]]; then
 	cdpath+=("$ALTSRC")
 fi
+
 zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b
 
-aliasdir cfg "$HOME/.config"
 aliasdir cur "$HOME/current"
 aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"
-aliasdir dow "$WIN_HOME/Downloads"
-aliasdir dr "$HOME/Dropbox"
-aliasdir dr "$WIN_HOME/Dropbox"
 aliasdir gs "$GOPATH/src/github.com/sschlesier"
 aliasdir src "$SRC"
-aliasdir to "$WIN_HOME/tools"
-
-#iq specific
-aliasdir od "$WIN_HOME/OneDrive"
+aliasdir cz "$HOME/.config/zsh"
 
 srcdir ah arthana
 srcdir pr practice

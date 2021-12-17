@@ -4,5 +4,6 @@
 .config/zsh/funcs.zsh
 .config/zsh/fzf.zsh
 .config/zsh/gitenv.zsh
+.config/zsh/0650-direnv.sh
 bin/iq/bin/install-azurecli-fedora
 bin/tm

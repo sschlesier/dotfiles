@@ -7,5 +7,6 @@
 .config/zsh/0650-direnv.sh
 .config/zsh/0100-antibody.zsh
 .config/zsh/0050-wsl.zsh
+.config/zsh/exa_completions.zsh
 bin/iq/bin/install-azurecli-fedora
 bin/tm

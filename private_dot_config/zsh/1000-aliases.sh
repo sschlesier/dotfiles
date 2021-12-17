@@ -9,6 +9,7 @@ export LESS=-RFMX
 alias lg=lazygit
 alias xdg-open='open_command'
 
+alias ca='chezmoi apply'
 alias cs='chezmoi status'
 alias cr='chezmoi re-add'
 alias cdf='chezmoi diff'

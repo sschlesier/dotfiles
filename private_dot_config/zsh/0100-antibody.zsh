@@ -4,6 +4,14 @@ if [[ -n $TMUX ]]; then
   export ZSH_DISABLE_COMPFIX=true
 fi
 
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
+
 #update plugins when out of date
 plugins_file="$ZSH_CACHE_DIR/pre_compinit_plugins.zsh"
 plugins_src="$ZSH_INIT/pre_compinit_plugins.txt"

@@ -1,6 +1,0 @@
-#! /usr/bin/sh
-# https://github.com/WhitewaterFoundry/Pengwin-Enterprise/issues/20#issuecomment-467605833
-
-dd if=/dev/zero of=/var/lib/rpm/__db.001 bs=1M count=1
-dd if=/dev/zero of=/var/lib/rpm/__db.002 bs=1M count=1
-dd if=/dev/zero of=/var/lib/rpm/__db.003 bs=1M count=1

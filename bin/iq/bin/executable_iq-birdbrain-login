@@ -1,7 +1,0 @@
-#! /bin/sh
-
-bb_secret=$(lp-getnote birdbrain_clientsecret)
-bb_json=$(https --form POST birdbrainapi.azure.production.k8s.iqmetrix.net/token client_secret="$bb_secret")
-unset bb_secret
-
-echo $bb_json | lpass edit --sync=no --non-interactive --notes birdbrain_token

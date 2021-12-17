@@ -1,4 +1,0 @@
-#! /bin/sh
-
-install-ms-repo-fedora
-sudo dnf install dotnet-sdk-5.0

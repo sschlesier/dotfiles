@@ -1,7 +1,0 @@
-#! /usr/bin/env zsh
-
-bkupdir="$WIN_HOME/Documents/WSLbkup"
-mkdir -p "$bkupdir"
-cp ~/.zsh_history "$bkupdir"
-cp -r ~/.ssh "$bkupdir"
-rm "$bkupdir/.ssh/environment-"

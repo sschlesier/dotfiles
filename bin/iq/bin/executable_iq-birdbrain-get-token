@@ -1,3 +1,0 @@
-#! /bin/sh
-
-lp-getnote birdbrain_token | jq -r '.access_token'

@@ -1,4 +1,0 @@
-#! /usr/bin/env sh
-
-echo $(date)
-sudo rsync --recursive --delete --times --exclude '.git/' -vv /mnt/wsl/Alpine/data/current /mnt/c/Users/Scott.Schlesier/OneDrive

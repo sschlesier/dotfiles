@@ -1,3 +1,3 @@
-{{- if ne .iq 1 }}
-iq/ # only manage iq/ on work laptop
+{{- if ne .work 1 }}
+work/ # only manage iq/ on work laptop
 {{- end }}

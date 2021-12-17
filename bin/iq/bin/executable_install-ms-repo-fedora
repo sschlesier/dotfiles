@@ -1,9 +1,0 @@
-#! /bin/sh
-
-repofile=/etc/yum.repos.d/microsoft-prod.repo
-
-if [ ! -f "$repofile" ]; then
-    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    sudo wget -O "$repofile" https://packages.microsoft.com/config/fedora/33/prod.repo
-fi
-

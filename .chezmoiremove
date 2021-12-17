@@ -5,5 +5,6 @@
 .config/zsh/fzf.zsh
 .config/zsh/gitenv.zsh
 .config/zsh/0650-direnv.sh
+.config/zsh/0100-antibody.zsh
 bin/iq/bin/install-azurecli-fedora
 bin/tm

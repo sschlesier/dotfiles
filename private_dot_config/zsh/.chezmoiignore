@@ -1,3 +1,3 @@
 {{- if ne .work 1 }}
-0610-work-dir-aliases.sh
+0610-work-dir-aliases.zsh
 {{- end }}

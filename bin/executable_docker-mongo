@@ -1,8 +1,0 @@
-#! /bin/sh
-
-if ! try_start_container mongo; then
-  docker run -d --rm --name mongo \
-	-p 27017:27017 \
-	-v mongo:/data/db \
-	mongo:4.0
-fi

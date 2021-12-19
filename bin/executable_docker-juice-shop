@@ -1,7 +1,0 @@
-#! /bin/sh
-
-if ! try_start_container juice-shop; then
-  docker run \
-     -p 3000:3000 --rm --name juice-shop -d \
-     bkimminich/juice-shop
-fi

@@ -1,8 +1,0 @@
-#! /bin/sh
-
-if ! try_start_container redis; then
-  docker run -d --rm --name redis \
-	-p 6379:6379 \
-	redis
-fi
-

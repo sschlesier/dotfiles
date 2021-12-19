@@ -1,8 +1,0 @@
-#! /bin/sh
-
-if ! try_start_container elasticHQ; then
-  docker run -d -p 5000:5000 \
-	-e "HQ_DEFAULT_URL=http://host.docker.internal:9200" \
-	--rm --name elasticHQ \
-	elastichq/elasticsearch-hq
-fi

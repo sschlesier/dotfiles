@@ -1,3 +1,0 @@
-#! /usr/bin/env sh
-
-docker run --net=host --ipc=host --uts=host --pid=host -it --security-opt=seccomp=unconfined --privileged --rm --name moby-linux-access -v /:/host nix-cli

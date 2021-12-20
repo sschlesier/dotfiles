@@ -38,7 +38,7 @@ fi
 while read -r binpath
 do
 	PATH+=:"$binpath"
-done < <(find "$HOME/bin" -type d -name bin)
+done < <(find "$HOME/bin" -type d)
 
 #include .local/bin on path
 if [[ -d "$HOME/.local/bin" ]]; then

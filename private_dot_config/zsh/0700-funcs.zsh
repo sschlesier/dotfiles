@@ -91,3 +91,25 @@ tm() {
         fi
     fi
 }
+
+# create new session $1 and optional dir $2
+# move current window into that session
+tm-fork() {
+  if [ -z "$1" ]; then
+    echo Please pass a session name
+    exit 1
+  fi
+
+  winSrc=$(tmux display-message -p "#{session_name}:#{window_index}")
+
+  if ! tmux has-session -t "$1" 2>/dev/null; then
+    newSess=1
+    tmux new-session -d -s "$1" -c "$2"
+  fi
+
+  tmux switch-client -t "$1"
+  tmux move-window -s "$winSrc" -t "$1"
+  if [ "$newSess" -eq "1" ]; then
+    tmux kill-window -a
+  fi
+}

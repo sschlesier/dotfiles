@@ -16,10 +16,10 @@ gosrcdir() {
 
 srcdir() {
 	if [[ -n $ALTSRC ]]; then
-		sessiondir "$1" "$ALTSRC"/"$2"
+		aliasdir "$1" "$ALTSRC"/"$2"
 	fi
 	#let main $SRC override alt if they both exist
-	sessiondir "$1" "$SRC"/"$2"
+	aliasdir "$1" "$SRC"/"$2"
 }
 
 setsrcdirs() {

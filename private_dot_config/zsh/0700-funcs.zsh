@@ -94,7 +94,7 @@ tm() {
 
 # create new session $1 and optional dir $2
 # move current window into that session
-tm-fork() {
+tmw() {
   if [ -z "$1" ]; then
     echo Please pass a session name
     exit 1

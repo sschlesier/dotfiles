@@ -113,3 +113,13 @@ tm-fork() {
     tmux kill-window -a
   fi
 }
+
+# update nvm
+nvm-update() {
+    if [[ -z $1 ]]; then
+        echo Please specify a version to update
+        nvm ls
+    fi
+
+    nvm install "$1" --reinstall-packages-from="$1"
+}

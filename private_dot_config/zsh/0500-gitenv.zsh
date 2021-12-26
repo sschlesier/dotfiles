@@ -3,3 +3,7 @@
 alias gt='printf "\033[?7l$(git tree --color=always | head -n$(($LINES - 4)))\033[?7h\n"'
 alias gta='git tree --all'
 alias gv='git view'
+
+function gi() {
+   curl -sLw '' https://www.toptal.com/developers/gitignore/api/$@ ;
+}

@@ -1,0 +1,3 @@
+#! /bin/sh
+
+echo $FPATH | tr ':' '\n'

@@ -123,3 +123,8 @@ nvm-update() {
 
     nvm install "$1" --reinstall-packages-from="$1"
 }
+
+#print a line sepearated fpath
+legible-fpath() {
+  echo $FPATH | tr ':' '\n'
+}

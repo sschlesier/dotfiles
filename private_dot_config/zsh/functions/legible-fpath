@@ -1,0 +1,5 @@
+#print a line sepearated fpath
+legible-fpath() {
+  echo $FPATH | tr ':' '\n'
+}
+legible-fpath

@@ -1,0 +1,6 @@
+#open the current folder in explorer
+b() {
+	open_command .
+}
+export b
+b

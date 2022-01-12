@@ -1,0 +1,6 @@
+#make directory w/ current date
+mdd() {
+	mcd $(date '+%Y-%m-%d')
+}
+export mdd
+mdd

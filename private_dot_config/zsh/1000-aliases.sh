@@ -14,3 +14,6 @@ alias cs='chezmoi status'
 alias cr='chezmoi re-add'
 alias cdf='chezmoi diff'
 alias ccs='cd $(chezmoi source-path)'
+
+## super user alias
+alias _='sudo'

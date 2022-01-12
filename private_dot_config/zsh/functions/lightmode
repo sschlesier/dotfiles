@@ -1,0 +1,4 @@
+lightmode() {
+	it2prof papercolor-light
+}
+lightmode

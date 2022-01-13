@@ -1,7 +1,6 @@
 robbyrussell/oh-my-zsh path:lib/functions.zsh
 robbyrussell/oh-my-zsh path:lib/history.zsh
 robbyrussell/oh-my-zsh path:plugins/git
-robbyrussell/oh-my-zsh path:plugins/ssh-agent
 robbyrussell/oh-my-zsh path:plugins/web-search
 romkatv/powerlevel10k
 zsh-users/zsh-syntax-highlighting

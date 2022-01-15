@@ -52,6 +52,7 @@ aliasdir dow "$HOME/Downloads"
 aliasdir gs "$GOPATH/src/github.com/sschlesier"
 aliasdir src "$SRC"
 aliasdir cz "$HOME/.config/zsh"
+aliasdir ic "$ICLOUD"
 
 srcdir ah arthana
 srcdir pr practice

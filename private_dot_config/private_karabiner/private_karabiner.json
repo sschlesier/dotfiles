@@ -40,34 +40,6 @@
                                 "type": "basic"
                             }
                         ]
-                    },
-                    {
-                        "description": "Cmd+Ctl+p to Flameshot Mac launcher",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "p",
-				    "modifiers": {
-					"mandatory": [
-					    "command",
-					    "control"
-					]
-				    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "4",
-                                        "modifiers": [
-                                            "right_alt",
-                                            "right_command",
-                                            "right_shift"
-                                        ],
-                                        "repeat": false
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
                     }
                 ]
             },

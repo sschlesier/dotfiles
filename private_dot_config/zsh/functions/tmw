@@ -3,7 +3,7 @@
 tmw() {
   if [ -z "$1" ]; then
     echo Please pass a session name
-    exit 1
+    return 1
   fi
 
   winSrc=$(tmux display-message -p "#{session_name}:#{window_index}")

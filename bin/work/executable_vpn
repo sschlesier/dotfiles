@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
-vpnName=${1:-Winnipegvpn.iqmetrix.com}
+# vpnName=${1:-Winnipegvpn.iqmetrix.com}
+vpnName=${1:-Reginavpn.iqmetrix.com}
 
 pwd="$(lp-getpwd adfs.iqmetrix.com)"
 if [[ -n $pwd ]]; then

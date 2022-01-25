@@ -28,6 +28,7 @@
 	prompt = false
 [diff]
 	tool = vimdiff
+	algorithm = histogram
 [alias]
 	ignore = "!gi() { curl -sL https://www.gitignore.io/api/$@ ;}; gi"
 [init]

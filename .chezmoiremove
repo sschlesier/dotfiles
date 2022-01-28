@@ -11,3 +11,4 @@
 .config/zsh/0610-ready-dir-aliases.zsh
 bin/iq/bin/install-azurecli-fedora
 bin/tm
+bin/webstorm

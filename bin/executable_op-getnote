@@ -1,0 +1,3 @@
+#! /usr/bin/env sh
+
+op get item "$1" | jq -r '.details.notesPlain'

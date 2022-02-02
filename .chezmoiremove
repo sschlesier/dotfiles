@@ -12,3 +12,4 @@
 bin/iq/bin/install-azurecli-fedora
 bin/tm
 bin/webstorm
+bin/ws

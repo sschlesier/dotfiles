@@ -1,0 +1,5 @@
+ws() {
+    nvm-use
+    open -na "WebStorm.app" --args "$@"
+}
+ws "$@"

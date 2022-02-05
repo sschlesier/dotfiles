@@ -1,9 +1,13 @@
 nvm-use() {
 	if [[ -f package.json ]]; then
 	    ver=$( jq -r '.engines.node' < package.json | ag --only-matching '[0-9.]+' )
-	    ver=v"$ver"
-	    echo using "$ver"
-	    nvm use "$ver"
+        if [[ -n $ver ]]; then
+            ver=v"$ver"
+            echo using node "$ver"
+            nvm use "$ver"
+        else
+            echo Could not find node version in package.json
+        fi
 	else
 	    echo Cannot find package.json
 	fi

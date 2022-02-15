@@ -9,4 +9,9 @@ if [[ ! -e $codepath ]]; then
   echo code not found
 fi
 
+#if no params passed use current dir
+if [[ $# == 0 ]]; then
+  set -- .
+fi
+
 nohup "$codepath"  "$@" &>/dev/null &

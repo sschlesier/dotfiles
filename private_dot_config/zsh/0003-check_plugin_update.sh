@@ -1,12 +1,10 @@
-#! /usr/bin/env bash
-
 lastUpdatedFileName=plugins_updated
 lastUpdatedPath="$ZSH_CACHE_DIR/$lastUpdatedFileName"
 
 #only run when in TMUX as the tmux updates will fail outside of tmux
-if [[ -z $TMUX ]]; then
-	return
-fi
+# if [[ -z $TMUX ]]; then
+# 	return
+# fi
 
 #find is faster than fd for this purpose but Fedora doesn't seem to have find
 if type find > /dev/null; then
@@ -18,7 +16,7 @@ else
 fi
 
 if [[ -n "$foundFile" ]]; then
-  read  -r "CONFIRM?Would you like to update all plugins? "
+  read  -r -t 5 "CONFIRM?Would you like to update all plugins? "
   if [[ $CONFIRM =~ ^[Yy]$ ]]; then
     update_all_plugins
     touch "$lastUpdatedPath"

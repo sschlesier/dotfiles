@@ -9,6 +9,7 @@
 .config/zsh/0050-wsl.zsh
 .config/zsh/exa_completions.zsh
 .config/zsh/0610-ready-dir-aliases.zsh
+.config/zsh/0900-check_plugin_update.sh
 bin/iq/bin/install-azurecli-fedora
 bin/tm
 bin/webstorm

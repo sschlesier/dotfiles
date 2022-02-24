@@ -36,3 +36,5 @@ bind -n M-r select-layout main-vertical \;\
 # Zoom selected pane
 bind -n M-z resize-pane -Z
 
+# move pane to a new window
+bind -n M-w break-pane

@@ -3,12 +3,13 @@ if [[ $(uname -r) =~ icrosoft ]]; then
 	export WSL=1
 fi
 
-export ZSH_INIT="$HOME/.config/zsh"
-export ZSH_CACHE_DIR="$HOME/.cache"
+export ZDOTDIR="$HOME/.config/zsh"
+export ZSH_INIT="$ZDOTDIR"
+export ZSH_CACHE_DIR="$ZDOTDIR/.cache"
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p "$ZSH_CACHE_DIR"
 fi
 
-source "$ZSH_INIT/shell_environment.zsh"
-source "$ZSH_INIT/path.zsh"
+source "$ZDOTDIR/shell_environment.zsh"
+source "$ZDOTDIR/path.zsh"
 

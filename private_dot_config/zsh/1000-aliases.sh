@@ -17,3 +17,6 @@ alias ccs='cd $(chezmoi source-path)'
 
 ## super user alias
 alias _='sudo'
+
+# put last command on clipboard
+alias fcc="fc -ln -1 | tr -d '\n' | pbcopy"

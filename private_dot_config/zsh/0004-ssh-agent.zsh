@@ -4,6 +4,7 @@ if [[ -n $TMUX ]]; then
   export ZSH_DISABLE_COMPFIX=true
 fi
 
+_comp_options+=(globdots) # complete hidden files
 autoload -Uz compinit && compinit
 
 #update plugins when out of date

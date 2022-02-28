@@ -3,13 +3,20 @@ if [[ $(uname -r) =~ icrosoft ]]; then
 	export WSL=1
 fi
 
-export ZDOTDIR="$HOME/.config/zsh"
-export ZSH_INIT="$ZDOTDIR"
-export ZSH_CACHE_DIR="$ZDOTDIR/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p "$ZSH_CACHE_DIR"
 fi
 
 source "$ZDOTDIR/shell_environment.zsh"
 source "$ZDOTDIR/path.zsh"
+
+#XDG for vim
+export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
 

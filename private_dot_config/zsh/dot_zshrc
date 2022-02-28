@@ -3,7 +3,7 @@
 stty -ixon
 
 #auto-load shell scripts
-for sh in $ZSH_INIT/[0-9]*-*sh; do
+for sh in $ZDOTDIR/[0-9]*-*sh; do
 	source "$sh"
 done
 

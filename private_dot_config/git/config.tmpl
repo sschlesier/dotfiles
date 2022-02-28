@@ -1,13 +1,14 @@
 [user]
 	name = Scott Schlesier
+	email = {{ .email }}
 [core]
 	autocrlf = input
-	excludesfile = /Users/scotts/.gitignore_global
+	excludesfile = ~/.config/git/ignore
 	safecrlf = false
 	pager = diff-so-fancy | less --tabs=4 -RFX
 [include]
-	path = ~/.git-alias
-	path = ~/.git-environment
+	path = ~/.config/git/aliases
+	path = ~/.config/git/environment
 [push]
 	default = upstream
 [rerere]

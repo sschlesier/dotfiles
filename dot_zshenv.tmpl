@@ -1,6 +1,6 @@
 # set WSL
 if [[ $(uname -r) =~ icrosoft ]]; then
-	export WSL=1
+	export WSL={{ .launch_tmux }}
 fi
 
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -14,7 +14,8 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p "$ZSH_CACHE_DIR"
 fi
 
-source "$ZDOTDIR/shell_environment.zsh"
+export EMAIL={{ .email }}
+export LAUNCH_TMUX={{ .launch_tmux }}
 source "$ZDOTDIR/path.zsh"
 
 #XDG for vim

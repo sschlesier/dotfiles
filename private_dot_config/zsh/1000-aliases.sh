@@ -5,7 +5,6 @@ else
 fi
 alias v=$EDITOR
 
-export LESS=-RFMX
 alias lg=lazygit
 alias xdg-open='open_command'
 

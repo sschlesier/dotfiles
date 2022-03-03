@@ -1,0 +1,7 @@
+markserv() {
+  nvm use default
+  prefix=$(npm config get prefix)
+  "$prefix/bin/markserv" "$@"
+}
+export markserv
+markserv

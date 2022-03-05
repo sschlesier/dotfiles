@@ -1,0 +1,8 @@
+nls () {
+  echo file matches
+  ls -c $XDG_DATA_HOME/notes | ag "$*"
+  echo
+  echo data matches
+  ag $* $XDG_DATA_HOME/notes
+}
+nls $*

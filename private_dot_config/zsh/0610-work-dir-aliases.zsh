@@ -4,7 +4,8 @@ srcdir rd  Ready.Dashboard
 srcdir rda Ready.DashboardV2Api
 srcdir rma Ready.MobileApp
 srcdir rmu Ready.Menu
-srcdir rmuc Ready.Menu.Core
+srcdir rmc Ready.Menu.Core
+srcdir rmcp Ready.MenuCopier
 
 aliasdir od "$HOME/OneDrive"
 

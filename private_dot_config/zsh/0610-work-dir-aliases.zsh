@@ -1,3 +1,4 @@
+srcdir pbi  powerbi-etl
 srcdir ra  Ready.API
 srcdir rad Ready.API.Dashboard
 srcdir rd  Ready.Dashboard

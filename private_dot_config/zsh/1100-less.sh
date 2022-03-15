@@ -1,4 +1,4 @@
 export LESS=-RFMX
-if type batpipe > /dev/null; then
+if [[ -z $LESSOPEN ]] && type batpipe > /dev/null; then
     eval "$(batpipe)"
 fi

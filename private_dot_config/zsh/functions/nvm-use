@@ -6,10 +6,12 @@ nvm-use() {
             echo using node "$ver"
             nvm use "$ver"
         else
-            echo Could not find node version in package.json
+            echo Could not find node version in package.json using default node
+            nvm use default
         fi
 	else
-	    echo Cannot find package.json
+	    echo Cannot find package.json using default node
+        nvm use default
 	fi
 }
 nvm-use

@@ -4,6 +4,10 @@ stty -ixon
 
 #auto-load shell scripts
 for sh in $ZDOTDIR/[0-9]*-*sh; do
+    # start=$(perl -MTime::HiRes=time -e 'printf "%.9f\n", time')
 	source "$sh"
+    # stop=$(perl -MTime::HiRes=time -e 'printf "%.9f\n", time')
+    # delta=$(echo "$stop - $start" | bc)
+    # echo $delta $sh
 done
 

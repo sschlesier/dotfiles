@@ -85,5 +85,10 @@ if type go > /dev/null; then
 	PATH+=:"$GOPATH/bin"
 fi
 
+#add libpq (postgres client) to path
+if [[ -e "$HOMEBREW_PREFIX/opt/libpq/bin" ]]; then
+	PATH+=:"$HOMEBREW_PREFIX/opt/libpq/bin"
+fi
+
 #de-duplicate path
 typeset -aU path

@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+function convert() {
+    printf "%s\t" "$1"
+    date \
+        -jf "%Y-%m-%dT%H:%M:%S%z" \
+        "$2" \
+        "+%Y-%m-%dT%H:%M:%S%z"
+}
+
+printf "input\t%s\n" "$1"
+TZ=UTC convert UTC "$1"
+TZ=Canada/Eastern convert ET "$1"
+TZ=Canada/Pacific convert PT "$1"
+TZ=Canada/Saskatchewan convert SKT "$1"

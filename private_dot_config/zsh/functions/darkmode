@@ -1,4 +1,0 @@
-darkmode() {
-	it2prof gruvbox-dark
-}
-darkmode

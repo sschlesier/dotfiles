@@ -1,0 +1,4 @@
+hg() {
+    kitty +kitten hyperlinked_grep "$@"
+}
+hg "$@"

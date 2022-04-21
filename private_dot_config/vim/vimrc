@@ -44,7 +44,6 @@ Plug 'blueyed/vim-diminactive'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'dense-analysis/ale'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'gruvbox-community/gruvbox'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
@@ -111,19 +110,7 @@ endif
 
 " Colorscheme
 syntax enable
-if $ITERM_PROFILE =~# "-light$"
-  set background=light
-  try
-    colorscheme PaperColor
-    catch
-  endtry
-else
-  set background=dark
-  try
-    colorscheme gruvbox
-    catch
-  endtry
-endif
+colorscheme PaperColor
 
 " allow tmux dimming to affect vim
 " highlight Normal ctermbg=NONE ctermfg=NONE

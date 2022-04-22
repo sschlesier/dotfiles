@@ -19,3 +19,6 @@ alias _='sudo'
 
 # put last command on clipboard
 alias fcc="fc -ln -1 | tr -d '\n' | pbcopy"
+
+# ssh kitten
+alias s="kitty +kitten ssh"

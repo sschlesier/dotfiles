@@ -110,6 +110,7 @@ endif
 
 " Colorscheme
 syntax enable
+set background=dark
 colorscheme PaperColor
 
 " allow tmux dimming to affect vim

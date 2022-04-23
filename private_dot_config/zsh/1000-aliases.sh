@@ -22,3 +22,6 @@ alias fcc="fc -ln -1 | tr -d '\n' | pbcopy"
 
 # ssh kitten
 alias s="kitty +kitten ssh"
+
+# images in kitty kitten
+alias icat="kitty +kitten icat"

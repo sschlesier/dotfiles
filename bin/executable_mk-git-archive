@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+set -euo pipefail
+
+name=${PWD##*/}
+gitPath="$HOME/OneDrive/Archive/gitrepo/$name.git"
+
+git init --bare "$gitPath"
+
+git remote add onedrive "$gitPath"
+git push -u onedrive main

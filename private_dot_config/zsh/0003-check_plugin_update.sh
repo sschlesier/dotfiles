@@ -1,11 +1,6 @@
 lastUpdatedFileName=plugins_updated
 lastUpdatedPath="$ZSH_CACHE_DIR/$lastUpdatedFileName"
 
-#only run when in TMUX as the tmux updates will fail outside of tmux
-# if [[ -z $TMUX ]]; then
-# 	return
-# fi
-
 #find is faster than fd for this purpose but Fedora doesn't seem to have find
 if type find > /dev/null; then
   foundFile=$(find "$ZSH_CACHE_DIR" -maxdepth 1 -name "$lastUpdatedFileName" -mtime +7 -print -quit)

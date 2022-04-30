@@ -1,5 +1,0 @@
-#update tmux environment from current server state
-tmux-update-env() {
-source <(tmux show-environment -s)
-}
-tmux-update-env

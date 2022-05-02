@@ -2,5 +2,5 @@
 
 antibody update
 vim +PlugUpdate +PlugUpgrade +qall
-"$HOME/.config/tmux/plugins/tpm/bin/update_plugins" all
+# "$HOME/.config/tmux/plugins/tpm/bin/update_plugins" all
 tldr --update

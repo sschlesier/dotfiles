@@ -98,10 +98,6 @@ set lazyredraw                  " Wait to redraw
 set nomodeline                  " disable mode line I don't use and it has vulnerability
 set scrolloff=3	                " minimum 10 lines around cursor when jumping
 
-" visible whitespace
-set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
-set nolist                      " hide whitespace
-
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')
   set undofile
@@ -113,8 +109,10 @@ syntax enable
 set background=dark
 colorscheme PaperColor
 
-" allow tmux dimming to affect vim
-" highlight Normal ctermbg=NONE ctermfg=NONE
+" visible whitespace
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+set nolist                      " hide whitespace
+highlight SpecialKey ctermfg=220       " override color to yellow
 
 "highlight active split by enabling syntax higlighting
 let g:diminactive_use_syntax = 0

@@ -1,6 +1,4 @@
 ws() {
-    nvm-use
-
     if [[ $# == 0 ]]; then
       #if no params passed use current dir
       set -- .

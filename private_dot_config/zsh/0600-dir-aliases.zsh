@@ -50,7 +50,6 @@ aliasdir cur "$HOME/current"
 aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"
 aliasdir gs "$GOPATH/src/github.com/sschlesier"
-aliasdir src "$SRC"
 aliasdir ic "$ICLOUD"
 
 srcdir ah arthana

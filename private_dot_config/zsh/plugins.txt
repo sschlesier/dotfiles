@@ -6,4 +6,3 @@ romkatv/powerlevel10k
 zsh-users/zsh-syntax-highlighting
 mollifier/cd-gitroot
 djui/alias-tips
-wfxr/forgit

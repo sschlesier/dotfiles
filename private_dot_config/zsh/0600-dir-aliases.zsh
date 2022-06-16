@@ -51,6 +51,7 @@ aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"
 aliasdir gs "$GOPATH/src/github.com/sschlesier"
 aliasdir ic "$ICLOUD"
+aliasdir od "$HOME/OneDrive"
 
 srcdir ah arthana
 srcdir pr practice

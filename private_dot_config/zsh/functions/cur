@@ -1,0 +1,4 @@
+cur() {
+	fuzzy-dir ~/current "$1"
+}
+cur "$@"

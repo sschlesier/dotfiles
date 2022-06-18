@@ -1,8 +1,4 @@
 src() {
-    cd "$SRC" || exit
-    dest=$(fd --type d --max-depth 1 '' | fzf --no-select-1 --query "$1")
-    if [[ -n $dest ]]; then
-        cd "$dest" || exit
-    fi
+	fuzzy-dir ~/src "$1"
 }
 src "$@"

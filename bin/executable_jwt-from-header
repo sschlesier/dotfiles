@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+set -euo pipefail
+
+# take an Authorization header from the clipboard and remove
+# the header and bearer and any double quotes
+# should leave a clean jwt token on stdout
+
+pbpaste | sed 's/.* //' | sed 's/"$//' |  sed 's/.*"//'
+

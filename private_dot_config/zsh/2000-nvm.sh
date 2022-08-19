@@ -14,20 +14,20 @@ lazynvm() {
 
 nvm() {
   lazynvm
-  nvm $@
+  nvm "$@"
 }
 
 node() {
   lazynvm
-  node $@
+  node "$@"
 }
 
 npm() {
   lazynvm
-  npm $@
+  npm "$@"
 }
 
 npx() {
   lazynvm
-  npx $@
+  npx "$@"
 }

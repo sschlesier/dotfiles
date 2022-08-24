@@ -1,6 +1,6 @@
 #! /bin/sh
 
 antibody update
-vim +PlugUpdate +PlugUpgrade +qall
+$EDITOR +PlugUpdate +PlugUpgrade +qall
 # "$HOME/.config/tmux/plugins/tpm/bin/update_plugins" all
 tldr --update

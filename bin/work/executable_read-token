@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+set -euo pipefail
+
+cat "$XDG_CACHE_HOME/tokens/$1"

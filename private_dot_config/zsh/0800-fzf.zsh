@@ -13,9 +13,6 @@ export FZF_DEFAULT_COMMAND="git ls-files --cached --others --exclude-standard | 
 export FZF_CTRL_T_COMMAND="fd $FD_OPTIONS"
 export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
 
-export FZF_TMUX=0
-export FZF_TMUX_HEIGHT=33%
-
 if [[ -z $FZF_SCRIPT_HOME ]]; then
 	# Where are fzf scripts
 	# fedora, freebsd, debian

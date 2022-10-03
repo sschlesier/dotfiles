@@ -1,4 +1,0 @@
-wip() {
-	fuzzy-dir ~/wip "$1"
-}
-wip "$@"

@@ -11,6 +11,7 @@
 .config/zsh/0610-ready-dir-aliases.zsh
 .config/zsh/0900-check_plugin_update.sh
 .config/zsh/1000-aliases.sh
+.config/zsh/4000-autojump.sh
 bin/iq/bin/install-azurecli-fedora
 bin/tm
 bin/webstorm

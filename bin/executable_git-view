@@ -1,6 +1,6 @@
 #! /bin/bash
 
-branch=$(git branch --show-current)
+branch=$(git branch --show-current | urlencode)
 remote=$(git remote get-url origin)
 
 #github

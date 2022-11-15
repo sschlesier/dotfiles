@@ -19,3 +19,4 @@ bin/webstorm
 bin/ws
 ~/.zshrc
 ~/.p10k.zsh
+.config/zsh/functions/nvm-use

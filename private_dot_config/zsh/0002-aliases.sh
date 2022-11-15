@@ -26,3 +26,6 @@ alias s="kitty +kitten ssh"
 
 # images in kitty kitten
 alias icat="kitty +kitten icat"
+
+#git related
+alias gprc='gh pr checkout'

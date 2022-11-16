@@ -1,5 +1,3 @@
-export NVM_DIR="$HOME/.nvm"
-[ ! -d "$NVM_DIR" ] && mkdir -p "$NVM_DIR"
 [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" --no-use
 [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && . "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
 
@@ -22,3 +20,8 @@ loadnvmrc() {
   fi
 }
 add-zsh-hook chpwd loadnvmrc
+
+# adapted from https://github.com/nvm-sh/nvm/issues/539#issuecomment-245791291
+#startup nvm when needed
+alias node='unalias node ; unalias npm ; nvm use default ; node $@'
+alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'

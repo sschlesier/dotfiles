@@ -1,13 +1,25 @@
-# set -x
-#disable tty XON/XOFF via ^S, ^Q
+# uncomment zprof to display profiling data
+# zmodload zsh/zprof
+
 stty -ixon
 
+# comment this to hide timings
+# SHOW_TIMING=true
+
 #auto-load shell scripts
+if [[ -n $SHOW_TIMING ]]; then
+    PS4=$'+ %D{%s.%6.}\011 '
+fi
+
 for sh in $ZDOTDIR/[0-9]*-*sh; do
-    # start=$(perl -MTime::HiRes=time -e 'printf "%.9f\n", time')
+    if [[ -n $SHOW_TIMING ]]; then
+        set -x
+        set +x
+        echo "$sh"
+    fi
 	source "$sh"
-    # stop=$(perl -MTime::HiRes=time -e 'printf "%.9f\n", time')
-    # delta=$(echo "$stop - $start" | bc)
-    # echo $delta $sh
 done
 
+if type zprof > /dev/null; then
+    zprof
+fi

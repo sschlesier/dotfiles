@@ -13,6 +13,7 @@
 .config/zsh/1000-aliases.sh
 .config/zsh/4000-autojump.sh
 .config/zsh/3000-direnv.sh
+.config/zsh/0100-completion-and-plugins.zsh
 bin/iq/bin/install-azurecli-fedora
 bin/tm
 bin/webstorm

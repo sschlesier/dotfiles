@@ -23,5 +23,6 @@ add-zsh-hook chpwd loadnvmrc
 
 # adapted from https://github.com/nvm-sh/nvm/issues/539#issuecomment-245791291
 #startup nvm when needed
-alias node='unalias node ; unalias npm ; nvm use default ; node $@'
-alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'
+alias node='unalias node ; unalias npm ; unalias yarn ; nvm use default ; node $@'
+alias npm='unalias node ; unalias npm ; unalias yarn ; nvm use default ; npm $@'
+alias yarn='unalias node ; unalias npm ; unalias yarn ; nvm use default ; yarn $@'

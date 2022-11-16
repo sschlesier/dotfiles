@@ -1,1 +1,0 @@
-robbyrussell/oh-my-zsh path:plugins/ssh-agent

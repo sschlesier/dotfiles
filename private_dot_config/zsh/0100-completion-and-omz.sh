@@ -14,7 +14,7 @@ function load_completion() {
     plugins_file="$ZSH_CACHE_DIR/omz-plugins.zsh"
     plugins_src="$ZDOTDIR/omz-plugins.txt"
     if [[ ! -e $plugins_file || $plugins_file -ot $plugins_src ]]; then
-        antibody bundle < omz-plugins.txt > "$ZSH_CACHE_DIR/omz-plugins.zsh"
+        antibody bundle < "$plugins_src" > "$ZSH_CACHE_DIR/omz-plugins.zsh"
     fi
     source "$plugins_file"
 }

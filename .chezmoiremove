@@ -18,6 +18,7 @@ bin/iq/bin/install-azurecli-fedora
 bin/tm
 bin/webstorm
 bin/ws
+bin/ecs-info
 ~/.zshrc
 ~/.p10k.zsh
 .config/zsh/functions/nvm-use

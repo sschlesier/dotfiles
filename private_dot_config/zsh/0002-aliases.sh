@@ -29,3 +29,4 @@ alias icat="kitty +kitten icat"
 
 #git related
 alias gprc='gh pr checkout'
+alias gprl='gh pr list'

@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: ./get-region <ready env prefix>
+
+Looksup the AWS region based on the standard Ready env prefixes t1, s1, d2, production
+
+'
+    exit
+fi
+
+cd "$(dirname "$0")"
+
+main() {
+    case "$1" in
+        t1)
+            echo us-east-1
+            exit
+            ;;
+        s1)
+            echo us-east-2
+            exit
+            ;;
+        d2)
+            echo us-west-1
+            exit
+            ;;
+        production)
+            echo ca-central-1
+            exit
+            ;;
+        *)
+            echo "$1" is unknown >&2
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

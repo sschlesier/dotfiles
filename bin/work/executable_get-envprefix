@@ -8,9 +8,9 @@ if [[ "${TRACE-0}" == "1" ]]; then
 fi
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
-    echo 'Usage: ./get-region <ready env prefix>
+    echo 'Usage: ./get-envprefix <aws region>
 
-Looksup the AWS region based on the standard Ready env prefixes t1, s1, d2, production
+Looksup the ready env prefix based on the standard Ready regions us-east-1,2 us-west-1, ca-central-1
 
 '
     exit
@@ -20,17 +20,17 @@ cd "$(dirname "$0")"
 
 main() {
     case "$1" in
-        t1)
-            echo us-east-1
+        us-east-1)
+            echo t1
             ;;
-        s1)
-            echo us-east-2
+        us-east-2)
+            echo s1
             ;;
-        d2)
-            echo us-west-1
+        us-west-1)
+            echo d2
             ;;
-        production)
-            echo ca-central-1
+        ca-central-1)
+            echo production
             ;;
         *)
             echo "$1" is unknown >&2

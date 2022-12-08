@@ -1,4 +1,4 @@
 src() {
-	fuzzy-dir ~/src "$1"
+	fuzzy-dir ~/src "$*"
 }
 src "$@"

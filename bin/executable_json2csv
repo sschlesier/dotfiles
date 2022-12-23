@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: ./json2csv [jsonFileName]
+
+Will convert a json array of objects into a csv using the field names in the first object as the header line.
+
+Either pass a file name, or pipe data to stdin.
+
+'
+    exit
+fi
+
+file=${1:-}
+
+main() {
+    #intentionally not quoting "$file" so it uses stdin when no file passed
+    jq -r '(.[0] | keys_unsorted) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' $file
+}
+
+main "$@"
+

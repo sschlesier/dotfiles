@@ -46,6 +46,8 @@ zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b
 
+aliasdir 2d "$ICLOUD/2d"
+aliasdir 3d "$ICLOUD/3d"
 aliasdir de "$DESKTOP"
 aliasdir dow "$HOME/Downloads"
 aliasdir gs "$GOPATH/src/github.com/sschlesier"

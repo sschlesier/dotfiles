@@ -1,1 +1,2 @@
-source "$XDG_CONFIG_HOME/vim/vimrc"
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'

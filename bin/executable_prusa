@@ -1,4 +1,4 @@
 #! /usr/bin/env bash
 
-nohup /System/Volumes/Data/Applications/PrusaSlicer.app/Contents/MacOS/PrusaSlicer $* &
+nohup /System/Volumes/Data/Applications/PrusaSlicer.app/Contents/MacOS/PrusaSlicer "$@" > "$TMPDIR/prusa-nohup.log" &
 

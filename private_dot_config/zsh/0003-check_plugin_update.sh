@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 lastUpdatedFileName=plugins_updated
 lastUpdatedPath="$ZSH_CACHE_DIR/$lastUpdatedFileName"
 

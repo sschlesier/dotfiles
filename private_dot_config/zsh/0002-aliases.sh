@@ -3,7 +3,7 @@ if type nvim > /dev/null; then
 else
 	export EDITOR=vim
 fi
-alias v=$EDITOR
+alias v='$EDITOR'
 
 alias lg=lazygit
 alias xdg-open='open_command'

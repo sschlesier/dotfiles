@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 autoload -Uz compinit
 
 #preload async
@@ -16,6 +17,7 @@ function load_completion() {
     if [[ ! -e $plugins_file || $plugins_file -ot $plugins_src ]]; then
         antibody bundle < "$plugins_src" > "$ZSH_CACHE_DIR/omz-plugins.zsh"
     fi
+    # shellcheck source=/dev/null
     source "$plugins_file"
 }
 

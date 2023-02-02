@@ -1,4 +1,4 @@
 3d() {
-	fuzzy-dir "$ICLOUD/3d" "$1"
+	fuzzy-dir "$HOME/3d" "$1"
 }
 3d "$@"

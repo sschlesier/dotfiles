@@ -1,7 +1,0 @@
-#! /bin/sh
-
-if [ -n "$WSL" ]; then
-    $C_ROOT/Windows/System32/clip.exe
-else
-    pbcopy
-fi

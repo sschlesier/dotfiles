@@ -20,15 +20,16 @@
 [status]
 	showUntrackedFiles = all
 [merge]
-	tool = vimdiff
-[mergetool]
-	prompt = true
+	tool = bc4
+[mergetool "bc4"]
+    path = bcomp
+    cmd = bcomp "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 [mergetool "vimdiff"]
 	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-[difftool]
-	prompt = false
+[difftool "bc4"]
+    path = bcomp
 [diff]
-	tool = vimdiff
+	tool = bc4
 	algorithm = histogram
 [alias]
 	ignore = "!gi() { curl -sL https://www.gitignore.io/api/$@ ;}; gi"

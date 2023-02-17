@@ -3,7 +3,7 @@ autoload -Uz compinit
 
 #preload async
 async_init=$(echo mafredri/zsh-async | antibody bundle)
-eval $async_init
+eval "$async_init"
 
 autoload -Uz async && async
 

@@ -1,8 +1,12 @@
+# shellcheck shell=bash
+
 # adapted from https://github.com/nvm-sh/nvm/issues/539#issuecomment-403661578
 if [[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]]; then
     autoload -Uz async && async
     function load_nvm() {
+        #shellcheck source=/dev/null
         [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+        #shellcheck source=/dev/null
         [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && . "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
     }
 

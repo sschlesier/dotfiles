@@ -17,6 +17,19 @@ fi
 export EMAIL={{ .email }}
 source "$ZDOTDIR/path.zsh"
 
-#XDG for vim
+# XDG for vim
 export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
+
+# XDG for aws
+export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
+export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
+
+# XDG for less
+export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
+
+# XDG for node
+export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
+
+# XDG for psql
+export PSQL_HISTORY="$XDG_DATA_HOME/psql_history"
 

@@ -65,6 +65,7 @@ if type exa &> /dev/null; then
 	alias l='ls -l'
 	alias la='ls -la'
 	alias lt='ls -T'
+    alias ldo='l $DOWNLOADS'
 else
 	alias l='ls -lh'
 	alias la='ls -lah'

@@ -3,4 +3,5 @@
 HISTIGNORE='l:gst: '
 setopt HIST_IGNORE_ALL_DUPS  #never duplicate a history command
 setopt HIST_SAVE_NO_DUPS     #never save duplicate commands
+setopt SHARE_HISTORY         #share history between shells
 

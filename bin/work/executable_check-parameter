@@ -8,7 +8,7 @@ if [[ "${TRACE-0}" == "1" ]]; then
 fi
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
-    echo 'Usage: ./script.sh arg-one arg-two
+    echo 'Usage: check-parameter "readyapi/KEY"
 
 check a parameter in ssm in all standard regions
 
@@ -19,6 +19,7 @@ fi
 cd "$(dirname "$0")"
 
 main() {
+    echo "$1"
     do_lookup "$1" "t1" "dev"
     do_lookup "$1" "s1" "staging"
     do_lookup "$1" "d2" "demo"
@@ -26,12 +27,10 @@ main() {
 }
 
 do_lookup() {
-    echo "$3"
     set +e # keep going to next param if missing
     aws ssm get-parameter --region "$(get-region "$2")" --name "/$2/$1" \
-        | jq -r '.Parameter.Name + ": " + .Parameter.Value'
+        | jq -r "\"$3: \" + .Parameter.Value"
     set -e
-    echo
 }
 
 main "$@"

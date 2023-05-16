@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: ./script.sh arg-one arg-two
+
+check a parameter in ssm in all standard regions
+
+'
+    exit
+fi
+
+cd "$(dirname "$0")"
+
+main() {
+    do_lookup "$1" "t1" "dev"
+    do_lookup "$1" "s1" "staging"
+    do_lookup "$1" "d2" "demo"
+    do_lookup "$1" "production" "production"
+}
+
+do_lookup() {
+    echo "$3"
+    set +e # keep going to next param if missing
+    aws ssm get-parameter --region "$(get-region "$2")" --name "/$2/$1" \
+        | jq -r '.Parameter.Name + ": " + .Parameter.Value'
+    set -e
+    echo
+}
+
+main "$@"

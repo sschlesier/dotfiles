@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+
+print_help() {
+    echo "Usage: $0 [-n|--dry-run] [-h|--help]"
+    echo "  -n, --dry-run: Show what would be done, but don't rename anything."
+    echo "  -h, --help   : Show this help message."
+}
+
+# Initialize option variables
+dry_run=false
+
+# Parse command line options
+while getopts "nh-:" opt; do
+    case "${opt}" in
+        n|-dry-run)
+            dry_run=true ;;
+        h|-help)
+            print_help
+            exit 0 ;;
+        *)
+            echo "Invalid option: -${OPTARG}" >&2
+            print_help
+            exit 1 ;;
+    esac
+done
+
+for file in *; do
+    decoded_name=$(echo "${file}" | urldecode)
+
+    if [[ "${file}" == "${decoded_name}" ]]; then
+        continue
+    fi
+
+    new_name=$(echo "${decoded_name}" | sed -e 's/[^A-Za-z0-9.]/-/g' | tr '[:upper:]' '[:lower:]')
+
+    if [[ "${file}" != "${new_name}" ]]; then
+        if [[ $dry_run == true ]]; then
+            echo "Would rename '${file}' to '${new_name}'"
+        else
+            mv "${file}" "${new_name}"
+        fi
+    fi
+done
+

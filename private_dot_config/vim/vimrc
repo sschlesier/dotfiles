@@ -105,6 +105,13 @@ if has('persistent_undo')
   set undodir=~/.config/vim/tmp/undo//
 endif
 
+" Explicit yank to the system clipboard
+if has('mac')
+  autocmd TextYankPost * if v:event.operator ==# 'y' | call system('pbcopy', @0) | endif
+elseif has('linux')
+  autocmd TextYankPost * if v:event.operator ==# 'y' | call system('xclip -selection clipboard', @0) | endif
+endif
+
 " Colorscheme
 syntax enable
 set background=dark

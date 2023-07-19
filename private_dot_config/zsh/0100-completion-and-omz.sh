@@ -2,7 +2,7 @@
 autoload -Uz compinit
 
 #preload async
-async_init=$(echo mafredri/zsh-async | antibody bundle)
+async_init=$(echo mafredri/zsh-async | antidote bundle)
 eval "$async_init"
 
 autoload -Uz async && async
@@ -15,7 +15,7 @@ function load_completion() {
     plugins_file="$ZSH_CACHE_DIR/omz-plugins.zsh"
     plugins_src="$ZDOTDIR/omz-plugins.txt"
     if [[ ! -e $plugins_file || $plugins_file -ot $plugins_src ]]; then
-        antibody bundle < "$plugins_src" > "$ZSH_CACHE_DIR/omz-plugins.zsh"
+        antidote bundle < "$plugins_src" > "$ZSH_CACHE_DIR/omz-plugins.zsh"
     fi
     # shellcheck source=/dev/null
     source "$plugins_file"

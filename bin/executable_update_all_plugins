@@ -2,6 +2,6 @@
 
 set -x
 
-antibody update
+antidote update
 $EDITOR +PlugUpdate +PlugUpgrade +qall
 tldr --update

@@ -1,12 +1,7 @@
 #! /usr/bin/env bash
 set -euo pipefail
 
-if [ -z "$1" ]
-then
-  echo "Please provide a PR ID as a parameter."
-  echo "Usage: ./pr-reviewers <pr-id>"
-  exit 1
-fi
+prId=${1:-}
 
-gh pr update "$1" --reviewer GarettRogers chrisventura thomaznz AndriiShyliuk
+gh pr edit "$prId" --add-reviewer GarettRogers --add-reviewer chrisventura --add-reviewer thomazmz --add-reviewer AndriiShyliuk
 

@@ -30,4 +30,5 @@ alias icat="kitty +kitten icat"
 #git related
 alias gprc='gh pr checkout'
 alias gprl='gh pr list'
+alias gprv='gh pr view -w'
 alias gre='git recent'

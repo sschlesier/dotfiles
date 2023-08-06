@@ -47,6 +47,7 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b
 
 aliasdir de "$DESKTOP"
+aliasdir docs "$HOME/Documents"
 aliasdir dow "$HOME/Downloads"
 aliasdir gs "$GOPATH/src/github.com/sschlesier"
 aliasdir ic "$ICLOUD"

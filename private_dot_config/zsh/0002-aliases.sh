@@ -6,6 +6,8 @@ fi
 alias v='$EDITOR'
 
 alias lg=lazygit
+alias lzn=lazynpm
+alias lzd=lazydocker
 alias xdg-open='open_command'
 
 alias ca='chezmoi apply'

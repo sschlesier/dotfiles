@@ -4,7 +4,12 @@ fuzzy-dir() {
           cd "$1" && \
           echo $(fd --type d --max-depth 1 '' | fzf --no-select-1 --query "$2")
         )
-        cd "$1/$dest"
+        if [[ -d "$1/$dest" ]]
+        then
+            cd "$1/$dest"
+        else
+          echo "cannot find $1/$dest"
+        fi
     else
         echo "$1" is not a directory
     fi

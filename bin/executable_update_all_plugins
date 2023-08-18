@@ -1,7 +1,0 @@
-#! /bin/sh
-
-set -x
-
-antidote update
-$EDITOR +PlugUpdate +PlugUpgrade +qall
-tldr --update

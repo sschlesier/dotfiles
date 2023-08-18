@@ -1,0 +1,8 @@
+#! /bin/sh
+
+update_all_plugins() {
+    antidote update
+    $EDITOR +PlugUpdate +PlugUpgrade +qall
+    tldr --update
+}
+update_all_plugins

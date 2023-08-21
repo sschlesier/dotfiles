@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+set -euo pipefail
+
+version=$(https test1.readytopay.co/ping | jq -r .ApplicationVersion)
+echo "dev   $version"
+
+version=$(https api.staging.readytopay.co/ping | jq -r .ApplicationVersion)
+echo "staging   $version"
+
+version=$(https api.demo2.readytopay.co/ping | jq -r .ApplicationVersion)
+echo "demo  $version"
+
+version=$(https api.readytopay.co/ping | jq -r .ApplicationVersion)
+echo "production    $version"

@@ -4,7 +4,14 @@ set -euo pipefail
 environments=("dev" "staging" "demo" "production")
 urls=("test1" "api.staging" "api.demo2" "api")
 
+echo rapi
 for i in "${!environments[@]}"; do
   version=$(https "${urls[$i]}.readytopay.co/ping" | jq -r .ApplicationVersion)
+  echo "${environments[$i]} v$version"
+done
+
+echo -e "\n\ndapi"
+for i in "${!environments[@]}"; do
+  version=$(https "${urls[$i]}.readytopay.co/dashborad/ping" | jq -r .ApplicationVersion)
   echo "${environments[$i]} v$version"
 done

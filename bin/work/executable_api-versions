@@ -12,6 +12,6 @@ done
 
 echo -e "\n\ndapi"
 for i in "${!environments[@]}"; do
-  version=$(https "${urls[$i]}.readytopay.co/dashborad/ping" | jq -r .ApplicationVersion)
+  version=$(https "${urls[$i]}.readytopay.co/dashboard/ping" | jq -r .ApplicationVersion)
   echo "${environments[$i]} v$version"
 done

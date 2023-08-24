@@ -1,5 +1,4 @@
 #! /usr/bin/env bash
-set -euo pipefail
 
 environments=("dev" "staging" "demo" "production")
 urls=("test1" "api.staging" "api.demo2" "api")
@@ -13,5 +12,22 @@ done
 echo -e "\n\ndapi"
 for i in "${!environments[@]}"; do
   version=$(curl -s "https://${urls[$i]}.readytopay.co/dashboard/ping" | jq -r .ApplicationVersion)
+  echo "${environments[$i]} v$version"
+done
+
+
+echo -e "\n\nDash UI"
+
+urls=("ready-dashboard-dev.herokuapp.com" "ready-dashboard-staging.herokuapp.com" "ready-dashboard-demo.herokuapp.com" "admin.readypay.co")
+for i in "${!environments[@]}"; do
+  version=$(curl -s "https://${urls[$i]}/ping.json" | jq -r .ApplicationVersion)
+  echo "${environments[$i]} v$version"
+done
+
+echo -e "\n\nMobile App"
+
+urls=("test1.readydemo.co" "staging1.readydemo.co" "readydemo.co" "readypay.co")
+for i in "${!environments[@]}"; do
+  version=$(curl -s "https://${urls[$i]}/ping.json" | jq -r .ApplicationVersion)
   echo "${environments[$i]} v$version"
 done

@@ -98,6 +98,15 @@ set nocursorline                " highlight cursor line
 set lazyredraw                  " Wait to redraw
 set nomodeline                  " disable mode line I don't use and it has vulnerability
 set scrolloff=3	                " minimum 10 lines around cursor when jumping
+set expandtab                   " use spaces not tabs
+set tabstop=2                   " Number of spaces per tab
+set shiftwidth=2                " Number of spaces for auto-indent
+set smarttab                    "
+set fileformat=unix             " Use lf endings
+set endofline                   " Ensure files ends with newline
+
+" Remove trailing whitespace before saving
+autocmd BufWritePre * %s/\s\+$//e
 
 " This enables us to undo files even if you exit Vim.
 if has('persistent_undo')

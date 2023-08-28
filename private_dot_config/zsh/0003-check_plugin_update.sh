@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 lastUpdatedFileName=plugins_updated
 lastUpdatedPath="$ZSH_CACHE_DIR/$lastUpdatedFileName"
+semaphorePath="$ZSH_CACHE_DIR/do_update"
 
 #find is faster than fd for this purpose but Fedora doesn't seem to have find
 if type find > /dev/null; then
@@ -14,7 +15,7 @@ fi
 if [[ -n "$foundFile" ]]; then
   read  -r -t 5 "CONFIRM?Would you like to update all plugins? "
   if [[ $CONFIRM =~ ^[Yy]$ ]]; then
-    update_all_plugins
+    touch "$semaphorePath" #leave an indicator that update should run
     touch "$lastUpdatedPath"
   fi
 elif [[ ! -f $lastUpdatedPath ]]; then

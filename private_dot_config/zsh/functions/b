@@ -1,6 +1,7 @@
 #open the current folder in explorer
+toOpen=${1:-.}
 b() {
-	open_command .
+	open_command "$toOpen"
 }
 export b
 b

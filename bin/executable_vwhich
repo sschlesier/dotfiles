@@ -6,7 +6,7 @@ if [ -n "$path" ]; then
 else
   zsh_function_path="$XDG_CONFIG_HOME/zsh/functions/$1"
   if [ -f "$zsh_function_path" ]; then
-    bat "$zsh_function_path"
+    "$EDITOR" "$zsh_function_path"
   else
 	echo unable to find "$1"
   fi

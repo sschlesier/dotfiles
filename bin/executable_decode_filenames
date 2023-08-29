@@ -33,7 +33,7 @@ while getopts "nh-:" opt; do
 done
 
 for file in *; do
-    decoded_name=$(echo "${file}" | urldecode)
+    decoded_name=$(echo "${file}" | urldecode | tr "[:upper:]" "[:lower:]")
 
     if [[ "${file}" == "${decoded_name}" ]]; then
         continue

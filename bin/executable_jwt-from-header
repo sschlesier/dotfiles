@@ -4,6 +4,14 @@ set -euo pipefail
 # take an Authorization header from the clipboard and remove
 # the header and bearer and any double quotes
 # should leave a clean jwt token on stdout
+clipboard_content=$(pbpaste)
 
-pbpaste | sed 's/.* //' | sed 's/"$//' |  sed 's/.*"//'
+# Check if clipboard contains an Authorization header
+if [[ $clipboard_content == *Bearer* ]]; then
+  pbpaste | sed 's/.* //' | sed 's/"$//' |  sed 's/.*"//'
+fi
 
+# Check if clipboard contains an ID-TOKEN cookie
+if [[ $clipboard_content == *ID-TOKEN=* ]]; then
+  pbpaste | awk -F ';' '{printf "%s", $1}' | sed 's/.*=//'
+fi

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Get the PR number and label name from command-line arguments
+label=$1
+pr_number=${2:-}
+
+# Apply the label to the PR using `gh`
+gh pr edit "$pr_number" --add-label "$label"
+

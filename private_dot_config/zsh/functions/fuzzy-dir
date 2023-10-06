@@ -1,7 +1,7 @@
 fuzzy-dir() {
     if [[ -d "$1" ]]; then
         local dest=$( \
-          cd "$1" && \
+          DISABLED_FUNCTIONS=(chpwd) cd "$1" && \
           echo $(fd --type d --max-depth 1 '' | fzf --no-select-1 --query "$2")
         )
         if [[ -d "$1/$dest" ]]

@@ -1,0 +1,6 @@
+cpcmd() {
+	local lastCmd=$(fc -ln -1)
+    echo "putting $lastCmd on clipboard"
+    echo "$lastCmd" | pbcopy
+}
+cpcmd "$@"

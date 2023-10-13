@@ -1,6 +1,8 @@
 cpcmd() {
-	local lastCmd=$(fc -ln -1)
-    echo "putting $lastCmd on clipboard"
-    echo "$lastCmd" | pbcopy
+	local lastCmd=$(fc -rln 1 | fzf)
+    if [[ -n $lastCmd ]]
+    then
+        echo "$lastCmd" | pbcopy
+    fi
 }
 cpcmd "$@"

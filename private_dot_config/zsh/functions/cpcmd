@@ -2,7 +2,7 @@ cpcmd() {
 	local lastCmd=$(fc -rln 1 | fzf)
     if [[ -n $lastCmd ]]
     then
-        echo "$lastCmd" | pbcopy
+        echo "$lastCmd" | sed 's/\\n/\\\n/g' | pbcopy
     fi
 }
 cpcmd "$@"

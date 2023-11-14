@@ -62,7 +62,7 @@ gosrcdir got golang-tour
 
 # List directory contents
 if type eza &> /dev/null; then
-	alias ls='eza --color-scale --icons --group-directories-first'
+	alias ls='eza --color-scale=size --icons=auto --group-directories-first'
 	alias l='ls -l'
 	alias la='ls -la'
 	alias lt='ls -T'

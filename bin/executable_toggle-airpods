@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Get the Bluetooth address of the first paired AirPods
+AIRPODS_MAC=$(blueutil --paired --format json | jq -r '.[] | select(.name | test("AirPods")) | .address | select(. != null) | . // empty' | head -n 1)
+
+if [[ -z "$AIRPODS_MAC" ]]; then
+  echo '{"error":"No AirPods found"}'
+  exit 1
+fi
+
+# Check if the AirPods are connected
+IS_CONNECTED=$(blueutil --is-connected ${AIRPODS_MAC})
+
+if [[ "$IS_CONNECTED" == "1" ]]; then
+  # AirPods are connected, so disconnect them
+  blueutil --disconnect ${AIRPODS_MAC}
+  echo '{"status":"disconnected"}'
+else
+  # AirPods are not connected, so connect them
+  blueutil --connect ${AIRPODS_MAC}
+  echo '{"status":"connected"}'
+fi

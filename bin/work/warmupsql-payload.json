@@ -1,0 +1,9 @@
+{
+  "Records": [
+    {
+      "body": {
+        "command": "WarmupSQL"
+      }
+    }
+  ]
+}

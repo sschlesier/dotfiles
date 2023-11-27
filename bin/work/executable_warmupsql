@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+# get directory of this script
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+aws lambda invoke \
+	--function-name powerbi-etl-processor-PowerBiEtlProcessor-jy3dF6lDcwA4 \
+	--region ca-central-1 \
+	--payload "fileb://$SCRIPT_DIR/warmupsql-payload.json" \
+	out

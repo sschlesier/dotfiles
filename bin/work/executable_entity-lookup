@@ -1,4 +1,4 @@
 #! /bin/sh
 
-https "entitymanager.iqmetrix.net/v1/entities($1)" \
+https --ignore-stdin "entitymanager.iqmetrix.net/v1/entities($1)" \
 	Authorization:"Bearer $(iq-gettoken)" \

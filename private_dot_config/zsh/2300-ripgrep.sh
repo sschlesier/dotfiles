@@ -1,0 +1,1 @@
+alias rg="$HOMEBREW_PREFIX/bin/rg --smart-case --colors 'match:bg:yellow' --colors 'match:fg:black' --colors 'match:style:nobold' --colors 'path:fg:green' --colors 'path:style:bold' --colors 'line:fg:yellow' --colors 'line:style:bold'"

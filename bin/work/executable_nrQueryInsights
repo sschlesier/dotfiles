@@ -1,6 +1,7 @@
-#! /bin/sh
+#! /bin/bash
 
 nrKey=$(lp-getNrKey)
 https --ignore-stdin --follow --body \
-	insights-api.newrelic.com/v1/accounts/488253/query?nrql="$1" \
+  insights-api.newrelic.com/v1/accounts/3200587/query \
+  nrql=="$1" \
 	X-Query-Key:"$nrKey"

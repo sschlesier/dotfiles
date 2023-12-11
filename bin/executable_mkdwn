@@ -20,13 +20,11 @@ create_temp_file() {
 MARKDOWN_FILE="$1"
 
 HTML_FILE=$(create_temp_file "html")
-
-# Path to the GitHub Markdown CSS file
 CSS_FILE="$HOME/bin/github-markdown.css"
 
 # replace horizontal rules so they don't trigger pandocs metadata features
-sed 's/^---$/_____/' < "$MARKDOWN_FILE" | \
-pandoc --css "$CSS_FILE" --metadata title="$1" -s -o "$HTML_FILE"
+sed 's/^---$/_____/' < "$MARKDOWN_FILE" |
+pandoc --css="$CSS_FILE" --embed-resources --standalone --metadata title="$1" -o "$HTML_FILE"
 
 # Open HTML file in default browser
 open "$HTML_FILE"

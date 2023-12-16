@@ -82,13 +82,3 @@ if [[ -n $WIN_HOME ]]; then
 	alias wh="cd $WIN_HOME"
 fi
 
-#list files in ~/bin
-function llb () {
-	pushd -q ~/bin
-	if [ -t 1 ]; then
-		fd --type executable | column
-	else
-		fd --type executable
-	fi
-	popd -q
-}

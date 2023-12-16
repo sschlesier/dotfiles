@@ -1,0 +1,11 @@
+function llb () {
+    output=$(
+		(cd $HOME/bin && fd --type executable .) &&
+        (cd $HOME/.config/zsh/functions && fd .)
+    )
+	if [ -t 1 ]; then
+        echo "$output" | column
+	else
+		echo "$output"
+	fi
+}

@@ -1,2 +1,0 @@
-robbyrussell/oh-my-zsh path:lib/functions.zsh
-robbyrussell/oh-my-zsh path:lib/history.zsh

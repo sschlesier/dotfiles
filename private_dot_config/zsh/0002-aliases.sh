@@ -29,11 +29,5 @@ alias s="kitty +kitten ssh"
 # images in kitty kitten
 alias icat="kitty +kitten icat"
 
-#git related
-alias prc='gh pr checkout'
-alias prl='gh pr list'
-alias prv='gh pr view -w'
-alias gre='git recent'
-
 # duckduckgo
 alias ddg=ddgr

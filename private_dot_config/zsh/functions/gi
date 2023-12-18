@@ -1,0 +1,3 @@
+function gi() {
+   curl -sLw '' https://www.toptal.com/developers/gitignore/api/$@ ;
+}

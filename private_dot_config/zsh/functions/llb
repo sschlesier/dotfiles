@@ -1,7 +1,7 @@
 function llb () {
     output=$(
 		(cd $HOME/bin && fd --type executable .) &&
-        (cd $HOME/.config/zsh/functions && fd .)
+        (cd $HOME/.config/zsh/functions && fd . | sed 's/$/()/')
     )
 	if [ -t 1 ]; then
         echo "$output" | column

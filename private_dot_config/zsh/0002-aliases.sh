@@ -30,4 +30,4 @@ alias s="kitty +kitten ssh"
 alias icat="kitty +kitten icat"
 
 # duckduckgo
-alias ddg="ddgr --noua"
+alias ddg=ddgr

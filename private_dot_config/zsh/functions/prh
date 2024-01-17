@@ -1,0 +1,13 @@
+prh() {
+  local contentPath="$SRC/practice/content/docs"
+  local file=$( \
+    echo $(fd -e md . "$contentPath" -x basename | fzf --no-select-1 --query="$1")
+  )
+  if [[ -e "$contentPath/$file" ]]
+  then
+    mkdwn "$contentPath/$file"
+  else
+    echo cannot find "$file"
+  fi
+}
+prh "$@"

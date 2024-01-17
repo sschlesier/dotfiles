@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+processData() {
+  sed 's/ObjectId("\([0-9a-f]*\)")/"\1"/g' | jq -s .
+}
+
+if [ -t 0 ]; then
+  # No stdin data, read from clipboard.
+  pbpaste | processData | pbcopy
+  echo clipboard has been updated
+else
+  # Read from stdin.
+  processData
+fi

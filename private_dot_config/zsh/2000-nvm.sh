@@ -32,6 +32,8 @@ if [[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]]; then
         echo "Reverting to nvm default version"
         nvm use default
       fi
+
+      source <(npm completion)
     }
     add-zsh-hook chpwd loadnvmrc
 fi

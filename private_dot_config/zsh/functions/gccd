@@ -12,4 +12,4 @@ function gccd() {
   [[ -d "$_" ]] && cd "$_" || cd "${${repo:t}%.git/#}"
 }
 compdef _git gccd=git-clone
-gccd
+gccd "$@"

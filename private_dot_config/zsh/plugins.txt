@@ -2,3 +2,4 @@ romkatv/powerlevel10k
 zsh-users/zsh-syntax-highlighting
 mollifier/cd-gitroot
 djui/alias-tips
+bigH/git-fuzzy path:bin kind:path

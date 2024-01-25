@@ -22,3 +22,4 @@ bin/ecs-info
 ~/.zshrc
 ~/.p10k.zsh
 .config/zsh/functions/nvm-use
+.config/zsh/9100-autocorrect.sh

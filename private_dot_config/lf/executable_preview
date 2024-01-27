@@ -1,0 +1,10 @@
+#! /usr/bin/env sh
+
+file="$1"
+# width="$2"
+# height="$3"
+# x="$4"
+# y="$5"
+
+# echo "f:$file w:$width h:$height x:$x y:$y"
+bat "$file" --force-colorization --style numbers,changes

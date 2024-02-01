@@ -33,7 +33,10 @@ if [[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]]; then
         nvm use default
       fi
 
-      source <(npm completion)
+      if ! type _npm_completion &>/dev/null # load npm completion if not yet loaded
+      then
+          source <(npm completion)
+      fi
     }
     add-zsh-hook chpwd loadnvmrc
 fi

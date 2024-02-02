@@ -1,0 +1,39 @@
+#! /usr/bin/env bash
+
+environments=("dev" "staging" "demo" "production")
+urls=("test1" "api.staging" "api.demo2" "api")
+
+cmds=("echo rapi")
+for i in "${!environments[@]}"; do
+  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/ping\" | jq -r .ApplicationVersion"
+  cmds+=("$cmd")
+done
+
+cmds+=('echo -e "\n\ndapi"')
+for i in "${!environments[@]}"; do
+  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/dashboard/ping\" | jq -r .ApplicationVersion"
+  cmds+=("$cmd")
+done
+
+cmds+=('echo -e "\n\nfrapi"')
+for i in "${!environments[@]}"; do
+  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/frapi/ping\" | jq -r .ApplicationVersion"
+  cmds+=("$cmd")
+done
+
+cmds+=('echo -e "\n\nDash UI"')
+urls=("ready-dashboard-dev.herokuapp.com" "ready-dashboard-staging.herokuapp.com" "ready-dashboard-demo.herokuapp.com" "admin.readypay.co")
+for i in "${!environments[@]}"; do
+  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}/ping.json\" | jq -r .ApplicationVersion"
+  cmds+=("$cmd")
+done
+
+cmds+=('echo -e "\n\nMobile App"')
+urls=("test1.readydemo.co" "staging1.readydemo.co" "readydemo.co" "readypay.co")
+for i in "${!environments[@]}"; do
+  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}/ping.json\" | jq -r .ApplicationVersion"
+  cmds+=("$cmd")
+done
+
+
+parallel -j 0 -k ::: "${cmds[@]}"

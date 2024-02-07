@@ -31,3 +31,6 @@ alias icat="kitty +kitten icat"
 
 # duckduckgo
 alias ddg=ddgr
+
+# ripgrep
+alias rga="rg --no-ignore --hidden"

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Run the command and capture the output in a variable
+output=$(lpass show "mongo $1" --json | jq '.[0] | {name, password, note}')
+
+# Use jq to extract the properties into variables
+name=$(echo "$output" | jq -r '.name')
+password=$(echo "$output" | jq -r '.password')
+connectionString=$(echo "$output" | jq -r '.note')
+
+protocol=${connectionString%%://*}
+rest=${connectionString#*://}
+
+connectionString="${protocol}://${name}:${password}@${rest}"
+
+mongosh "$connectionString"
+

@@ -1,0 +1,7 @@
+#! /usr/bin/env sh
+
+region="${1:-us-east-1}"
+
+echo logging in to "$region"
+aws ecr get-login-password --region "$region" | docker login --username AWS --password-stdin "171913223320.dkr.ecr.$region.amazonaws.com"
+

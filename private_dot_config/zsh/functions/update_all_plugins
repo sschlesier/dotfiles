@@ -5,6 +5,5 @@ update_all_plugins() {
     $EDITOR +PlugUpdate +PlugUpgrade +qall
     echo updating tldr cache...
     tldr --update
-    nvm install --lts
 }
 update_all_plugins

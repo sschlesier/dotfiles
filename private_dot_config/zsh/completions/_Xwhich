@@ -1,0 +1,5 @@
+#compdef vwhich bwhich
+
+_Xwhich() {
+  _path_commands
+}

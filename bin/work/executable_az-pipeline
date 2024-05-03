@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: az-pipeline <service> <env> <version>
+
+Run an azure pipeline for a Ready service
+
+'
+    exit
+fi
+
+cd "$(dirname "$0")"
+
+service="$1"
+env="$2"
+version="$3"
+
+lookup-pipeline() {
+  case "$service" in
+    rapi)
+      case "$env" in
+        staging)
+          echo 3284
+          ;;
+        prod)
+          echo 3285
+          ;;
+      esac
+      ;;
+  dapi)
+      case "$env" in
+        staging)
+          echo 3322
+          ;;
+        prod)
+          echo 3323
+          ;;
+      esac
+      ;;
+  frapi)
+      case "$env" in
+        staging)
+          echo 3473
+          ;;
+        prod)
+          echo 3474
+          ;;
+      esac
+      ;;
+  esac
+}
+
+main() {
+  pipelineId=$(lookup-pipeline)
+  if [[ -z "$pipelineId" ]]
+  then
+    echo Unknown pipeline
+    exit 1
+  fi
+
+  az pipelines run \
+    --organization "https://dev.azure.com/iqmetrix" \
+    --project "Ready to Pay" \
+    --id "$pipelineId" \
+    --parameters "DeployVersion=$version"
+}
+
+main "$@"
+

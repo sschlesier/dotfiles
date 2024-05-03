@@ -78,7 +78,7 @@ BRANCHES=$(git reflog |
 )
 
 if [[ $INTERACTIVE = '1' ]]; then
-  d=$(echo "$BRANCHES" | tr ' ' '\n' | fzf)
+  d=$(echo "$BRANCHES" | tr ' ' '\n' | fzf --no-select-1 --query "$1")
   if [[ -n "$d" ]]; then
     git checkout "$d"
   fi

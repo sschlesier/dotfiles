@@ -26,6 +26,7 @@ name=${computer}-${now}
 
 # Create an archive
 tarsnap -c \
+    --cachedir "$HOME/.tarsnap" \
     --keyfile "$HOME/tarsnap.key" \
     -f "${name}" \
     "$HOME/3d" "$HOME/2d" "$HOME/Documents"

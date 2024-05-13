@@ -65,11 +65,14 @@ main() {
     exit 1
   fi
 
-  az pipelines run \
+  buildId=$( az pipelines run \
     --organization "https://dev.azure.com/iqmetrix" \
     --project "Ready to Pay" \
     --id "$pipelineId" \
-    --parameters "DeployVersion=$version"
+    --parameters "DeployVersion=$version" | jq -r .id)
+
+  sleep 1
+  open "https://dev.azure.com/iqmetrix/Ready to Pay/_build/results?buildId=$buildId&view=results"
 }
 
 main "$@"

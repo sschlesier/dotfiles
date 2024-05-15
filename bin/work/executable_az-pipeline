@@ -65,6 +65,18 @@ main() {
     exit 1
   fi
 
+  if [[ $env == "prod" ]]
+  then
+    echo "Are you sure you want to release $service $version to production? (y/N)"
+    read -r answer
+    if [[ $answer =~ ^[Yy]$ ]]
+    then
+      echo "Releasing $version to production"
+    else
+      exit 1
+    fi
+  fi
+
   buildId=$( az pipelines run \
     --organization "https://dev.azure.com/iqmetrix" \
     --project "Ready to Pay" \

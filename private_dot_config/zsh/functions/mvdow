@@ -1,0 +1,5 @@
+mvdow() {
+	mv "$DOWNLOADS/$1" .
+}
+mvdow "$@"
+

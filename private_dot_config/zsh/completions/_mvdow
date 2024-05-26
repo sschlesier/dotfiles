@@ -1,0 +1,9 @@
+_mvdow() {
+    local cur="${words[CURRENT]}"
+
+    _files -W "$DOWNLOADS" -M 'r:|/=*' -g "*${cur}*"
+    #compadd -W "$DOWNLOADS" -- "$cur"
+}
+
+compdef _mvdow mvdow
+

@@ -31,7 +31,7 @@ tarsnap -c \
     "$HOME/3d" "$HOME/2d" "$HOME/Documents"
 
 #keep the most recent 60 archives
-tarsnap --list-archives | sort -r | tail -n +61 | xargs -n 1 tarsnap -d -f
+tarsnap --list-archives | sort -r | tail -n +46 | xargs -n 1 tarsnap -d -f
 }
 
 main "$@"

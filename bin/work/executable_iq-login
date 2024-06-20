@@ -5,14 +5,8 @@ clientKey=$(echo $clientNote | jq -r '.Key')
 clientSecret=$(echo $clientNote | jq -r '.Secret')
 unset clientNote
 
-lpuser=$(lpass show --json adfs.iqmetrix.com)
-username=$(echo $lpuser | jq -r '.[0].username')
-pass=$(echo $lpuser | jq -r '.[0].password')
-
 response=$(http --form --body  POST https://accounts.iqmetrix.net/v1/oauth2/token \
-	grant_type=password \
-	username=$username \
-	password=$pass \
+	grant_type=client_credentials \
 	client_id=$clientKey \
 	client_secret=$clientSecret)
 

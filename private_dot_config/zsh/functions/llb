@@ -3,6 +3,10 @@ function llb () {
 		(cd $HOME/bin && fd --type executable .) &&
         (cd $HOME/.config/zsh/functions && fd . | sed 's/$/()/')
     )
+    if [[ -n $1 ]]
+    then
+      output=$(echo $output | rg "$1")
+    fi
 	if [ -t 1 ]; then
         echo "$output" | column
 	else

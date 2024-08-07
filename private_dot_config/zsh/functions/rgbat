@@ -1,0 +1,19 @@
+rgbat() {
+  if [[ $# -ne 2 ]]; then
+      echo "Usage: rgbat <regex> <path>"
+      return 1
+  fi
+
+  local regex="$1"
+  local filepath="$2"
+
+  first_match="$(rg -n "$regex" "$filepath" | head -n 1 | cut -d: -f1)"
+
+  if [[ -n $first_match ]]
+  then
+    bat --highlight-line="$first_match" "$filepath"
+  else
+    bat "$filepath"
+  fi
+}
+rgbat "$@"

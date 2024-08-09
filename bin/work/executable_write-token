@@ -2,4 +2,6 @@
 set -euo pipefail
 
 jwt-from-header > "$XDG_CACHE_HOME/tokens/$1"
+head --bytes 16 "$XDG_CACHE_HOME/tokens/$1"
+
 

@@ -17,6 +17,10 @@ done
 
 cmds+=('echo -e "\n\nfrapi"')
 for i in "${!environments[@]}"; do
+  if [[ ${environments[$i]} == "demo" ]]
+  then
+    continue
+  fi
   cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/frapi/ping\" | jq -r .ApplicationVersion"
   cmds+=("$cmd")
 done

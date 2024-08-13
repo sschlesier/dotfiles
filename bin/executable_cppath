@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+realpath "$1" | tr -d '\n' | pbcopy
+echo clipboard has been updated

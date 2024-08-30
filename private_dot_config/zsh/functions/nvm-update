@@ -1,9 +1,0 @@
-nvm-update() {
-    if [[ -z $1 ]]; then
-        echo Please specify a version to update
-        nvm ls
-    fi
-
-    nvm install "$1" --reinstall-packages-from="$1"
-}
-nvm-update "$@"

@@ -7,6 +7,7 @@ set -o pipefail
 processData() {
   sed 's/ObjectId("\([0-9a-f]*\)")/"\1"/g' | \
   sed 's/ISODate("\([0-9:T+Z.-]*\)")/"\1"/g' | \
+  sed 's/NumberInt(\([0-9]*\))/\1/g' | \
   jq .
 }
 

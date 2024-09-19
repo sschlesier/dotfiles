@@ -40,7 +40,7 @@ for i in "${!environments[@]}"; do
 done
 
 
-cmds+=('echo -e "\npost-metric lambda"')
+cmds+=('echo -e "\n\npost-metric lambda"')
 cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
   --function-name post-metrics-Function-JQwkOV9M3BPp \
   --cli-binary-format raw-in-base64-out \
@@ -48,4 +48,4 @@ cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
 cmds+=("$cmd")
 
 
-parallel -j 0 -k ::: "${cmds[@]}"
+parallel -j 200% -k ::: "${cmds[@]}"

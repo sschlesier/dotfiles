@@ -22,7 +22,7 @@ file=${1:-}
 
 main() {
     #intentionally not quoting "$file" so it uses stdin when no file passed
-    jq -r '(.[0] | keys_unsorted) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' $file
+    jq -r -s '(.[0] | keys_unsorted) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @csv' $file
 }
 
 main "$@"

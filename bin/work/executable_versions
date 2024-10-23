@@ -25,14 +25,14 @@ for i in "${!environments[@]}"; do
   cmds+=("$cmd")
 done
 
-cmds+=('echo -e "\n\nDash UI"')
+cmds+=('echo -e "\n\ndui"')
 urls=("ready-dashboard-dev.herokuapp.com" "ready-dashboard-staging.herokuapp.com" "ready-dashboard-demo.herokuapp.com" "admin.readypay.co")
 for i in "${!environments[@]}"; do
   cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}/ping.json\" | jq -r .ApplicationVersion"
   cmds+=("$cmd")
 done
 
-cmds+=('echo -e "\n\nMobile App"')
+cmds+=('echo -e "\n\nrma"')
 urls=("test1.readydemo.co" "staging1.readydemo.co" "readydemo.co" "readypay.co")
 for i in "${!environments[@]}"; do
   cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}/ping.json\" | jq -r .ApplicationVersion"

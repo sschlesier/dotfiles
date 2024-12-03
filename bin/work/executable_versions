@@ -47,5 +47,12 @@ cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
   --payload '{\"ping\": 1}' response.json > /dev/null && jq -r '.appVersion' response.json && rm response.json"
 cmds+=("$cmd")
 
+cmds+=('echo -e "\n\ninvoice anomaly detection lambda"')
+cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
+  --function-name invoice-anomaly-detection-Function-BVrJFsOZ2oKr \
+  --cli-binary-format raw-in-base64-out \
+  --payload '{\"ping\": 1}' response.json > /dev/null && jq -r '.appVersion' response.json && rm response.json"
+cmds+=("$cmd")
+
 
 parallel -j 200% -k ::: "${cmds[@]}"

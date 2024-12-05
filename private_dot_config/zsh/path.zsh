@@ -90,5 +90,10 @@ if [[ -e "$HOMEBREW_PREFIX/opt/libpq/bin" ]]; then
 	PATH+=:"$HOMEBREW_PREFIX/opt/libpq/bin"
 fi
 
+# add dotnet CLI to path
+if [[ -e "$HOME/.dotnet/dotnet" ]]; then
+    PATH+=:"$HOME/.dotnet"
+fi
+
 #de-duplicate path
 typeset -aU path

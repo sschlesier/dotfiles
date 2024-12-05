@@ -1,0 +1,26 @@
+ide() {
+    local app_name="$1"
+    shift
+
+    if [[ $# == 0 ]]; then
+        # if no directory params passed, check if current directory is part of a Git repo
+        if git rev-parse --is-inside-work-tree &>/dev/null; then
+            # If inside a git repo, use the root directory
+            set -- "$(git rev-parse --show-toplevel)"
+        else
+            # If not in a git repo, use the current directory
+            set -- .
+        fi
+    fi
+
+    open -na "${app_name}" --args "$@"
+}
+
+# Require app name parameter
+if [[ $# == 0 ]]; then
+    echo "Usage: $(basename "$0") <app_name> [directory]" >&2
+    echo "Example: $(basename "$0") 'Cursor.app' ~/projects" >&2
+    exit 1
+fi
+
+ide "$@"

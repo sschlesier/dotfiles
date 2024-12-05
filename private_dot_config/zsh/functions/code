@@ -1,0 +1,6 @@
+code() {
+    ide "Visual Studio Code.app"
+}
+code "$@"
+
+

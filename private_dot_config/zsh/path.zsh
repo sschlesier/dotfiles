@@ -95,5 +95,10 @@ if [[ -e "$HOME/.dotnet/dotnet" ]]; then
     PATH+=:"$HOME/.dotnet"
 fi
 
+# add dotnet tools to path
+if [[ -e "$HOME/.dotnet/tools" ]]; then
+    PATH+=:"$HOME/.dotnet/tools"
+fi
+
 #de-duplicate path
 typeset -aU path

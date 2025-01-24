@@ -1,0 +1,32 @@
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  line-height: 1.6;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+pre {
+  background-color: #2d2d2d;
+  border-radius: 4px;
+  padding: 0.5rem;
+  border: 1px solid #404040;
+  overflow-x: auto;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  display: block;
+  font-family: monospace;
+}
+
+a {
+  color: #66b3ff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff;
+} 

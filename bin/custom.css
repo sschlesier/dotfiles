@@ -3,8 +3,8 @@ body {
   margin: 0 auto;
   padding: 2rem;
   line-height: 1.6;
-  background-color: #1a1a1a;
-  color: #e0e0e0;
+  background-color: #212830;
+  color: #c7cdd5;
 }
 
 pre {
@@ -24,9 +24,9 @@ pre code {
 }
 
 a {
-  color: #66b3ff;
+  color: #0a81d1;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: #ffffff;
-} 
+}

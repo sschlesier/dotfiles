@@ -3,5 +3,5 @@ set -euo pipefail
 
 prId=${1:-}
 
-gh pr edit "$prId" --add-reviewer anythingmachine --add-reviewer chrisventura --add-reviewer albakrio
+gh pr edit "$prId" --add-reviewer anythingmachine
 

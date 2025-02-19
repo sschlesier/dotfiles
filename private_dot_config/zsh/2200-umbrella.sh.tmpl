@@ -1,0 +1,10 @@
+{{ if eq .work 1 }}
+# Remember to edit his file as a template
+#
+# Cisco umbrella related configuration
+
+if [[ -e "$HOME/certs/umbrella.pem" ]]
+then
+    export NODE_EXTRA_CA_CERTS="$HOME/certs/umbrella.pem"
+fi
+{{ end }}

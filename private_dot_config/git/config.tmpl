@@ -20,18 +20,18 @@
 [status]
 	showUntrackedFiles = all
 [merge]
-	tool = bc4
-[mergetool "bc4"]
-    path = bcomp
-    cmd = bcomp "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+	tool = kdiff3
 [mergetool "vimdiff"]
 	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-[difftool "bc4"]
-    path = bcomp
 [diff]
-	tool = bc4
-	algorithm = histogram
+	tool = kdiff3
 [alias]
 	ignore = "!gi() { curl -sL https://www.gitignore.io/api/$@ ;}; gi"
 [init]
 	defaultBranch = main
+[difftool "kdiff3"]
+	path = /opt/homebrew/bin/kdiff3
+[mergetool "kdiff3"]
+	path = /opt/homebrew/bin/kdiff3
+	trustExitCode = false
+	keepBackup = false

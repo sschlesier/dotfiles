@@ -19,19 +19,21 @@
 	date = short
 [status]
 	showUntrackedFiles = all
-[merge]
-	tool = kdiff3
-[mergetool "vimdiff"]
-	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-[diff]
-	tool = kdiff3
 [alias]
 	ignore = "!gi() { curl -sL https://www.gitignore.io/api/$@ ;}; gi"
 [init]
 	defaultBranch = main
-[difftool "kdiff3"]
-	path = /opt/homebrew/bin/kdiff3
+[merge]
+	tool = kdiff3
 [mergetool "kdiff3"]
 	path = /opt/homebrew/bin/kdiff3
 	trustExitCode = false
 	keepBackup = false
+[diff]
+	tool = difft
+[difftool "difft"]
+    cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
+[difftool]
+    prompt = false
+[pager]
+    difftool = true

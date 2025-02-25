@@ -1,3 +1,4 @@
+# remeber to edit with chezmoi edit
 [user]
 	name = Scott Schlesier
 	email = {{ .email }}
@@ -30,7 +31,7 @@
 	trustExitCode = false
 	keepBackup = false
 [diff]
-	tool = difft
+	external = difft
 [difftool "difft"]
     cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 [difftool]

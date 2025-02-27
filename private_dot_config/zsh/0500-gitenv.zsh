@@ -7,6 +7,7 @@ alias gca='git commit --verbose --all'
 alias gca!='git commit --verbose --all --amend'
 # alias gccd= function
 alias gd='git diff'
+alias gdss='git difftool --tool difft' # diff side-by-side
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gdw='git diff --word-diff'
 alias gf='git fetch'

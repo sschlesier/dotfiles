@@ -34,3 +34,6 @@ alias ddg=ddgr
 
 # ripgrep
 alias rga="rg --no-ignore --hidden"
+
+# fd all
+alias fda="fd --hidden --no-ignore"

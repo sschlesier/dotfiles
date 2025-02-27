@@ -1,4 +1,4 @@
-# remeber to edit with chezmoi edit
+# remember to edit with chezmoi edit
 [user]
 	name = Scott Schlesier
 	email = {{ .email }}
@@ -11,9 +11,13 @@
 	path = ~/.config/git/aliases
 	path = ~/.config/git/environment
 [push]
-	default = upstream
-[rerere]
-	enabled = 1
+  default = simple
+  autoSetupRemote = true
+  followTags = true
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
 [grep]
 	extendRegexp = true
 [blame]
@@ -26,15 +30,38 @@
 	defaultBranch = main
 [merge]
 	tool = kdiff3
+  conflictstyle = zdiff3
 [mergetool "kdiff3"]
 	path = /opt/homebrew/bin/kdiff3
 	trustExitCode = false
 	keepBackup = false
 [diff]
-	external = difft
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
 [difftool "difft"]
     cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 [difftool]
     prompt = false
 [pager]
     difftool = true
+[column]
+  ui = auto
+[branch]
+  sort = -committerdate
+[tag]
+  sort = version:refname
+[help]
+  autocorrect = prompt
+[commit]
+  verbose = true
+[rerere]
+  enabled = true
+  autoupdate = true
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
+[pull]
+  rebase = true

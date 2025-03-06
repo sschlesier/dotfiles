@@ -102,3 +102,9 @@ fi
 
 #de-duplicate path
 typeset -aU path
+
+if [ -e $HOME/Library/Android/sdk ]; then
+    export ANDROID_HOME=$HOME/Library/Android/sdk
+    export PATH=$PATH:$ANDROID_HOME/emulator
+    export PATH=$PATH:$ANDROID_HOME/platform-tools
+fi

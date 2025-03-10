@@ -1,7 +1,7 @@
 fuzzy-dir() {
     if [[ -d "$1" ]]; then
         local dest=$( \
-          echo $(fd --type d --max-depth 1 '' "$1" -X basename | fzf --no-select-1 --query "$2")
+          echo $(fd --type d --max-depth 1 '' "$1" -X basename | sort --ignore-case | fzf --no-select-1 --query "$2")
         )
         if [[ -d "$1/$dest" ]]
         then

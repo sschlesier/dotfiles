@@ -6,12 +6,15 @@ ControlPersist 300
 #show randomart for host keys
 VisualHostKey=yes
 
-#add ssh keys to ssh-agent as they are used
-Host *
-   AddKeysToAgent yes
+#key file for github
+Host github.com
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
 
 #explicit key file for azure devops
 Host ssh.dev.azure.com
-  IdentityFile ~/.ssh/id_rsa.pub
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_rsa
   IdentitiesOnly yes
   PubkeyAcceptedKeyTypes +rsa-sha2-256,rsa-sha2-512

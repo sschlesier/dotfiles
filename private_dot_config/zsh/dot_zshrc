@@ -1,6 +1,5 @@
 # uncomment zprof to display profiling data
 # zmodload zsh/zprof
-source "$ZDOTDIR/path.zsh"
 
 # Skip all configuration for non-interactive shells
 [[ $- != *i* ]] && return

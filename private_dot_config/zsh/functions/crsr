@@ -1,5 +1,0 @@
-cursor() {
-    ide "Cursor.app" "$@"
-}
-cursor "$@"
-

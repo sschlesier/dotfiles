@@ -10,7 +10,7 @@ if [[ "$1" == "--install-only" ]]; then
   shift
 fi
 
-if [ "$#" -eq 2 ]; then
+if [ "$#" -ge 2 ]; then
   tool="$1"
   pkg="$2"
   shift 2
@@ -22,7 +22,7 @@ fi
 
 if ! fnm exec --using=default npm list -g --depth=0 | rg "$pkg" > /dev/null
 then
-  echo "installing $pkg"
+  echo "installing $pkg" >&2
   fnm exec --using=default npm install -g "$pkg"
 fi
 

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+install_only=false
+if [[ "$1" == "--install-only" ]]; then
+  install_only=true
+  shift
+fi
+
+if [ "$#" -eq 2 ]; then
+  tool="$1"
+  pkg="$2"
+  shift 2
+else
+  tool="$1"
+  pkg="$1"
+  shift
+fi
+
+if ! fnm exec --using=default npm list -g --depth=0 | rg "$pkg" > /dev/null
+then
+  echo "installing $pkg"
+  fnm exec --using=default npm install -g "$pkg"
+fi
+
+if [ "$install_only" = false ]; then
+  fnm exec --using=default "$tool" "$@"
+fi

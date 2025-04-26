@@ -4,10 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if ! fnm exec --using=default npm list -g | rg curlconverter > /dev/null
-then
-  fnm exec --using=default npm install -g curlconverter
-fi
+fnm-default --install-only curlconverter
 
-pbpaste | fnm exec --using=default curlconverter --language httpie - | pbcopy
+pbpaste | fnm-default curlconverter --language httpie - | pbcopy
 echo clipboard has been updated

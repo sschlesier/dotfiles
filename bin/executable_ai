@@ -4,4 +4,4 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-fnm-default markserv "$@"
+fnm-default ai '@builder.io/ai-shell' "$@"

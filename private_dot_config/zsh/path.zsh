@@ -64,19 +64,21 @@ do
 done
 
 #add gems to path
-gempath="$ZSH_CACHE_DIR/gempath"
+gemfile="$ZSH_CACHE_DIR/gempath"
+gempath="$(brew --prefix ruby)/bin/gem"
 #write path into a file
-if [[ ! -f $gempath ]]; then
+if [[ ! -f $gemfile ]]; then
 	echo updating gempath
-	if [[ -n $(type gem) ]]; then
-		gem environment gempath > "$gempath"
+	if [[ -x "$gempath" ]]; then
+		$gempath env gempath | tr ':' '\n' | xargs -I {} find {} -maxdepth 1 -name bin -type d | tr '\n' ':' | sed 's/:$//' > "$gemfile"
+		cat "$gemfile"
 	else
 		#no gems here so blank the file
-		touch "$gempath"
+		touch "$gemfile"
 	fi
 fi
-if [[ -s $gempath ]]; then
-	PATH+=:$(cat "$gempath")
+if [[ -s $gemfile ]]; then
+	PATH+=:$(cat "$gemfile")
 fi
 
 #add golang to path

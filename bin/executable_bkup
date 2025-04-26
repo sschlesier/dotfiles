@@ -19,19 +19,33 @@ fi
 cd "$(dirname "$0")"
 
 main() {
+# Find tarsnap in common Homebrew locations
+local tarsnap_path
+for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+    if [[ -x "${prefix}/bin/tarsnap" ]]; then
+        tarsnap_path="${prefix}/bin/tarsnap"
+        break
+    fi
+done
+
+if [[ -z "${tarsnap_path:-}" ]]; then
+    echo "Error: tarsnap not found in any Homebrew location"
+    exit 1
+fi
+
 # Set up archive name
 computer=claudius
 now=$(date +%Y-%m-%d_%H-%M-%S)
 name=${computer}-${now}
 
 # Create an archive
-tarsnap -c \
+"${tarsnap_path}" -c \
     --print-stats \
     -f "${name}" \
     "$HOME/3d" "$HOME/2d" "$HOME/Documents"
 
 #keep the most recent 60 archives
-tarsnap --list-archives | sort -r | tail -n +46 | xargs -n 1 tarsnap -d -f
+"${tarsnap_path}" --list-archives | sort -r | tail -n +46 | xargs -n 1 "${tarsnap_path}" -d -f
 }
 
 main "$@"

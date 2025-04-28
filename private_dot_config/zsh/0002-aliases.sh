@@ -38,4 +38,4 @@ alias rga="rg --no-ignore --hidden"
 # fd all
 alias fda="fd --hidden --no-ignore"
 
-alias crsr="cursor"
+alias crsr="ide cursor"

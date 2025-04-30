@@ -13,7 +13,11 @@ ide() {
         fi
     fi
 
-    open -na "${app_name}" --args "$@"
+    if [[ "${app_name}" == *.app ]]; then
+        open -na "${app_name}" --args "$@"
+    else
+        "${app_name}" "$@"
+    fi
 }
 
 # Require app name parameter

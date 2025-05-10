@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Display help if no arguments or help flag is provided
+if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "Usage: watch_py <python_file>"
+    echo ""
+    echo "Watches for changes in Python files and automatically runs the specified Python file."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help    Display this help message and exit"
+    echo ""
+    echo "Example:"
+    echo "  watch_py script.py"
+    exit 0
+fi
+
+while true;
+	do fd -e py | \
+		entr -d -c -r python "$1"
+done

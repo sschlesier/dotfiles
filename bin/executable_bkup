@@ -7,11 +7,14 @@ if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
-if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
-    echo 'Usage: bkup
+if [[ "${1-}" =~ ^-*h(elp)?$ ]] || [[ $# -eq 0 ]]; then
+    echo 'Usage: bkup [directory1] [directory2] ...
 
-bkup claudius to tarsnap
+Backup specified directories to tarsnap.
+At least one directory must be specified.
 
+Example:
+    bkup ~/Documents ~/Photos ~/Projects
 '
     exit
 fi
@@ -19,33 +22,47 @@ fi
 cd "$(dirname "$0")"
 
 main() {
-# Find tarsnap in common Homebrew locations
-local tarsnap_path
-for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
-    if [[ -x "${prefix}/bin/tarsnap" ]]; then
-        tarsnap_path="${prefix}/bin/tarsnap"
-        break
+    # Find tarsnap in common Homebrew locations
+    local tarsnap_path
+    for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+        if [[ -x "${prefix}/bin/tarsnap" ]]; then
+            tarsnap_path="${prefix}/bin/tarsnap"
+            break
+        fi
+    done
+
+    if [[ -z "${tarsnap_path:-}" ]]; then
+        echo "Error: tarsnap not found in any Homebrew location"
+        exit 1
     fi
-done
 
-if [[ -z "${tarsnap_path:-}" ]]; then
-    echo "Error: tarsnap not found in any Homebrew location"
-    exit 1
-fi
+    # Validate all directories exist
+    local missing_dirs=()
+    for dir in "$@"; do
+        if [[ ! -e "$dir" ]]; then
+            missing_dirs+=("$dir")
+        fi
+    done
 
-# Set up archive name
-computer=claudius
-now=$(date +%Y-%m-%d_%H-%M-%S)
-name=${computer}-${now}
+    if [[ ${#missing_dirs[@]} -gt 0 ]]; then
+        echo "Error: The following directories do not exist:"
+        printf '%s\n' "${missing_dirs[@]}"
+        exit 1
+    fi
 
-# Create an archive
-"${tarsnap_path}" -c \
-    --print-stats \
-    -f "${name}" \
-    "$HOME/3d" "$HOME/2d" "$HOME/Documents"
+    # Set up archive name
+    computer=${HOST%%.*}
+    now=$(date +%Y-%m-%d_%H-%M-%S)
+    name=${computer}-${now}
 
-#keep the most recent 60 archives
-"${tarsnap_path}" --list-archives | sort -r | tail -n +46 | xargs -n 1 "${tarsnap_path}" -d -f
+    # Create an archive
+    "${tarsnap_path}" -c \
+        --print-stats \
+        -f "${name}" \
+        "$@"
+
+    #keep the most recent archives
+    "${tarsnap_path}" --list-archives | sort -r | tail -n +46 | xargs -n 1 "${tarsnap_path}" -d -f
 }
 
 main "$@"

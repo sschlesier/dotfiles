@@ -50,6 +50,8 @@ main() {
         exit 1
     fi
 
+    echo "Backing up $@" >&2
+
     # Set up archive name
     computer=${HOST%%.*}
     now=$(date +%Y-%m-%d_%H-%M-%S)

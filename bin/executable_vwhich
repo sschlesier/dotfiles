@@ -1,5 +1,7 @@
 #! /bin/sh
 
+EDITOR=cursor
+
 path=$(which "$1")
 if [ -n "$path" ]; then
 	$EDITOR "$path"

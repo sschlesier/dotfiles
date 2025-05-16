@@ -1,0 +1,29 @@
+autoload -U add-zsh-hook
+
+auto_activate_venv() {
+  # Deactivate any currently active venv
+  if [[ -n $VIRTUAL_ENV ]]; then
+    # Get the parent directory of the current virtual environment
+    local venv_parent="${VIRTUAL_ENV:h}"
+    # Only deactivate if current directory is not a child of the venv parent
+    if [[ ! $PWD = $venv_parent/* ]]; then
+      deactivate
+    else
+      # Stick with current venv
+      return
+    fi
+  fi
+
+  # Check common venv directory names in current directory
+  for venv_dir in .venv venv; do
+    if [[ -f $venv_dir/bin/activate ]]; then
+      source $venv_dir/bin/activate
+      return
+    fi
+  done
+}
+
+add-zsh-hook chpwd auto_activate_venv
+
+# Also call the function for the initial directory on shell start
+auto_activate_venv

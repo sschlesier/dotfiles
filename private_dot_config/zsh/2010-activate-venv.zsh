@@ -1,0 +1,2 @@
+autoload -U auto_activate_venv
+auto_activate_venv

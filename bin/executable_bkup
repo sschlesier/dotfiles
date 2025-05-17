@@ -7,14 +7,17 @@ if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
-if [[ "${1-}" =~ ^-*h(elp)?$ ]] || [[ $# -eq 0 ]]; then
-    echo 'Usage: bkup [directory1] [directory2] ...
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: bkup [dirs_file]
 
-Backup specified directories to tarsnap.
-At least one directory must be specified.
+Backup directories listed in dirs_file to tarsnap.
+Each directory should be on its own line in the file.
+If dirs_file is not specified, defaults to bkup.dirs in the same directory as this script.
 
-Example:
-    bkup ~/Documents ~/Photos ~/Projects
+Example dirs_file contents:
+    ~/Documents
+    ~/Photos
+    ~/Projects
 '
     exit
 fi
@@ -36,9 +39,30 @@ main() {
         exit 1
     fi
 
+    # Set default dirs file if not provided
+    local dirs_file="${1:-bkup.dirs}"
+
+    if [[ ! -f "$dirs_file" ]]; then
+        echo "Error: Dirs file '$dirs_file' does not exist"
+        exit 1
+    fi
+
+    # Read directories from file
+    local dirs=()
+    while IFS= read -r dir || [[ -n "$dir" ]]; do
+        # Skip empty lines and comments
+        [[ -z "$dir" || "$dir" =~ ^[[:space:]]*# ]] && continue
+        dirs+=("$dir")
+    done < "$dirs_file"
+
+    if [[ ${#dirs[@]} -eq 0 ]]; then
+        echo "Error: No valid directories found in '$dirs_file'"
+        exit 1
+    fi
+
     # Validate all directories exist
     local missing_dirs=()
-    for dir in "$@"; do
+    for dir in "${dirs[@]}"; do
         if [[ ! -e "$dir" ]]; then
             missing_dirs+=("$dir")
         fi
@@ -50,7 +74,8 @@ main() {
         exit 1
     fi
 
-    echo "Backing up $@" >&2
+    echo "Backing up directories from $dirs_file:" >&2
+    printf '%s\n' "${dirs[@]}" >&2
 
     # Set up archive name
     computer=${HOST%%.*}
@@ -61,7 +86,7 @@ main() {
     "${tarsnap_path}" -c \
         --print-stats \
         -f "${name}" \
-        "$@"
+        "${dirs[@]}"
 
     #keep the most recent archives
     "${tarsnap_path}" --list-archives | sort -r | tail -n +46 | xargs -n 1 "${tarsnap_path}" -d -f

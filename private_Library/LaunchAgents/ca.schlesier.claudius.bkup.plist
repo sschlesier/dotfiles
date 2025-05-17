@@ -13,9 +13,6 @@
     <key>ProgramArguments</key>
     <array>
         <string>/Users/scotts/bin/bkup</string>
-        <string>/Users/scotts/3d</string>
-        <string>/Users/scotts/2d</string>
-        <string>/Users/scotts/Documents</string>
     </array>
 
     <!-- Time to start the job, at 2:30 AM every day -->

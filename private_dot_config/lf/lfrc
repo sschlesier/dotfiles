@@ -1,3 +1,4 @@
 set previewer ~/.config/lf/preview
 
 cmd open $$EDITOR $fx
+set hidden true

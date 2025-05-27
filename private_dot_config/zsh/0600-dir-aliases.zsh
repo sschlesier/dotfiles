@@ -53,12 +53,8 @@ aliasdir gs "$GOPATH/src/github.com/sschlesier"
 aliasdir ic "$ICLOUD"
 aliasdir od "$HOME/OneDrive"
 
-srcdir ah arthana
 srcdir pr practice
-srcdir pe product-excellence
 srcdir ss shell-setup
-
-gosrcdir got golang-tour
 
 # List directory contents
 if type eza &> /dev/null; then

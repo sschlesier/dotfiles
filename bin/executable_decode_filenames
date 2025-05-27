@@ -33,19 +33,23 @@ while getopts "nh-:" opt; do
 done
 
 for file in *; do
-    decoded_name=$(echo "${file}" | urldecode | tr "[:upper:]" "[:lower:]")
+    decoded_name=$( \
+      echo "${file}" | \
+      urldecode | \
+      tr "[:upper:]" "[:lower:]" | \
+      sed -e 's/[^a-z0-9.]/-/g' | \
+      tr -s '-'
+      )
 
     if [[ "${file}" == "${decoded_name}" ]]; then
         continue
     fi
 
-    new_name=$(echo "${decoded_name}" | sed -e 's/[^A-Za-z0-9.]/-/g' | tr '[:upper:]' '[:lower:]')
-
-    if [[ "${file}" != "${new_name}" ]]; then
+    if [[ "${file}" != "${decoded_name}" ]]; then
         if [[ $dry_run == true ]]; then
-            echo "Would rename '${file}' to '${new_name}'"
+            echo "Would rename '${file}' to '${decoded_name}'"
         else
-            mv "${file}" "${new_name}"
+            mv "${file}" "${decoded_name}"
         fi
     fi
 done

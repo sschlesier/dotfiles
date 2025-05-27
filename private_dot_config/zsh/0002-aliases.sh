@@ -39,3 +39,5 @@ alias rga="rg --no-ignore --hidden"
 alias fda="fd --hidden --no-ignore"
 
 alias crsr="ide cursor"
+
+alias ai="gh copilot suggest"

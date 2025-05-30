@@ -40,4 +40,4 @@ alias fda="fd --hidden --no-ignore"
 
 alias crsr="ide cursor"
 
-alias ai="gh copilot suggest"
+alias ai="gh copilot suggest -t shell"

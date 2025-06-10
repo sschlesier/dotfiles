@@ -1,0 +1,41 @@
+#! /usr/bin/env bash
+
+# Check if tmux is running
+if ! command -v tmux &> /dev/null; then
+    echo "Error: tmux is not installed"
+    exit 1
+fi
+
+# Function to get the process running in a window
+get_window_process() {
+    local session=$1
+    local window=$2
+    local pane=$3
+
+    # Get the process tree for the pane
+    local process=$(tmux list-panes -t "$session:$window.$pane" -F "#{pane_current_command}")
+
+    # Skip if it's just a shell
+    if [[ "$process" =~ ^(zsh|bash|sh)$ ]]; then
+        return 1
+    fi
+
+    echo "$process"
+}
+
+# Main loop
+tmux list-sessions -F "#{session_name}" | while read -r session; do
+    echo "Session: $session"
+
+    # Get windows in this session
+    tmux list-windows -t "$session" -F "#{window_index}:#{window_name}" | while IFS=: read -r window_index window_name; do
+        # Get panes in this window
+        tmux list-panes -t "$session:$window_index" -F "#{pane_index}" | while read -r pane_index; do
+            process=$(get_window_process "$session" "$window_index" "$pane_index")
+            if [ $? -eq 0 ]; then
+                echo "  Window $window_index ($window_name) - Pane $pane_index: $process"
+            fi
+        done
+    done
+    echo
+done

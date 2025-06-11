@@ -1,7 +1,0 @@
-use_nvm() {
-  if [[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]]; then
-    echo "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
-    source "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
-  fi
-  nvm use $1
-}

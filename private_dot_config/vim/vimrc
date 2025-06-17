@@ -122,13 +122,13 @@ endif
 
 " Colorscheme
 syntax enable
-set background=dark
-colorscheme PaperColor
+set background=light
+colorscheme morning
 
 " Enable transparency
-highlight Normal ctermbg=none guibg=none
-highlight NonText ctermbg=none guibg=none
-set termguicolors
+" highlight Normal ctermbg=none guibg=none
+" highlight NonText ctermbg=none guibg=none
+" set termguicolors
 
 " visible whitespace
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣

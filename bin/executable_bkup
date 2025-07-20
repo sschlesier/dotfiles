@@ -90,7 +90,7 @@ main() {
         "${dirs[@]}"
 
     #keep the most recent archives
-    "${tarsnap_path}" --list-archives | sort -r | tail -n +46 | xargs -n 1 "${tarsnap_path}" -d -f
+    "${tarsnap_path}" --list-archives | sort -r | tail -n +66 | xargs -n 1 "${tarsnap_path}" -d -f
 }
 
 main "$@"

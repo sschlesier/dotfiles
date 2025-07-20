@@ -85,6 +85,7 @@ main() {
     # Create an archive
     "${tarsnap_path}" -c \
         --print-stats \
+        --humanize-numbers \
         -f "${name}" \
         "${dirs[@]}"
 

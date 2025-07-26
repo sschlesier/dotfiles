@@ -7,6 +7,22 @@ if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
+notify_failure() {
+    local message="$1"
+    echo "BACKUP FAILED: $message" >&2
+    
+    # Try osascript first (macOS)
+    if command -v osascript >/dev/null 2>&1; then
+        osascript -e "display notification \"$message\" with title \"Backup Failed\" sound name \"Basso\""
+    # Try terminal-notifier (macOS with homebrew)
+    elif command -v terminal-notifier >/dev/null 2>&1; then
+        terminal-notifier -title "Backup Failed" -message "$message" -sound Basso
+    # Try notify-send (Linux)
+    elif command -v notify-send >/dev/null 2>&1; then
+        notify-send -u critical "Backup Failed" "$message"
+    fi
+}
+
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
     echo 'Usage: bkup [dirs_file]
 
@@ -35,7 +51,7 @@ main() {
     done
 
     if [[ -z "${tarsnap_path:-}" ]]; then
-        echo "Error: tarsnap not found in any Homebrew location"
+        notify_failure "tarsnap not found in any Homebrew location"
         exit 1
     fi
 
@@ -43,7 +59,7 @@ main() {
     local dirs_file="${1:-bkup.dirs}"
 
     if [[ ! -f "$dirs_file" ]]; then
-        echo "Error: Dirs file '$dirs_file' does not exist"
+        notify_failure "Dirs file '$dirs_file' does not exist"
         exit 1
     fi
 
@@ -56,7 +72,7 @@ main() {
     done < "$dirs_file"
 
     if [[ ${#dirs[@]} -eq 0 ]]; then
-        echo "Error: No valid directories found in '$dirs_file'"
+        notify_failure "No valid directories found in '$dirs_file'"
         exit 1
     fi
 
@@ -69,8 +85,9 @@ main() {
     done
 
     if [[ ${#missing_dirs[@]} -gt 0 ]]; then
-        echo "Error: The following directories do not exist:"
-        printf '%s\n' "${missing_dirs[@]}"
+        local missing_list=$(printf '%s, ' "${missing_dirs[@]}")
+        missing_list=${missing_list%, }
+        notify_failure "Directories do not exist: $missing_list"
         exit 1
     fi
 
@@ -83,14 +100,20 @@ main() {
     name=${computer}-${now}
 
     # Create an archive
-    "${tarsnap_path}" -c \
+    if ! "${tarsnap_path}" -c \
         --print-stats \
         --humanize-numbers \
         -f "${name}" \
-        "${dirs[@]}"
+        "${dirs[@]}"; then
+        notify_failure "Archive creation failed for ${name}"
+        exit 1
+    fi
 
     #keep the most recent archives
-    "${tarsnap_path}" --list-archives | sort -r | tail -n +66 | xargs -n 1 "${tarsnap_path}" -d -f
+    if ! "${tarsnap_path}" --list-archives | sort -r | tail -n +66 | xargs -n 1 "${tarsnap_path}" -d -f; then
+        notify_failure "Archive cleanup failed"
+        exit 1
+    fi
 }
 
 main "$@"

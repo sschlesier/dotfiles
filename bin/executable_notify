@@ -63,14 +63,14 @@ fi
 # Set sound based on shortcuts
 case "$sound" in
     "error"|"fail"|"failure")
-        if command -v osascript >/dev/null 2>&1; then
+        if type -P osascript >/dev/null 2>&1; then
             sound="Basso"
         else
             sound=""  # Linux doesn't have consistent error sounds
         fi
         ;;
     "success"|"complete"|"done")
-        if command -v osascript >/dev/null 2>&1; then
+        if type -P osascript >/dev/null 2>&1; then
             sound="Glass"
         else
             sound=""
@@ -79,21 +79,21 @@ case "$sound" in
 esac
 
 # Send notification based on available tools
-if command -v osascript >/dev/null 2>&1; then
+if type -P osascript >/dev/null 2>&1; then
     # macOS native notifications
     cmd="display notification \"$message\" with title \"$title\""
     if [[ -n "$sound" ]]; then
         cmd="$cmd sound name \"$sound\""
     fi
     osascript -e "$cmd"
-elif command -v terminal-notifier >/dev/null 2>&1; then
+elif type -P terminal-notifier >/dev/null 2>&1; then
     # macOS with terminal-notifier (Homebrew)
     args=(-title "$title" -message "$message")
     if [[ -n "$sound" ]]; then
         args+=(-sound "$sound")
     fi
     terminal-notifier "${args[@]}"
-elif command -v notify-send >/dev/null 2>&1; then
+elif type -P notify-send >/dev/null 2>&1; then
     # Linux notifications
     args=()
     case "$urgency" in

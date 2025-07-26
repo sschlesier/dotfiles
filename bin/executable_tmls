@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # Check if tmux is running
-if ! command -v tmux &> /dev/null; then
+if ! type -P tmux &> /dev/null; then
     echo "Error: tmux is not installed"
     exit 1
 fi

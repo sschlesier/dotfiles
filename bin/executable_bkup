@@ -10,17 +10,7 @@ fi
 notify_failure() {
     local message="$1"
     echo "BACKUP FAILED: $message" >&2
-    
-    # Try osascript first (macOS)
-    if command -v osascript >/dev/null 2>&1; then
-        osascript -e "display notification \"$message\" with title \"Backup Failed\" sound name \"Basso\""
-    # Try terminal-notifier (macOS with homebrew)
-    elif command -v terminal-notifier >/dev/null 2>&1; then
-        terminal-notifier -title "Backup Failed" -message "$message" -sound Basso
-    # Try notify-send (Linux)
-    elif command -v notify-send >/dev/null 2>&1; then
-        notify-send -u critical "Backup Failed" "$message"
-    fi
+    notify -t "Backup Failed" -s error -u critical "$message"
 }
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then

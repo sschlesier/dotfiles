@@ -78,7 +78,7 @@ main() {
     printf '%s\n' "${dirs[@]}" >&2
 
     # Set up archive name
-    computer=${HOST%%.*}
+    computer=$(hostname | cut -d. -f1)
     now=$(date +%Y-%m-%d_%H-%M-%S)
     name=${computer}-${now}
 

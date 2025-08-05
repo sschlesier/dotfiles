@@ -1,2 +1,2 @@
 # shellcheck shell=bash
-export LESS=-RFMXJ
+export LESS=-RFMXJi

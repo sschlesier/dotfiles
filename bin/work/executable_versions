@@ -44,14 +44,14 @@ cmds+=('echo -e "\n\npost-metric lambda"')
 cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
   --function-name post-metrics-Function-JQwkOV9M3BPp \
   --cli-binary-format raw-in-base64-out \
-  --payload '{\"ping\": 1}' response.json > /dev/null && jq -r '.appVersion' response.json && rm response.json"
+  --payload '{\"ping\": 1}' post-metric.json > /dev/null && jq -r '.appVersion' post-metric.json && rm post-metric.json"
 cmds+=("$cmd")
 
 cmds+=('echo -e "\n\ninvoice anomaly detection lambda"')
 cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
   --function-name invoice-anomaly-detection-Function-BVrJFsOZ2oKr \
   --cli-binary-format raw-in-base64-out \
-  --payload '{\"ping\": 1}' response.json > /dev/null && jq -r '.appVersion' response.json && rm response.json"
+  --payload '{\"ping\": 1}' anomaly.json > /dev/null && jq -r '.appVersion' anomaly.json && rm anomaly.json"
 cmds+=("$cmd")
 
 

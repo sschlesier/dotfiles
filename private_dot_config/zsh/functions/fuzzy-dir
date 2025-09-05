@@ -1,13 +1,28 @@
 fuzzy-dir() {
     if [[ -d "$1" ]]; then
-        local dest=$( \
-          echo $(fd --type d --max-depth 1 '' "$1" -X basename | sort --ignore-case | fzf --no-select-1 --query "$2")
-        )
-        if [[ -d "$1/$dest" ]]
+        local fzf_output=$(fd --type d --max-depth 1 '' "$1" -X basename | sort --ignore-case | fzf --no-select-1 --query "$2" --print-query)
+        local query=$(echo "$fzf_output" | head -n1)
+        local selected=$(echo "$fzf_output" | tail -n1)
+
+        if [[ -n "$selected" && "$query" != "$selected" ]]
         then
-            cd "$1/$dest"
+            # A real selection was made
+            if [[ -d "$1/$selected" ]]
+            then
+                cd "$1/$selected"
+            else
+                echo "cannot find $1/$selected"
+            fi
         else
-          echo "cannot find $1/$dest"
+            # No match selected, create directory using the query
+            local new_dir="$1/$query"
+            echo -n "Create directory '$new_dir'? [y/N] "
+            read -r response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                mkdir -p "$new_dir" && cd "$new_dir"
+            else
+                echo "Directory creation cancelled."
+            fi
         fi
     else
         echo "$1" is not a directory

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Create temp file with clipboard content
+tmpfile=$(mktemp /tmp/clipboard_edit.XXXXXX)
+pbpaste > "$tmpfile"
+
+# Open in vim
+vim "$tmpfile"
+
+# Copy the edited content back to clipboard
+pbcopy < "$tmpfile"
+
+# Clean up
+rm "$tmpfile"

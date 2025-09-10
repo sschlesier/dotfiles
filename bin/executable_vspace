@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+count=${1:-15}
+for i in $(seq 1 $count); do echo; done

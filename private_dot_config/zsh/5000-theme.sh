@@ -13,6 +13,8 @@ fi
 THEME_FILE="$XDG_DATA_HOME/theme_mode"
 LIGHT_THEME="Ayu Light"
 DARK_THEME="Ayu"
+BAT_LIGHT_THEME="OneHalfLight"
+BAT_DARK_THEME="OneHalfDark"
 
 # Initialize
 mkdir -p "$(dirname "$THEME_FILE")"
@@ -21,12 +23,14 @@ mkdir -p "$(dirname "$THEME_FILE")"
 light() {
     echo "light" > "$THEME_FILE"
     kitty +kitten themes --reload-in=all "$LIGHT_THEME"
+    echo "--theme=$BAT_LIGHT_THEME" > "$HOME/.config/bat/config"
     echo "Switched to light theme"
 }
 
 dark() {
     echo "dark" > "$THEME_FILE"
     kitty +kitten themes --reload-in=all "$DARK_THEME"
+    echo "--theme=$BAT_DARK_THEME" > "$HOME/.config/bat/config"
     echo "Switched to dark theme"
 }
 

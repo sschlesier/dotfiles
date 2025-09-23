@@ -59,10 +59,11 @@ srcdir ss shell-setup
 # List directory contents
 if type eza &> /dev/null; then
 	alias ls='eza --color-scale=size --icons=auto --group-directories-first'
-	alias l='ls -l'
-	alias la='ls -la'
-	alias lt='ls -T'
+	alias l='ls --long'
+	alias la='l --all'
+	alias lt='ls --tree'
     alias ldo='l $DOWNLOADS'
+    alias ldt='l --sort oldest'
 else
 	alias l='ls -lh'
 	alias la='ls -lah'

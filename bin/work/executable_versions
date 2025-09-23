@@ -39,6 +39,13 @@ for i in "${!environments[@]}"; do
   cmds+=("$cmd")
 done
 
+environments=("dev" "staging" "production")
+cmds+=('echo -e "\n\nsell-sheet-parser"')
+urls=("test1" "api.staging" "api")
+for i in "${!environments[@]}"; do
+  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/sell-sheet/health\" | jq -r .version"
+  cmds+=("$cmd")
+done
 
 cmds+=('echo -e "\n\npost-metric lambda"')
 cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \

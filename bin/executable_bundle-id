@@ -45,4 +45,16 @@ fi
 
 app_name="$1"
 
-osascript -e "id of app \"${app_name}\""
+# Check if output is going to a terminal (not piped/redirected)
+is_output_to_terminal() {
+  [[ -t 1 ]]
+}
+
+bundle_id=$(osascript -e "id of app \"${app_name}\"")
+
+# If output is to a terminal, include newline; if piped, don't
+if is_output_to_terminal; then
+  echo "$bundle_id"
+else
+  printf "%s" "$bundle_id"
+fi

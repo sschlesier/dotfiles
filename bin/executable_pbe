@@ -6,7 +6,7 @@ tmpfile=$(mktemp /tmp/clipboard_edit.XXXXXX)
 pbpaste > "$tmpfile"
 
 # Open in vim
-vim "$tmpfile"
+nvim "$tmpfile"
 
 # Copy the edited content back to clipboard
 pbcopy < "$tmpfile"

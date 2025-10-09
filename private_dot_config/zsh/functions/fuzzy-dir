@@ -1,31 +1,39 @@
 fuzzy-dir() {
-    if [[ -d "$1" ]]; then
-        local fzf_output=$(fd --type d --max-depth 1 '' "$1" -X basename | sort --ignore-case | fzf --no-select-1 --query "$2" --print-query)
+    local base_dir="$1"
+    local child_dir="$2"
+
+    if [[ -d "$base_dir" ]]; then
+        local fzf_output=$(fd --type d --max-depth 1 '' "$base_dir" -X basename | sort --ignore-case | fzf --no-select-1 --query "$child_dir" --print-query)
         local query=$(echo "$fzf_output" | head -n1)
         local selected=$(echo "$fzf_output" | tail -n1)
 
         if [[ -n "$selected" && "$query" != "$selected" ]]
         then
             # A real selection was made
-            if [[ -d "$1/$selected" ]]
+            if [[ -d "$base_dir/$selected" ]]
             then
-                cd "$1/$selected"
+                cd "$base_dir/$selected"
             else
-                echo "cannot find $1/$selected"
+                echo "cannot find $base_dir/$selected"
             fi
         else
             # No match selected, create directory using the query
-            local new_dir="$1/$query"
-            echo -n "Create directory '$new_dir'? [y/N] "
-            read -r response
-            if [[ "$response" =~ ^[Yy]$ ]]; then
-                mkdir -p "$new_dir" && cd "$new_dir"
+            if [[ -z "$query" ]]; then
+                # Empty query, just cd to base_dir
+                cd "$base_dir"
             else
-                echo "Directory creation cancelled."
+                local new_dir="$base_dir/$query"
+                echo -n "Create directory '$new_dir'? [y/N] "
+                read -r response
+                if [[ "$response" =~ ^[Yy]$ ]]; then
+                    mkdir -p "$new_dir" && cd "$new_dir"
+                else
+                    echo "Directory creation cancelled."
+                fi
             fi
         fi
     else
-        echo "$1" is not a directory
+        echo "$base_dir" is not a directory
     fi
 }
 fuzzy-dir "$@"

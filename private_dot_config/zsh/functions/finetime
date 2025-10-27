@@ -1,0 +1,29 @@
+finetime() {
+  # Check if a command was given
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: finetime <command> [args...]"
+    return 1
+  fi
+
+  # Record start time
+  local start=$EPOCHREALTIME
+
+  # Run the command, preserving exit code
+  "$@"
+  local exit_code=$?
+
+  # Record end time
+  local end=$EPOCHREALTIME
+
+  # Compute elapsed time
+  local elapsed=$(( end - start ))
+
+  # Print results
+  printf "\n───────────────────────────────\n"
+  printf " Command: %s\n" "$*"
+  printf "Elapsed: %.6f seconds\n" "$elapsed"
+  printf " Exit code: %d\n" "$exit_code"
+  printf "───────────────────────────────\n"
+
+  return $exit_code
+}

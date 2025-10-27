@@ -7,4 +7,3 @@ update_all_plugins() {
     tldr --update
     wget https://github.com/sindresorhus/github-markdown-css/raw/refs/heads/main/github-markdown.css -O "$HOME/bin/github-markdown.css"
 }
-update_all_plugins

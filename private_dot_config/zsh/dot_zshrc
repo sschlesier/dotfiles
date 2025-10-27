@@ -4,25 +4,38 @@
 # Skip all configuration for non-interactive shells
 [[ $- != *i* ]] && return
 
+zmodload zsh/datetime
+
+zshrc_start_time=$EPOCHREALTIME
 stty -ixon
 
-# comment this to hide timings
-# SHOW_TIMING=true
+log_dir=${TMPDIR:-/tmp}
+log_dir=${log_dir%/}
+[[ -n $log_dir ]] || log_dir=/tmp
+log_file="$log_dir/zsh-startup-$(date +%Y-%m-%d).log"
 
-#auto-load shell scripts
-if [[ -n $SHOW_TIMING ]]; then
-    PS4=$'+ %D{%s.%6.}\011 '
+if [[ ! -d $log_dir ]]; then
+    command mkdir -p -- "$log_dir" 2>/dev/null
 fi
 
+if [[ ! -s $log_file ]]; then
+    printf 'start_time\tend_time\tduration_seconds\tscript\n' >> "$log_file"
+fi
 for sh in $ZDOTDIR/[0-9]*-*sh; do
-    if [[ -n $SHOW_TIMING ]]; then
-        set -x
-        set +x
-        echo "$sh"
-    fi
-	source "$sh"
+    start_time=$EPOCHREALTIME
+    source "$sh"
+    end_time=$EPOCHREALTIME
+    duration_fmt=$(echo "$end_time - $start_time" | bc)
+    printf '%s\t%s\t%.6f\t%s\n' "$start_time" "$end_time" "$duration_fmt" "$sh" >> "$log_file"
 done
 
 if type zprof > /dev/null; then
     zprof
 fi
+
+# Log total zshrc execution time
+zshrc_end_time=$EPOCHREALTIME
+zshrc_duration=$(echo "$zshrc_end_time - $zshrc_start_time" | bc)
+printf '%s\t%s\t%.6f\t%s\n' "$zshrc_start_time" "$zshrc_end_time" "$zshrc_duration" ".zshrc" >> "$log_file"
+
+printf "zshc duration: %.6f seconds\n" "$zshrc_duration"

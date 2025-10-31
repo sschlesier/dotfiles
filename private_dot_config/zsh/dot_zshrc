@@ -38,4 +38,4 @@ zshrc_end_time=$EPOCHREALTIME
 zshrc_duration=$(echo "$zshrc_end_time - $zshrc_start_time" | bc)
 printf '%s\t%s\t%.6f\t%s\n' "$zshrc_start_time" "$zshrc_end_time" "$zshrc_duration" ".zshrc" >> "$log_file"
 
-printf "zshc duration: %.6f seconds\n" "$zshrc_duration"
+printf "zshrc duration: %.6f seconds\n" "$zshrc_duration"

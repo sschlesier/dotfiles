@@ -4,33 +4,31 @@ fuzzy-dir() {
 
     if [[ -d "$base_dir" ]]; then
         local fzf_output=$(fd --type d --max-depth 1 '' "$base_dir" -X basename | sort --ignore-case | fzf --no-select-1 --query "$child_dir" --print-query)
+        local fzf_exit_code=$?
         local query=$(echo "$fzf_output" | head -n1)
         local selected=$(echo "$fzf_output" | tail -n1)
 
-        if [[ -n "$selected" && "$query" != "$selected" ]]
+        if [[ $fzf_exit_code -eq 0 && -n "$selected" ]]
         then
-            # A real selection was made
-            if [[ -d "$base_dir/$selected" ]]
+            # fzf exited successfully and something was selected
+            local target_dir="$base_dir/$selected"
+            if [[ -d "$target_dir" ]]
             then
-                cd "$base_dir/$selected"
+                cd "$target_dir"
             else
-                echo "cannot find $base_dir/$selected"
-            fi
-        else
-            # No match selected, create directory using the query
-            if [[ -z "$query" ]]; then
-                # Empty query, just cd to base_dir
-                cd "$base_dir"
-            else
-                local new_dir="$base_dir/$query"
-                echo -n "Create directory '$new_dir'? [y/N] "
+                # Directory doesn't exist, offer to create it
+                echo -n "Create directory '$target_dir'? [y/N] "
                 read -r response
                 if [[ "$response" =~ ^[Yy]$ ]]; then
-                    mkdir -p "$new_dir" && cd "$new_dir"
+                    mkdir -p "$target_dir" && cd "$target_dir"
                 else
                     echo "Directory creation cancelled."
                 fi
             fi
+        elif [[ $fzf_exit_code -eq 1 ]]
+        then
+            # fzf was cancelled, cd to base_dir
+            cd "$base_dir"
         fi
     else
         echo "$base_dir" is not a directory

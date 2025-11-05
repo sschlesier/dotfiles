@@ -61,5 +61,12 @@ cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
   --payload '{\"ping\": 1}' anomaly.json > /dev/null && jq -r '.appVersion' anomaly.json && rm anomaly.json"
 cmds+=("$cmd")
 
+cmds+=('echo -e "\n\nomnivore alerter"')
+cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
+  --function-name omnivore-alerter-Function-WfoFaZnQwDkH \
+  --cli-binary-format raw-in-base64-out \
+  --payload '{\"ping\": 1}' alerter.json > /dev/null && jq -r '.appVersion' alerter.json && rm alerter.json"
+cmds+=("$cmd")
+
 
 parallel -j 200% -k ::: "${cmds[@]}"

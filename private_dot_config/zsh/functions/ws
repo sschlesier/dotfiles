@@ -1,0 +1,20 @@
+ws() {
+    if [[ -z $SRC ]] || [[ ! -d $SRC ]]; then
+        echo "Error: \$SRC is not set or is not a directory"
+        return 1
+    fi
+
+    local selected=$(fd -e code-workspace . "$SRC" | while IFS= read -r path; do
+        echo "${path##*/}"
+    done | fzf)
+    local fzf_exit_code=$?
+
+    if [[ $fzf_exit_code -eq 0 ]] && [[ -n "$selected" ]]; then
+        local full_path=$(fd -e code-workspace . "$SRC" | grep -m1 "/${selected}$")
+        if [[ -n "$full_path" ]]; then
+            open "$full_path"
+        fi
+    fi
+}
+ws "$@"
+

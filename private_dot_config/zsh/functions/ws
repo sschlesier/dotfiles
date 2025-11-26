@@ -1,5 +1,0 @@
-ws() {
-    ide "WebStorm.app"
-}
-ws "$@"
-

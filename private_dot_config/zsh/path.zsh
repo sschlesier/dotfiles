@@ -34,11 +34,17 @@ if [[ -d $HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs ]]; then
 	export ICLOUD=$HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs
 fi
 
-#include ~/bin and all bins under that folder on path
-while read -r binpath
-do
-	PATH+=:"$binpath"
-done < <(find "$HOME/bin" -type d)
+#include ~/bin and all bins under that folder on path (cache to avoid repeated find)
+home_bin_cache="$ZSH_CACHE_DIR/home_bin_paths"
+if [[ -d "$HOME/bin" ]]; then
+	if [[ ! -s $home_bin_cache || "$HOME/bin" -nt $home_bin_cache ]]; then
+		find "$HOME/bin" -type d >| "$home_bin_cache"
+	fi
+	while IFS= read -r binpath
+	do
+		PATH+=:"$binpath"
+	done < "$home_bin_cache"
+fi
 
 #include .local/bin on path
 if [[ -d "$HOME/.local/bin" ]]; then
@@ -50,35 +56,50 @@ if [[ -d "$HOME/.cargo/bin" ]]; then
 	PATH+=:"$HOME/.cargo/bin"
 fi
 
-# setup homebrew
+# setup homebrew (cache shellenv output to avoid rerunning brew)
+brew_shellenv_cache="$ZSH_CACHE_DIR/brew_shellenv"
 brewpaths=( "/home/linuxbrew/.linuxbrew/bin/brew" \
 	"/usr/local/bin/brew" \
 	"/opt/homebrew/bin/brew" )
 
-for pth in "${brewpaths[@]}";
-do
-	if [[ -x "$pth" ]]; then
-		eval $("$pth" shellenv)
-		break
-	fi
-done
+if [[ -s $brew_shellenv_cache ]]; then
+	eval "$(<"$brew_shellenv_cache")"
+else
+	for pth in "${brewpaths[@]}";
+	do
+		if [[ -x "$pth" ]]; then
+			brew_env="$("$pth" shellenv)"
+			printf '%s\n' "$brew_env" >| "$brew_shellenv_cache"
+			eval "$brew_env"
+			break
+		fi
+	done
+fi
 
-#add gems to path
-gemfile="$ZSH_CACHE_DIR/gempath"
-gempath="$(brew --prefix ruby)/bin/gem"
-#write path into a file
-if [[ ! -f $gemfile ]]; then
-	echo updating gempath
-	if [[ -x "$gempath" ]]; then
-		$gempath env gempath | tr ':' '\n' | xargs -I {} find {} -maxdepth 1 -name bin -type d | tr '\n' ':' | sed 's/:$//' > "$gemfile"
-		cat "$gemfile"
-	else
-		#no gems here so blank the file
-		touch "$gemfile"
+#add gems to path (track gem source paths + bins without rescanning)
+gem_bins_cache="$ZSH_CACHE_DIR/gem_bins"
+gem_sources_cache="$ZSH_CACHE_DIR/gem_sources"
+
+if command -v gem >/dev/null; then
+	current_gem_sources=$(gem env gempath 2>/dev/null | tr -d '\r')
+	if [[ -n $current_gem_sources ]]; then
+		if [[ -r $gem_sources_cache ]]; then
+			cached_sources=$(<"$gem_sources_cache")
+		else
+			cached_sources=""
+		fi
+		if [[ $current_gem_sources != "$cached_sources" ]]; then
+			printf '%s' "$current_gem_sources" >| "$gem_sources_cache"
+			printf '%s\n' "$current_gem_sources" | tr ':' '\n' | sed 's@$@/bin@' >| "$gem_bins_cache"
+		fi
 	fi
 fi
-if [[ -s $gemfile ]]; then
-	PATH+=:$(cat "$gemfile")
+
+if [[ -s $gem_bins_cache ]]; then
+	while IFS= read -r gem_bin
+	do
+		PATH+=:"$gem_bin"
+	done < "$gem_bins_cache"
 fi
 
 #add golang to path

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: oid [-e] <object_id> [object_id...]
+
+Extracts the timestamp embedded in MongoDB ObjectIds.
+
+Options:
+  -e    Output the Unix epoch instead of ISO-8601 UTC.
+  -h    Show this help and exit.
+EOF
+}
+
+format_iso() {
+  local ts=$1 iso
+  if iso=$(date -u -r "$ts" +"%Y-%m-%dT%H:%M:%SZ" 2>/dev/null); then
+    printf '%s\n' "$iso"
+    return 0
+  fi
+  if iso=$(date -u -d "@$ts" +"%Y-%m-%dT%H:%M:%SZ" 2>/dev/null); then
+    printf '%s\n' "$iso"
+    return 0
+  fi
+  printf 'oid: unable to format timestamp "%s"\n' "$ts" >&2
+  return 1
+}
+
+ensure_object_id() {
+  local oid=$1
+  if [[ ! $oid =~ ^[0-9a-fA-F]{24}$ ]]; then
+    printf 'oid: "%s" is not a valid ObjectId\n' "$oid" >&2
+    return 1
+  fi
+}
+
+main() {
+  local epoch_output=0
+  local opt
+  while getopts ":eh" opt; do
+    case "$opt" in
+      e) epoch_output=1 ;;
+      h)
+        usage
+        exit 0
+        ;;
+      \?)
+        usage >&2
+        exit 1
+        ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+
+  if (($# == 0)); then
+    usage >&2
+    exit 1
+  fi
+
+  local oid ts_hex ts
+  for oid in "$@"; do
+    ensure_object_id "$oid"
+    ts_hex=${oid:0:8}
+    ts=$((16#$ts_hex))
+    if ((epoch_output)); then
+      printf '%s\n' "$ts"
+    else
+      format_iso "$ts"
+    fi
+  done
+}
+
+main "$@"

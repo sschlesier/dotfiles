@@ -3,7 +3,7 @@
 set -uo pipefail
 
 # Get the Bluetooth address of the first paired AirPods
-AIRPODS_MAC=$(blueutil --paired --format json | jq -r '.[] | select(.name | test("AirPods")) | .address | select(. != null) | . // empty' | head -n 1)
+AIRPODS_MAC=$(blueutil --paired --format json | jq -r '.[] | select(.name | test("AirPods"; "i")) | .address | select(. != null) | . // empty' | head -n 1)
 
 if [[ -z "${AIRPODS_MAC}" ]]; then
   echo 'No AirPods found'

@@ -25,9 +25,9 @@ fuzzy-dir() {
                     echo "Directory creation cancelled."
                 fi
             fi
-        elif [[ $fzf_exit_code -eq 1 ]]
-        then
-            # fzf was cancelled, cd to base_dir
+        else
+            # fzf was cancelled (exit code 1) or Enter pressed with no selection (exit code 0 but empty selected)
+            # In both cases, cd to base_dir
             cd "$base_dir"
         fi
     else

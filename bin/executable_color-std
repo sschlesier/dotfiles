@@ -1,0 +1,7 @@
+for attr in 0 1; do
+  echo "attr=$attr"
+  for color in {30..37}; do
+    printf "\e[%s;%sm%3s\e[0m " "$attr" "$color" "$color"
+  done
+  echo
+done

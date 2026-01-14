@@ -4,13 +4,13 @@ ws() {
         return 1
     fi
 
-    local selected=$(fd -e code-workspace . "$SRC" | while IFS= read -r path; do
-        echo "${path##*/}"
+    local selected=$(fd -e code-workspace . "$SRC" | while IFS= read -r fname; do
+        echo "${${fname##*/}%.*}"
     done | fzf)
     local fzf_exit_code=$?
 
     if [[ $fzf_exit_code -eq 0 ]] && [[ -n "$selected" ]]; then
-        local full_path=$(fd -e code-workspace . "$SRC" | grep -m1 "/${selected}$")
+        local full_path=$(fd -e code-workspace . "$SRC" | grep -m1 "/${selected}.code-workspace$")
         if [[ -n "$full_path" ]]; then
             open "$full_path"
         fi

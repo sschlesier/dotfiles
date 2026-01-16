@@ -1,0 +1,11 @@
+lf() {
+  tmp="$(mktemp)"
+  LF_LAST_DIR="$tmp" command lf "$@"
+  if [ -s "$tmp" ]; then
+    dir="$(cat "$tmp")"
+    rm -f "$tmp"
+    [ -d "$dir" ] && [ "$dir" != "$PWD" ] && cd "$dir"
+  else
+    rm -f "$tmp"
+  fi
+}

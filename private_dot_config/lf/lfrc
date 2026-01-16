@@ -3,3 +3,9 @@ set icons true
 
 cmd open $$EDITOR $fx
 set hidden true
+
+# normal quit
+map q quit
+
+# quit and write current directory for wrapper
+map Q $printf '%s\n' "$PWD" > "$LF_LAST_DIR" ; lf -remote "send $id quit"

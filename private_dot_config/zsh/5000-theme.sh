@@ -14,8 +14,8 @@ fi
 
 # Configuration
 THEME_FILE="$XDG_DATA_HOME/theme_mode"
-LIGHT_THEME="Ayu Light"
-DARK_THEME="Monokai Soda"
+LIGHT_THEME="Pencil Light"
+DARK_THEME="VSCode_Dark"
 BAT_LIGHT_THEME="OneHalfLight"
 BAT_DARK_THEME="OneHalfDark"
 

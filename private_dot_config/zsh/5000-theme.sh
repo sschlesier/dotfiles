@@ -36,12 +36,3 @@ dark() {
     echo "--theme=$BAT_DARK_THEME" > "$HOME/.config/bat/config"
     echo "Switched to dark theme"
 }
-
-toggle() {
-    current=$(cat "$THEME_FILE")
-    if [[ "$current" == "light" ]]; then
-        dark
-    else
-        light
-    fi
-}

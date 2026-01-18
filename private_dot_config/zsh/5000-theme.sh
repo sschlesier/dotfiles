@@ -25,14 +25,14 @@ mkdir -p "$(dirname "$THEME_FILE")"
 
 light() {
     echo "light" > "$THEME_FILE"
-    kitty +kitten themes --reload-in=all "$LIGHT_THEME"
+    kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$LIGHT_THEME"
     echo "--theme=$BAT_LIGHT_THEME" > "$HOME/.config/bat/config"
     echo "Switched to light theme"
 }
 
 dark() {
     echo "dark" > "$THEME_FILE"
-    kitty +kitten themes --reload-in=all "$DARK_THEME"
+    kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$DARK_THEME"
     echo "--theme=$BAT_DARK_THEME" > "$HOME/.config/bat/config"
     echo "Switched to dark theme"
 }

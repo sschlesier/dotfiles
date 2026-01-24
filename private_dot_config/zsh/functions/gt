@@ -1,0 +1,5 @@
+gt() {
+  tput rmam          # disable autowrap
+  git tree --color=always | head -n $(($LINES - 4))
+  tput smam          # re‑enable autowrap
+}

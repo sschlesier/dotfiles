@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Usage: kill-port 3000
+
+set -euo pipefail
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $(basename "$0") <port>" >&2
+  exit 1
+fi
+
+port="$1"
+
+# Find PIDs and process names using the port
+processes=$(lsof -i:"$port" -n -P 2>/dev/null | tail -n +2 || true)
+
+if [ -z "$processes" ]; then
+  echo "No process is using port $port"
+  exit 0
+fi
+
+# Get unique command and PID pairs
+mapfile -t proc_list < <(echo "$processes" | awk '{print $1, $2}' | sort -u)
+num_procs=${#proc_list[@]}
+
+pids_to_kill=""
+
+if [ "$num_procs" -gt 1 ]; then
+  echo "Multiple processes found using port $port:"
+  for i in "${!proc_list[@]}"; do
+    echo "$((i+1)) ${proc_list[$i]}"
+  done
+  echo "a All"
+  echo "q Quit"
+  
+  read -p "Select process to kill (1-$num_procs, a, or q): " choice
+  
+  if [[ "$choice" == "a" ]]; then
+    pids_to_kill=$(echo "$processes" | awk '{print $2}' | sort -u)
+  elif [[ "$choice" == "q" ]]; then
+    echo "Aborted."
+    exit 0
+  elif [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$num_procs" ]; then
+    pids_to_kill=$(echo "${proc_list[$((choice-1))]}" | awk '{print $2}')
+  else
+    echo "Invalid selection."
+    exit 1
+  fi
+else
+  pids_to_kill=$(echo "${proc_list[0]}" | awk '{print $2}')
+  echo "Killing process: ${proc_list[0]}"
+fi
+
+# First try graceful
+kill $pids_to_kill || true
+sleep 1
+
+# If still alive, force kill
+still_running=$(lsof -t -i:"$port" 2>/dev/null || true)
+if [ -n "$still_running" ]; then
+  # Only force kill the PIDs we originally targeted that are still running
+  to_force=""
+  for pid in $pids_to_kill; do
+    if echo "$still_running" | grep -q "^$pid$"; then
+      to_force="$to_force $pid"
+    fi
+  done
+  
+  if [ -n "$to_force" ]; then
+    echo "Force killing PIDs: $to_force"
+    kill -9 $to_force
+  fi
+fi
+
+echo "Port $port is now free"

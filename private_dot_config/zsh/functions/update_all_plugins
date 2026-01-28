@@ -5,5 +5,4 @@ update_all_plugins() {
     $EDITOR +PlugUpdate +PlugUpgrade +qall
     echo updating tldr cache...
     tldr --update
-    wget https://github.com/sindresorhus/github-markdown-css/raw/refs/heads/main/github-markdown.css -O "$HOME/bin/github-markdown.css"
 }

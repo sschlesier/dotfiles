@@ -8,27 +8,17 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-create_temp_file() {
-  local extension="$1"
-  local temp_file
-  temp_file=$(mktemp)
-  mv "$temp_file" "$temp_file.$extension"
-  echo "$temp_file.$extension"
-}
-
 # Path to the Markdown file
 MARKDOWN_FILE="$1"
 
-HTML_FILE=$(create_temp_file "html")
-CSS_FILE="$HOME/bin/github-markdown.css"
-CUSTOM_CSS_FILE="$HOME/bin/custom.css"
+# Create temp HTML file
+HTML_FILE=$(mktemp).html
 
-# replace horizontal rules so they don't trigger pandocs metadata features
-sed 's/^---$/_____/' < "$MARKDOWN_FILE" |
-pandoc --css="$CSS_FILE" --css="$CUSTOM_CSS_FILE" --embed-resources --standalone --metadata title="$1" -o "$HTML_FILE"
+# Render markdown to HTML using mdserver
+mdserver --render "$MARKDOWN_FILE" > "$HTML_FILE"
 
 # Open HTML file in default browser
 open "$HTML_FILE"
 
-# Sleep for 10 seconds, then delete the temporary files
+# Sleep for 10 seconds, then delete the temporary file
 (sleep 10 && rm -f "$HTML_FILE") &

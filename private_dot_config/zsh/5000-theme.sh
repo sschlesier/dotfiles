@@ -12,6 +12,19 @@ elif [ -f "$ZDOTDIR/.p10k.zsh" ]; then
 	. "$ZDOTDIR/.p10k.zsh"
 fi
 
+# register late so it fires after p10k's precmd
+autoload -Uz add-zsh-hook
+_prompt_render_end() {
+  if [[ -n $_prt_start ]]; then
+    local d=$(echo "$EPOCHREALTIME - $_prt_start" | bc)
+    printf 'prompt render: %.6f seconds\n' "$d"
+    add-zsh-hook -d precmd _prompt_render_start
+    add-zsh-hook -d precmd _prompt_render_end
+    unset _prt_start
+  fi
+}
+add-zsh-hook precmd _prompt_render_end
+
 # Configuration
 THEME_FILE="$XDG_DATA_HOME/theme_mode"
 LIGHT_THEME="Pencil Light"

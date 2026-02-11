@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+URL_HOST="localhost:3001"             # match loosely
+URL_OPEN="http://localhost:3001"      # what we open
+SYSTRAY_APP="DGrid"
+CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+# Start systray if needed
+if ! pgrep -f "$SYSTRAY_APP" >/dev/null; then
+  open -a "$SYSTRAY_APP"
+  sleep 1
+fi
+
+# Search for existing dashboard tab; focus it if found
+FOUND=$(osascript - "$URL_HOST" <<'AS'
+on run argv
+    set targetHost to item 1 of argv
+    if application "Google Chrome" is not running then return "NOTFOUND"
+    tell application "Google Chrome"
+        set wc to count of windows
+        repeat with i from 1 to wc
+            set tc to count of tabs of window i
+            repeat with j from 1 to tc
+                try
+                    if URL of tab j of window i contains targetHost then
+                        set active tab index of window i to j
+                        set index of window i to 1
+                        return "FOUND"
+                    end if
+                end try
+            end repeat
+        end repeat
+    end tell
+    return "NOTFOUND"
+end run
+AS
+)
+
+# If not found, open app-mode window
+if [[ "$FOUND" != "FOUND" ]]; then
+  "$CHROME_BIN" --app="$URL_OPEN" >/dev/null 2>&1 &
+  sleep 0.3
+fi
+
+# Force focus Chrome
+osascript <<'EOF'
+tell application "Google Chrome" to activate
+tell application "System Events"
+  tell process "Google Chrome" to set frontmost to true
+end tell
+EOF

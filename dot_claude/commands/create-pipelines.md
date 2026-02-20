@@ -28,8 +28,8 @@ Run `git remote get-url origin` to determine if the repo is hosted on GitHub or 
 
 **Ask the user** to confirm or provide:
 - Which YAML files should have pipelines created (templates usually excluded)
-- The Azure DevOps **organization URL** (e.g. `https://dev.azure.com/ORG`)
-- The Azure DevOps **project name**
+- The Azure DevOps **organization URL** — default to `https://dev.azure.com/iQmetrix`
+- The Azure DevOps **project name** — default to `Ready to Pay`
 - The **folder path** in the Pipelines UI (e.g. `Lambdas\MenuCopier`)
 - The **pipeline display names** — suggest sensible names derived from the YAML filenames, but let the user override
 
@@ -38,11 +38,11 @@ Run `git remote get-url origin` to determine if the repo is hosted on GitHub or 
 - **Repository name**: parse from `git remote get-url origin`
 
 ### If repo is on GitHub
-List available GitHub service connections and ask the user to pick one:
+First try the **ReadyPay** service connection (`ebeac5c8-b2a0-407b-8d1e-26bfd362459c`). If pipeline creation fails with a permissions error, fall back to listing all available GitHub service connections and ask the user to pick one:
 ```bash
-az devops service-endpoint list --organization ORG_URL --project "PROJECT" --output table
+az devops service-endpoint list --organization ORG_URL --project "PROJECT" --query "[?type=='github']" --output table
 ```
-Filter the results to show only `GitHub` type connections. The selected connection's **ID** is needed for `--service-connection`.
+The selected connection's **ID** is needed for `--service-connection`.
 
 ### If repo is on Azure Repos
 Run `az repos list --organization ORG_URL --project "PROJECT" --output table` to confirm the repository name. No service connection is needed.

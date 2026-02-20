@@ -2,40 +2,76 @@
 
 You are helping the user create Azure DevOps YAML pipelines using the `az pipelines` CLI.
 
-## Gather Context
+## Step 1: Prerequisites Check & Find YAML Files (in parallel)
 
-1. **Find the YAML pipeline files** in this repo. Search for files matching patterns like `*.yml` or `*.yaml` in common locations (`pipelines/`, `.azuredevops/`, `build/`, or the repo root). Present the list to the user.
+Run these in parallel to save time:
 
-2. **Ask the user** to confirm or provide:
-   - Which YAML files should have pipelines created for them
-   - The Azure DevOps **organization URL** (e.g. `https://dev.azure.com/ORG`)
-   - The Azure DevOps **project name**
-   - The **repository name** in Azure DevOps (run `az repos list --output table` if unsure)
-   - The **default branch** (e.g. `main`, `master`, `develop`)
-   - The **folder path** in the Pipelines UI where these should live (e.g. `Lambdas\MenuCopier`)
-   - The **pipeline display names** — suggest sensible names derived from the YAML filenames, but let the user override
-
-## Prerequisites Check
-
-Before creating pipelines, verify the CLI is ready:
-
+### Prerequisites
 ```bash
-# Check az CLI is installed
 az version
-
-# Check azure-devops extension
 az extension show --name azure-devops 2>/dev/null || az extension add --name azure-devops
-
-# Check login status
 az account show
 ```
-
 If not logged in, instruct the user to run `az login` and `az devops configure --defaults organization=URL project=NAME`.
 
-## Create the Pipelines
+### Find YAML Files
+Search for `*.yml` / `*.yaml` in common locations (`azdo/`, `pipelines/`, `.azuredevops/`, `build/`, or the repo root). **Exclude** `node_modules/`, `.github/`, and `test/` directories. Also exclude files that are clearly not pipelines (e.g. `.eslintrc.yml`, `.travis.yml`, `.prettierrc.yaml`).
+
+When presenting results, flag files with "template" in the name as likely templates that don't need their own pipeline.
+
+### Detect Repo Type
+Run `git remote get-url origin` to determine if the repo is hosted on GitHub or Azure Repos:
+- If the URL contains `github.com` → repo type is `github`
+- Otherwise → repo type is `tfsgit` (Azure Repos)
+
+## Step 2: Gather Context
+
+**Ask the user** to confirm or provide:
+- Which YAML files should have pipelines created (templates usually excluded)
+- The Azure DevOps **organization URL** (e.g. `https://dev.azure.com/ORG`)
+- The Azure DevOps **project name**
+- The **folder path** in the Pipelines UI (e.g. `Lambdas\MenuCopier`)
+- The **pipeline display names** — suggest sensible names derived from the YAML filenames, but let the user override
+
+**Infer automatically** (don't ask unless ambiguous):
+- **Default branch**: read from `git branch --show-current` or `git symbolic-ref refs/remotes/origin/HEAD`
+- **Repository name**: parse from `git remote get-url origin`
+
+### If repo is on GitHub
+List available GitHub service connections and ask the user to pick one:
+```bash
+az devops service-endpoint list --organization ORG_URL --project "PROJECT" --output table
+```
+Filter the results to show only `GitHub` type connections. The selected connection's **ID** is needed for `--service-connection`.
+
+### If repo is on Azure Repos
+Run `az repos list --organization ORG_URL --project "PROJECT" --output table` to confirm the repository name. No service connection is needed.
+
+## Step 3: Create the Pipelines
+
+First, ensure the folder exists (ignore "already exists" errors):
+```bash
+az pipelines folder create --path "FOLDER\PATH" --organization ORG_URL --project "PROJECT" 2>&1 || true
+```
 
 For each YAML file the user confirmed, run:
 
+### GitHub repos
+```bash
+az pipelines create \
+  --name "PIPELINE_NAME" \
+  --repository "OWNER/REPO" \
+  --repository-type github \
+  --service-connection "SERVICE_CONNECTION_ID" \
+  --branch BRANCH \
+  --yml-path PATH_TO_YML_IN_REPO \
+  --folder-path "FOLDER\PATH" \
+  --skip-first-run true \
+  --organization ORG_URL \
+  --project "PROJECT"
+```
+
+### Azure Repos
 ```bash
 az pipelines create \
   --name "PIPELINE_NAME" \
@@ -44,19 +80,20 @@ az pipelines create \
   --branch BRANCH \
   --yml-path PATH_TO_YML_IN_REPO \
   --folder-path "FOLDER\PATH" \
-  --skip-first-run true
+  --skip-first-run true \
+  --organization ORG_URL \
+  --project "PROJECT"
 ```
 
 Notes:
-- Use `--repository-type tfsgit` for Azure Repos. Use `github` if the repo is on GitHub.
 - Use `--skip-first-run true` so pipelines don't trigger immediately.
-- If the folder doesn't exist yet, create it first: `az pipelines folder create --path "FOLDER\PATH"`
-- The `--yml-path` is **relative to the repo root** (e.g. `pipelines/deploy-dev.yml`).
+- The `--yml-path` is **relative to the repo root** (e.g. `azdo/deploy-dev.yml`).
+- Create multiple pipelines in parallel when possible.
 
-## After Creation
+## Step 4: Verify
 
-1. Run `az pipelines list --folder-path "FOLDER\PATH" --output table` to confirm everything was created.
-2. Summarize what was created in a table: pipeline name, YAML file, folder.
+1. Run `az pipelines list --folder-path "FOLDER\PATH" --organization ORG_URL --project "PROJECT" --output table` to confirm everything was created.
+2. Summarize what was created in a table: pipeline name, YAML file, folder, ID.
 3. Remind the user that `--skip-first-run` was used, so they need to trigger runs manually or push a commit.
 
 ## Arguments

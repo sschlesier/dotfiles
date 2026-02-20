@@ -94,24 +94,8 @@ else
 	done
 fi
 
-#add gems to path (track gem source paths + bins without rescanning)
+#add gems to path (use cached bins; refresh lazily via gem-refresh-path)
 gem_bins_cache="$ZSH_CACHE_DIR/gem_bins"
-gem_sources_cache="$ZSH_CACHE_DIR/gem_sources"
-
-if command -v gem >/dev/null; then
-	current_gem_sources=$(gem env gempath 2>/dev/null | tr -d '\r')
-	if [[ -n $current_gem_sources ]]; then
-		if [[ -r $gem_sources_cache ]]; then
-			cached_sources=$(<"$gem_sources_cache")
-		else
-			cached_sources=""
-		fi
-		if [[ $current_gem_sources != "$cached_sources" ]]; then
-			printf '%s' "$current_gem_sources" >| "$gem_sources_cache"
-			printf '%s\n' "$current_gem_sources" | tr ':' '\n' | sed 's@$@/bin@' >| "$gem_bins_cache"
-		fi
-	fi
-fi
 
 if [[ -s $gem_bins_cache ]]; then
 	while IFS= read -r gem_bin
@@ -119,6 +103,21 @@ if [[ -s $gem_bins_cache ]]; then
 		PATH+=:"$gem_bin"
 	done < "$gem_bins_cache"
 fi
+
+# refresh gem bin paths on demand (avoids spawning ruby on every shell startup)
+gem-refresh-path() {
+	local gem_sources_cache="$ZSH_CACHE_DIR/gem_sources"
+	local gem_bins_cache="$ZSH_CACHE_DIR/gem_bins"
+	local current_gem_sources
+	current_gem_sources=$(gem env gempath 2>/dev/null | tr -d '\r')
+	if [[ -n $current_gem_sources ]]; then
+		printf '%s' "$current_gem_sources" >| "$gem_sources_cache"
+		printf '%s\n' "$current_gem_sources" | tr ':' '\n' | sed 's@$@/bin@' >| "$gem_bins_cache"
+		echo "gem bin paths updated — restart shell or source path.zsh to pick up changes"
+	else
+		echo "gem env gempath returned nothing"
+	fi
+}
 
 #add golang to path
 if type go > /dev/null; then
@@ -155,4 +154,6 @@ if [[ ${path_start_time:-0} != 0 ]]; then
 	path_end_time=$EPOCHREALTIME
 	path_duration=$(echo "$path_end_time - $path_start_time" | bc)
 	printf '%s\t%s\t%.6f\t%s\n' "$path_start_time" "$path_end_time" "$path_duration" "$path_script" >> "$zlog_file"
+	# export so .zshrc can display it
+	export _path_zsh_duration=$path_duration
 fi

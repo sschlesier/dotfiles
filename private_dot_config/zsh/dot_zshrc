@@ -38,7 +38,12 @@ zshrc_end_time=$EPOCHREALTIME
 zshrc_duration=$(echo "$zshrc_end_time - $zshrc_start_time" | bc)
 printf '%s\t%s\t%.6f\t%s\n' "$zshrc_start_time" "$zshrc_end_time" "$zshrc_duration" ".zshrc" >> "$log_file"
 
-printf "zshrc duration: %.6f seconds\n" "$zshrc_duration"
+if [[ -n $_path_zsh_duration ]]; then
+    printf "path.zsh: %s + zshrc: %.6f seconds\n" "$_path_zsh_duration" "$zshrc_duration"
+    unset _path_zsh_duration
+else
+    printf "zshrc duration: %.6f seconds\n" "$zshrc_duration"
+fi
 
 # one-shot precmd to measure post-zshrc gap
 _first_prompt_measure() {

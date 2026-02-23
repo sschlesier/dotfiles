@@ -1,3 +1,7 @@
+---
+allowed-tools: Bash(az *), Bash(git *), Bash(ls *), Glob, Read
+---
+
 # Create Azure DevOps Pipelines
 
 You are helping the user create Azure DevOps YAML pipelines using the `az pipelines` CLI.

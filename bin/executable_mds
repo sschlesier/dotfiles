@@ -1,0 +1,4 @@
+#!/bin/sh
+# Start mdserver in a new tmux window in the misc session (detached)
+tmux has-session -t misc 2>/dev/null || tmux new-session -d -s misc
+tmux new-window -d -t misc "mdserver --dir '${1:-$(pwd)}'"

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-set -o errexit
-set -o nounset
-set -o pipefail
+set -euo pipefail
+
 if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
@@ -10,9 +9,18 @@ fi
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
     echo 'Usage: bkup [dirs_file]
 
-Backup directories listed in dirs_file to tarsnap.
+Backup directories listed in dirs_file to a restic repository on Backblaze B2.
 Each directory should be on its own line in the file.
 If dirs_file is not specified, defaults to bkup.dirs in the same directory as this script.
+
+Required environment variables:
+    RESTIC_REPOSITORY   - B2 repo URI (e.g. b2:bucket-name:path/to/repo)
+    RESTIC_PASSWORD     - Repository encryption password
+    AWS_ACCESS_KEY_ID   - AWS access key ID
+    AWS_SECRET_ACCESS_KEY - AWS secret access key
+
+These can be set via environment variables or loaded from an env file at
+$XDG_CONFIG_HOME/bkup/env (or $BKUP_ENV_FILE if set).
 
 Example dirs_file contents:
     ~/Documents
@@ -24,18 +32,36 @@ fi
 
 cd "$(dirname "$0")"
 
+# Load environment variables from file if present
+env_file="${BKUP_ENV_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/bkup/env}"
+if [[ -f "$env_file" ]]; then
+    set -a
+    source "$env_file"
+    set +a
+fi
+
 main() {
-    # Find tarsnap in common Homebrew locations
-    local tarsnap_path
+    # Verify required environment variables
+    local required_vars=(RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY)
+    for var in "${required_vars[@]}"; do
+        if [[ -z "${!var:-}" ]]; then
+            echo "Error: Missing required environment variable: $var"
+            exit 1
+        fi
+    done
+
+    # Find restic in common locations
+    local restic_path=""
+
     for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
-        if [[ -x "${prefix}/bin/tarsnap" ]]; then
-            tarsnap_path="${prefix}/bin/tarsnap"
+        if [[ -x "${prefix}/bin/restic" ]]; then
+            restic_path="${prefix}/bin/restic"
             break
         fi
     done
 
-    if [[ -z "${tarsnap_path:-}" ]]; then
-        echo "Error: tarsnap not found in any Homebrew location"
+    if [[ -z "${restic_path:-}" ]]; then
+        echo "Error: restic not found"
         exit 1
     fi
 
@@ -52,6 +78,8 @@ main() {
     while IFS= read -r dir || [[ -n "$dir" ]]; do
         # Skip empty lines and comments
         [[ -z "$dir" || "$dir" =~ ^[[:space:]]*# ]] && continue
+        # Expand tilde
+        dir="${dir/#\~/$HOME}"
         dirs+=("$dir")
     done < "$dirs_file"
 
@@ -70,27 +98,31 @@ main() {
 
     if [[ ${#missing_dirs[@]} -gt 0 ]]; then
         echo "Error: The following directories do not exist:"
-        printf '%s\n' "${missing_dirs[@]}"
+        printf '  %s\n' "${missing_dirs[@]}"
         exit 1
     fi
 
     echo "Backing up directories from $dirs_file:" >&2
-    printf '%s\n' "${dirs[@]}" >&2
+    printf '  %s\n' "${dirs[@]}" >&2
 
-    # Set up archive name
+    # Tag with hostname for multi-machine repos
+    local computer
     computer=$(hostname | cut -d. -f1)
-    now=$(date +%Y-%m-%d_%H-%M-%S)
-    name=${computer}-${now}
 
-    # Create an archive
-    "${tarsnap_path}" -c \
-        --print-stats \
-        --humanize-numbers \
-        -f "${name}" \
+    # Create a backup
+    "$restic_path" backup \
+        --tag "$computer" \
+        --verbose \
         "${dirs[@]}"
 
-    #keep the most recent archives
-    "${tarsnap_path}" --list-archives | sort -r | tail -n +66 | xargs -n 1 "${tarsnap_path}" -d -f
+    # Retention policy: 40 daily, 8 weekly, 12 monthly, 3 yearly
+    "$restic_path" forget \
+        --keep-daily 40 \
+        --keep-weekly 8 \
+        --keep-monthly 12 \
+        --keep-yearly 3 \
+        --tag "$computer" \
+        --prune
 }
 
 main "$@"

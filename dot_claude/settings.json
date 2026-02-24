@@ -1,26 +1,16 @@
 {
   "permissions": {
+    "deny": [
+      "Bash(git reset --hard*)",
+      "Bash(git clean *)",
+      "Bash(rm -rf *)"
+    ],
     "allow": [
-      "Bash(ls *)",
-      "Bash(head *)",
-      "Bash(tail *)",
-      "Bash(wc *)",
-      "Bash(cat *)",
-      "Bash(find *)",
-      "Bash(grep *)",
-      "Bash(sort *)",
-      "Bash(uniq *)",
-      "Bash(cut *)",
-      "Bash(file *)",
-      "Bash(stat *)",
-      "Bash(du *)",
-      "Bash(tree *)",
-      "Bash(which *)",
-      "Bash(pwd)",
-      "Bash(date)",
-      "Bash(whoami)",
-      "Bash(npm run ts-compile *)",
-      "Bash(npx tsc *)",
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(pnpm *)",
+      "Bash(cargo *)",
       "WebSearch"
     ],
     "defaultMode": "default"

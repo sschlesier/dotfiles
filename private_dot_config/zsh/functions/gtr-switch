@@ -1,0 +1,80 @@
+gtr-switch() {
+  # Determine mode: cd (default) | editor | ai | both
+  local mode="cd"
+  case "$1" in
+    editor|ai|both)
+      mode="$1"
+      shift
+      ;;
+    "") ;;
+    *)
+      echo "gtr-switch: unknown mode '$1' (use: editor | ai | both)" >&2
+      return 1
+      ;;
+  esac
+
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "gtr-switch: fzf is required (install from https://github.com/junegunn/fzf)" >&2
+    return 1
+  fi
+
+  # porcelain format: path\tbranch\tstatus
+  local porcelain
+  if ! porcelain="$(git gtr list --porcelain 2>/dev/null)"; then
+    echo "gtr-switch: failed to run 'git gtr list --porcelain' (are you in a git repo with gtr configured?)" >&2
+    return 1
+  fi
+
+  local line_count
+  line_count=$(printf '%s\n' "$porcelain" | wc -l | tr -d ' ')
+  if [[ -z "$porcelain" || "$line_count" -le 1 ]]; then
+    echo "gtr-switch: no gtr worktrees found. Create one with: git gtr new <name>" >&2
+    return 1
+  fi
+
+  local selection
+  selection="$(printf '%s\n' "$porcelain" | fzf \
+    --delimiter=$'\t' \
+    --with-nth=2,1 \
+    --ansi \
+    --layout=reverse \
+    --border \
+    --prompt='Worktree> ' \
+    --header='branch / path' \
+    --preview='git -C {1} log --oneline --graph --color=always -15 2>/dev/null; echo "---"; git -C {1} status --short 2>/dev/null' \
+    --preview-window=right:60%)" || return 0
+
+  if [[ -z "$selection" ]]; then
+    return 0
+  fi
+
+  local wt_path wt_branch
+  wt_path="${selection%%$'\t'*}"
+  wt_branch="${selection#*$'\t'}"
+  wt_branch="${wt_branch%%$'\t'*}"
+
+  if [[ -z "$wt_path" || ! -d "$wt_path" ]]; then
+    echo "gtr-switch: selected worktree path does not exist: $wt_path" >&2
+    return 1
+  fi
+
+  # Main repo is referenced as "1" in gtr commands; worktrees use branch name
+  local repo_root id
+  repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+  if [[ -n "$repo_root" && "$wt_path" == "$repo_root" ]]; then
+    id="1"
+  else
+    id="$wt_branch"
+  fi
+
+  cd "$wt_path" || return $?
+
+  case "$mode" in
+    editor) git gtr editor "$id" ;;
+    ai)     git gtr ai "$id" ;;
+    both)   git gtr editor "$id" && git gtr ai "$id" ;;
+    cd)     ;;
+  esac
+}
+
+gtr-switch "$@"

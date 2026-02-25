@@ -41,3 +41,6 @@ alias fda="fd --hidden --no-ignore"
 alias crsr="ide cursor"
 
 alias ai="gh copilot suggest -t shell"
+
+alias wt="gtr-switch"
+alias wtl="gtr-ls"

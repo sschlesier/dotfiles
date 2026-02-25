@@ -1,0 +1,80 @@
+gtr-ls() {
+  local short=0
+  if [[ "$1" == "--short" ]]; then
+    short=1
+    shift
+  fi
+
+  # porcelain format: path\tbranch\tstatus
+  local porcelain
+  if ! porcelain="$(git gtr list --porcelain 2>/dev/null)"; then
+    echo "gtr-ls: failed to run 'git gtr list --porcelain' (are you in a git repo with gtr configured?)" >&2
+    return 1
+  fi
+
+  local line_count
+  line_count=$(printf '%s\n' "$porcelain" | wc -l | tr -d ' ')
+  if [[ -z "$porcelain" || "$line_count" -le 1 ]]; then
+    echo "gtr-ls: no gtr worktrees found. Create one with: git gtr new <name>" >&2
+    return 1
+  fi
+
+  local repo_root repo_parent
+  repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+  repo_parent="${repo_root:h}"
+
+  if (( short )); then
+    local wt_path wt_branch wt_status changes disp_path
+    while IFS=$'\t' read -r wt_path wt_branch wt_status; do
+      [[ -z "$wt_path" ]] && continue
+
+      changes="$(git -C "$wt_path" status --short 2>/dev/null | wc -l | tr -d ' ')" || changes="?"
+
+      disp_path="$wt_path"
+      if [[ "$PWD" == "$wt_path" || "$PWD" == "$wt_path"/* ]]; then
+        disp_path="."
+      elif [[ -n "$repo_parent" && "$wt_path" == "$repo_parent"/* ]]; then
+        disp_path="${wt_path#$repo_parent/}"
+      else
+        disp_path="${wt_path/#$HOME/~}"
+      fi
+
+      printf '%s %s %s\n' "$wt_branch" "$disp_path" "$changes"
+    done <<< "$porcelain"
+    return 0
+  fi
+
+  # Human-friendly table output
+  printf "%-1s %-30s %-50s %7s\n" " " "BRANCH" "PATH" "CHANGES"
+  printf "%-1s %-30s %-50s %7s\n" " " "------" "----" "-------"
+
+  local wt_path wt_branch wt_status changes mark disp_path
+  while IFS=$'\t' read -r wt_path wt_branch wt_status; do
+    [[ -z "$wt_path" ]] && continue
+
+    if changes="$(git -C "$wt_path" status --short 2>/dev/null | wc -l | tr -d ' ')"; then
+      :
+    else
+      printf "%-1s %-30s %-50s %7s\n" "!" "$wt_branch" "$wt_path" "ERR"
+      continue
+    fi
+
+    mark=" "
+    if [[ "$PWD" == "$wt_path" || "$PWD" == "$wt_path"/* ]]; then
+      mark="*"
+    fi
+
+    disp_path="$wt_path"
+    if [[ "$PWD" == "$wt_path" || "$PWD" == "$wt_path"/* ]]; then
+      disp_path="."
+    elif [[ -n "$repo_parent" && "$wt_path" == "$repo_parent"/* ]]; then
+      disp_path="${wt_path#$repo_parent/}"
+    else
+      disp_path="${wt_path/#$HOME/~}"
+    fi
+
+    printf "%-1s %-30s %-50s %7s\n" "$mark" "$wt_branch" "$disp_path" "$changes"
+  done <<< "$porcelain"
+}
+
+gtr-ls "$@"

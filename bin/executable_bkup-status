@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    cat <<'EOF'
+Usage: bkup-status [warn_days]
+
+Check the status of backups created by the bkup script.
+
+By default, warns if the latest backup for this machine is older than 2 days.
+
+Arguments:
+  warn_days   Number of days after which a backup is considered stale (default: 2).
+
+Environment:
+  Uses the same environment as bkup:
+    RESTIC_REPOSITORY
+    RESTIC_PASSWORD
+    AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY
+
+  These can be set directly or via an env file at:
+    $XDG_CONFIG_HOME/bkup/env
+  (or $BKUP_ENV_FILE if set).
+EOF
+    exit 0
+fi
+
+cd "$(dirname "$0")"
+
+# Load environment variables from file if present (same logic as bkup)
+env_file="${BKUP_ENV_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/bkup/env}"
+if [[ -f "$env_file" ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    source "$env_file"
+    set +a
+fi
+
+main() {
+    local warn_days="${1:-2}"
+
+    if ! [[ "$warn_days" =~ ^[0-9]+$ ]]; then
+        echo "Error: warn_days must be a non-negative integer (got: '$warn_days')" >&2
+        exit 1
+    fi
+
+    local required_vars=(RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY)
+    for var in "${required_vars[@]}"; do
+        if [[ -z "${!var:-}" ]]; then
+            echo "Error: Missing required environment variable: $var" >&2
+            exit 1
+        fi
+    done
+
+    local restic_path=""
+    for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+        if [[ -x "${prefix}/bin/restic" ]]; then
+            restic_path="${prefix}/bin/restic"
+            break
+        fi
+    done
+
+    if [[ -z "${restic_path:-}" ]]; then
+        echo "Error: restic not found" >&2
+        exit 1
+    fi
+
+    local computer
+    computer=$(hostname | cut -d. -f1)
+
+    echo "Checking backup status for host: $computer" >&2
+
+    if ! command -v jq &>/dev/null; then
+        echo "Error: jq is required but not found" >&2
+        exit 1
+    fi
+
+    local snapshots_json
+    if ! snapshots_json="$("$restic_path" snapshots --tag "$computer" --json 2>/dev/null)"; then
+        echo "Error: failed to list snapshots" >&2
+        exit 1
+    fi
+
+    local snapshot_count
+    snapshot_count=$(jq 'length' <<<"$snapshots_json")
+
+    if [[ "$snapshot_count" -eq 0 ]]; then
+        echo "No snapshots found for host '$computer'." >&2
+        exit 1
+    fi
+
+    # restic returns snapshots sorted by time; last element is the latest
+    local snapshot_id snapshot_time paths tags
+    snapshot_id=$(jq -r '.[-1].short_id' <<<"$snapshots_json")
+    snapshot_time=$(jq -r '.[-1].time' <<<"$snapshots_json")
+    paths=$(jq -r '.[-1].paths | join(", ")' <<<"$snapshots_json")
+    tags=$(jq -r '.[-1].tags | join(", ")' <<<"$snapshots_json")
+
+    # Convert ISO 8601 timestamp to epoch; truncate nanoseconds for date compatibility
+    local snap_epoch now_epoch age_secs age_days status
+    local time_trimmed
+    time_trimmed=$(jq -r '.[-1].time | split(".")[0]' <<<"$snapshots_json")
+
+    if snap_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$time_trimmed" "+%s" 2>/dev/null); then
+        :
+    elif snap_epoch=$(date -d "$time_trimmed" "+%s" 2>/dev/null); then
+        :
+    else
+        echo "Warning: could not parse snapshot time '$snapshot_time'" >&2
+        snap_epoch=""
+    fi
+
+    now_epoch=$(date "+%s")
+
+    if [[ -n "${snap_epoch:-}" ]]; then
+        age_secs=$((now_epoch - snap_epoch))
+        age_days=$((age_secs / 86400))
+        if (( age_days > warn_days )); then
+            status="STALE"
+        else
+            status="OK"
+        fi
+    else
+        age_days=""
+        status="UNKNOWN"
+    fi
+
+    echo
+    echo "Snapshot summary for host '$computer':"
+    echo "  Total snapshots:        $snapshot_count"
+    echo "  Latest snapshot ID:     $snapshot_id"
+    echo "  Latest snapshot time:   $snapshot_time"
+    echo "  Paths:                  $paths"
+    echo "  Tags:                   $tags"
+    echo "  Age of latest snapshot: ${age_days:-(could not determine)}${age_days:+d}"
+    echo "  Warning threshold:      ${warn_days}d"
+    echo "  Status:                 $status"
+}
+
+main "$@"

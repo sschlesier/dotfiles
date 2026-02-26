@@ -1,23 +1,15 @@
 gtr-ls() {
+  source "${ZDOTDIR:-$HOME/.config/zsh}/functions/_gtr-common"
+
   local short=0
   if [[ "$1" == "--short" ]]; then
     short=1
     shift
   fi
 
-  # porcelain format: path\tbranch\tstatus
   local porcelain
-  if ! porcelain="$(git gtr list --porcelain 2>/dev/null)"; then
-    echo "gtr-ls: failed to run 'git gtr list --porcelain' (are you in a git repo with gtr configured?)" >&2
-    return 1
-  fi
-
-  local line_count
-  line_count=$(printf '%s\n' "$porcelain" | wc -l | tr -d ' ')
-  if [[ -z "$porcelain" || "$line_count" -le 1 ]]; then
-    echo "gtr-ls: no gtr worktrees found. Create one with: git gtr new <name>" >&2
-    return 1
-  fi
+  porcelain="$(_gtr_get_porcelain gtr-ls)" || return 1
+  _gtr_porcelain_empty_check gtr-ls "$porcelain" || return 1
 
   local repo_root repo_parent
   repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"

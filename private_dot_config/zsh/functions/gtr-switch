@@ -1,4 +1,6 @@
 gtr-switch() {
+  source "${ZDOTDIR:-$HOME/.config/zsh}/functions/_gtr-common"
+
   # Determine mode: cd (default) | editor | ai | both
   local mode="cd"
   case "$1" in
@@ -13,45 +15,21 @@ gtr-switch() {
       ;;
   esac
 
-  if ! command -v fzf >/dev/null 2>&1; then
-    echo "gtr-switch: fzf is required (install from https://github.com/junegunn/fzf)" >&2
-    return 1
-  fi
+  _gtr_require_fzf gtr-switch || return 1
 
-  # porcelain format: path\tbranch\tstatus
   local porcelain
-  if ! porcelain="$(git gtr list --porcelain 2>/dev/null)"; then
-    echo "gtr-switch: failed to run 'git gtr list --porcelain' (are you in a git repo with gtr configured?)" >&2
-    return 1
-  fi
-
-  local line_count
-  line_count=$(printf '%s\n' "$porcelain" | wc -l | tr -d ' ')
-  if [[ -z "$porcelain" || "$line_count" -le 1 ]]; then
-    echo "gtr-switch: no gtr worktrees found. Create one with: git gtr new <name>" >&2
-    return 1
-  fi
+  porcelain="$(_gtr_get_porcelain gtr-switch)" || return 1
+  _gtr_porcelain_empty_check gtr-switch "$porcelain" || return 1
 
   local selection
-  selection="$(printf '%s\n' "$porcelain" | fzf \
-    --delimiter=$'\t' \
-    --with-nth=2,1 \
-    --ansi \
-    --layout=reverse \
-    --border \
-    --prompt='Worktree> ' \
-    --header='branch / path' \
-    --preview='git -C {1} log --oneline --graph --color=always -15 2>/dev/null; echo "---"; git -C {1} status --short 2>/dev/null' \
-    --preview-window=right:60%)" || return 0
+  selection="$(_gtr_fzf_pick "Worktree> " "$porcelain")" || return 0
 
   if [[ -z "$selection" ]]; then
     return 0
   fi
 
-  local wt_path wt_branch
-  wt_path="${selection%%$'\t'*}"
-  wt_branch="${selection#*$'\t'}"
-  wt_branch="${wt_branch%%$'\t'*}"
+  _gtr_parse_selection "$selection"
+  local wt_path="$_gtr_wt_path" wt_branch="$_gtr_wt_branch"
 
   if [[ -z "$wt_path" || ! -d "$wt_path" ]]; then
     echo "gtr-switch: selected worktree path does not exist: $wt_path" >&2

@@ -1,0 +1,63 @@
+# Shared helpers for gtr-* functions. Source this from each gtr script.
+# Usage: source "${ZDOTDIR:-$HOME/.config/zsh}/functions/_gtr-common"
+
+_gtr_get_porcelain() {
+  local name="${1:-gtr}"
+  local porcelain
+  if ! porcelain="$(git gtr list --porcelain 2>/dev/null)"; then
+    echo "$name: failed to run 'git gtr list --porcelain' (are you in a git repo with gtr configured?)" >&2
+    return 1
+  fi
+  echo "$porcelain"
+}
+
+_gtr_require_fzf() {
+  local name="${1:-gtr}"
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "$name: fzf is required (install from https://github.com/junegunn/fzf)" >&2
+    return 1
+  fi
+}
+
+_gtr_porcelain_empty_check() {
+  local name="${1:-gtr}"
+  local porcelain="$2"
+  local line_count
+  line_count=$(printf '%s\n' "$porcelain" | wc -l | tr -d ' ')
+  if [[ -z "$porcelain" || "$line_count" -le 1 ]]; then
+    echo "$name: no gtr worktrees found. Create one with: git gtr new <name>" >&2
+    return 1
+  fi
+  return 0
+}
+
+_gtr_parse_selection() {
+  local line="$1"
+  _gtr_wt_path="${line%%$'\t'*}"
+  _gtr_wt_branch="${line#*$'\t'}"
+  _gtr_wt_branch="${_gtr_wt_branch%%$'\t'*}"
+}
+
+_gtr_fzf_pick() {
+  local prompt="${1:-Worktree> }"
+  shift
+  (( $# == 0 )) && return 1
+  printf '%s\n' "$@" | fzf \
+    --delimiter=$'\t' \
+    --with-nth=2,1 \
+    --ansi \
+    --layout=reverse \
+    --border \
+    --prompt="$prompt" \
+    --header='branch / path' \
+    --preview='git -C {1} log --oneline --graph --color=always -15 2>/dev/null; echo "---"; git -C {1} status --short 2>/dev/null' \
+    --preview-window=right:60%
+}
+
+_gtr_main_path() {
+  local line
+  line="$(git worktree list --porcelain 2>/dev/null | head -1)"
+  line="${line#worktree }"
+  line="${line%$'\n'}"
+  echo "$line"
+}

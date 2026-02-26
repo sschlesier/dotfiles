@@ -44,3 +44,4 @@ alias ai="gh copilot suggest -t shell"
 
 alias wt="gtr-switch"
 alias wtl="gtr-ls"
+alias wtd="gtr-delete"

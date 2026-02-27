@@ -13,8 +13,8 @@ RST=$'\033[0m'
 
 color_pct() {
     local val=$1
-    if   [[ $val -ge 80 ]]; then printf '%s' "$RED"
-    elif [[ $val -ge 50 ]]; then printf '%s' "$YLW"
+    if   [[ $val -ge 95 ]]; then printf '%s' "$RED"
+    elif [[ $val -ge 80 ]]; then printf '%s' "$YLW"
     else                          printf '%s' "$GRN"
     fi
 }

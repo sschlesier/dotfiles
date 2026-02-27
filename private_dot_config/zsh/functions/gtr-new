@@ -1,0 +1,32 @@
+gtr-new() {
+  source "${ZDOTDIR:-$HOME/.config/zsh}/functions/_gtr-common"
+
+  if [[ -z "$1" || "$1" == -* ]]; then
+    echo "gtr-new: usage: gtr-new <branch> [options]" >&2
+    echo "         options are passed through to 'git gtr new' (-a, -e, --from, ...)" >&2
+    return 1
+  fi
+
+  local branch="$1"
+  shift
+
+  echo "gtr-new: creating worktree '$branch'..."
+
+  if ! git gtr new "$branch" "$@"; then
+    echo "gtr-new: failed to create worktree '$branch'" >&2
+    return 1
+  fi
+
+  # Find the new worktree path by branch name and cd into it
+  local porcelain line wt_path wt_branch
+  porcelain="$(_gtr_get_porcelain gtr-new)" || return 0
+  while IFS=$'\t' read -r wt_path wt_branch _; do
+    [[ -z "$wt_path" ]] && continue
+    if [[ "$wt_branch" == "$branch" && -d "$wt_path" ]]; then
+      cd "$wt_path"
+      return 0
+    fi
+  done <<< "$porcelain"
+}
+
+gtr-new "$@"

@@ -51,8 +51,18 @@ CTX_PCT="${CTX_RAW%.*}"
 if git rev-parse --git-dir > /dev/null 2>&1; then
     BRANCH="$(git branch --show-current 2>/dev/null)"
     BRANCH="${BRANCH:-detached}"
+    REPO="$(basename "$(dirname "$(git rev-parse --git-common-dir 2>/dev/null)")")"
+    GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)"
+    COMMON_DIR="$(git rev-parse --git-common-dir 2>/dev/null)"
+    if [[ "$GIT_DIR" != "$COMMON_DIR" ]]; then
+        REPO_SEP="@"
+    else
+        REPO_SEP="/"
+    fi
 else
     BRANCH=""
+    REPO=""
+    REPO_SEP="/"
 fi
 
 # ── Usage fetch (called only when cache is stale) ─────────────────────────────
@@ -136,7 +146,7 @@ else
 fi
 
 PARTS=""
-[[ -n "$BRANCH" ]] && PARTS="${DIM}${BRANCH}${RST}${SEP}"
+[[ -n "$BRANCH" ]] && PARTS="${DIM}${REPO}${REPO_SEP}${BRANCH}${RST}${SEP}"
 PARTS="${PARTS}${CTX_PART}${SEP}${USAGE_PART}"
 [[ -n "$AGE_PART" ]] && PARTS="${PARTS}  ${AGE_PART}"
 PARTS="${PARTS}${SEP}${MODEL}"

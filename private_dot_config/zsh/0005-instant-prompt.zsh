@@ -1,10 +1,3 @@
-# register early so it fires before p10k's precmd
-autoload -Uz add-zsh-hook
-_prompt_render_start() {
-  _prt_start=$EPOCHREALTIME
-}
-add-zsh-hook precmd _prompt_render_start
-
 # if doing a script update skip instant prompt this time
 semaphorePath="$ZSH_CACHE_DIR/do_update"
 

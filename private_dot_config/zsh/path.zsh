@@ -5,24 +5,6 @@ else
 	export PATHS_DEFINED=1
 fi
 
-zlog_dir=${TMPDIR:-/tmp}
-zlog_dir=${zlog_dir%/}
-[[ -n $zlog_dir ]] || zlog_dir=/tmp
-zlog_file="$zlog_dir/zsh-startup-$(date +%Y-%m-%d).log"
-path_script="${(%):-%N}"
-[[ $path_script == path.zsh ]] && path_script="$ZDOTDIR/path.zsh"
-
-if [[ ! -d $zlog_dir ]]; then
-	command mkdir -p -- "$zlog_dir" 2>/dev/null
-fi
-
-if [[ ! -s $zlog_file ]]; then
-	printf 'start_time\tend_time\tduration_seconds\tscript\n' >> "$zlog_file"
-fi
-
-zmodload zsh/datetime 2>/dev/null
-path_start_time=${EPOCHREALTIME:-0}
-
 export DESKTOP="$HOME/Desktop"
 if [[ -d $HOME/Downloads ]]; then
 	export DOWNLOADS="$HOME/Downloads"
@@ -149,11 +131,3 @@ if [ -e $HOME/Library/Android/sdk ]; then
     export PATH=$PATH:$ANDROID_HOME/platform-tools
 fi
 
-if [[ ${path_start_time:-0} != 0 ]]; then
-	zmodload zsh/datetime 2>/dev/null
-	path_end_time=$EPOCHREALTIME
-	path_duration=$(echo "$path_end_time - $path_start_time" | bc)
-	printf '%s\t%s\t%.6f\t%s\n' "$path_start_time" "$path_end_time" "$path_duration" "$path_script" >> "$zlog_file"
-	# export so .zshrc can display it
-	export _path_zsh_duration=$path_duration
-fi

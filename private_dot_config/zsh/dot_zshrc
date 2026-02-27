@@ -1,56 +1,8 @@
-# uncomment zprof to display profiling data
-# zmodload zsh/zprof
-
 # Skip all configuration for non-interactive shells
 [[ $- != *i* ]] && return
 
-zmodload zsh/datetime
-
-zshrc_start_time=$EPOCHREALTIME
 stty -ixon
 
-log_dir=${TMPDIR:-/tmp}
-log_dir=${log_dir%/}
-[[ -n $log_dir ]] || log_dir=/tmp
-log_file="$log_dir/zsh-startup-$(date +%Y-%m-%d).log"
-
-if [[ ! -d $log_dir ]]; then
-    command mkdir -p -- "$log_dir" 2>/dev/null
-fi
-
-if [[ ! -s $log_file ]]; then
-    printf 'start_time\tend_time\tduration_seconds\tscript\n' >> "$log_file"
-fi
 for sh in $ZDOTDIR/[0-9]*-*sh; do
-    start_time=$EPOCHREALTIME
     source "$sh"
-    end_time=$EPOCHREALTIME
-    duration_fmt=$(echo "$end_time - $start_time" | bc)
-    printf '%s\t%s\t%.6f\t%s\n' "$start_time" "$end_time" "$duration_fmt" "$sh" >> "$log_file"
 done
-
-if type zprof > /dev/null; then
-    zprof
-fi
-
-# Log total zshrc execution time
-zshrc_end_time=$EPOCHREALTIME
-zshrc_duration=$(echo "$zshrc_end_time - $zshrc_start_time" | bc)
-printf '%s\t%s\t%.6f\t%s\n' "$zshrc_start_time" "$zshrc_end_time" "$zshrc_duration" ".zshrc" >> "$log_file"
-
-if [[ -n $_path_zsh_duration ]]; then
-    printf "path.zsh: %s + zshrc: %.6f seconds\n" "$_path_zsh_duration" "$zshrc_duration"
-    unset _path_zsh_duration
-else
-    printf "zshrc duration: %.6f seconds\n" "$zshrc_duration"
-fi
-
-# one-shot precmd to measure post-zshrc gap
-_first_prompt_measure() {
-  local now=$EPOCHREALTIME
-  local gap=$(echo "$now - $zshrc_end_time" | bc)
-  printf 'first-prompt gap: %.6f seconds\n' "$gap"
-  add-zsh-hook -d precmd _first_prompt_measure
-}
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd _first_prompt_measure

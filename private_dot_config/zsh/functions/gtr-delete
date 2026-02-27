@@ -40,9 +40,9 @@ gtr-delete() {
   fi
 
   # Safety check: working tree must be clean (no modified, staged, or untracked files)
-  local status
-  status="$(git -C "$wt_path" status --porcelain 2>/dev/null)"
-  if [[ -n "$status" ]]; then
+  local wt_status
+  wt_status="$(git -C "$wt_path" status --porcelain 2>/dev/null)"
+  if [[ -n "$wt_status" ]]; then
     echo "gtr-delete: worktree has outstanding changes. Commit or clean up first:" >&2
     echo "" >&2
     git -C "$wt_path" status --short 2>/dev/null >&2
@@ -51,16 +51,15 @@ gtr-delete() {
     return 1
   fi
 
-  # Remove worktree (branch is kept)
-  if ! git gtr rm "$wt_branch" --yes 2>/dev/null; then
-    echo "gtr-delete: failed to remove worktree: $wt_branch" >&2
-    return 1
-  fi
+  echo "gtr-delete: removing '$wt_branch'"
 
-  # If we were inside the deleted worktree, cd to main repo
+  # cd away before deletion if we're inside the worktree
   if [[ "$PWD" == "$wt_path" || "$PWD" == "$wt_path"/* ]]; then
     [[ -n "$main_path" && -d "$main_path" ]] && cd "$main_path" || true
   fi
+
+  # Remove worktree in background
+  git gtr rm "$wt_branch" --yes &>/dev/null &!
 }
 
 gtr-delete "$@"

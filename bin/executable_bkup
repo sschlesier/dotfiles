@@ -7,14 +7,18 @@ if [[ "${TRACE-0}" == "1" ]]; then
 fi
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
-    echo 'Usage: bkup [dirs_file]
+    echo 'Usage: bkup [init | dirs_file]
 
 Backup directories listed in dirs_file to a restic repository on Backblaze B2.
 Each directory should be on its own line in the file.
-If dirs_file is not specified, defaults to bkup.dirs in the same directory as this script.
+If dirs_file is not specified, defaults to ~/.config/bkup/dirs
+(or $BKUP_DIRS_FILE if set, or $XDG_CONFIG_HOME/bkup/dirs if XDG_CONFIG_HOME is set).
+
+Subcommands:
+    init    Interactively set up per-machine configuration
 
 Required environment variables:
-    RESTIC_REPOSITORY   - B2 repo URI (e.g. b2:bucket-name:path/to/repo)
+    RESTIC_REPOSITORY   - B2 repo URI (e.g. s3:s3.region.backblazeb2.com/bucket-name)
     RESTIC_PASSWORD     - Repository encryption password
     AWS_ACCESS_KEY_ID   - AWS access key ID
     AWS_SECRET_ACCESS_KEY - AWS secret access key
@@ -30,7 +34,9 @@ Example dirs_file contents:
     exit
 fi
 
-cd "$(dirname "$0")"
+if [[ "${1-}" == "init" ]]; then
+    exec "$(dirname "$0")/bkup-init" "${@:2}"
+fi
 
 # Load environment variables from file if present
 env_file="${BKUP_ENV_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/bkup/env}"
@@ -50,23 +56,26 @@ main() {
         fi
     done
 
-    # Find restic in common locations
-    local restic_path=""
-
-    for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
-        if [[ -x "${prefix}/bin/restic" ]]; then
-            restic_path="${prefix}/bin/restic"
-            break
-        fi
-    done
+    # Find restic — try PATH first, then common Homebrew locations
+    local restic_path
+    if restic_path="$(command -v restic 2>/dev/null)"; then
+        :
+    else
+        for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+            if [[ -x "${prefix}/bin/restic" ]]; then
+                restic_path="${prefix}/bin/restic"
+                break
+            fi
+        done
+    fi
 
     if [[ -z "${restic_path:-}" ]]; then
-        echo "Error: restic not found"
+        echo "Error: restic not found" >&2
         exit 1
     fi
 
     # Set default dirs file if not provided
-    local dirs_file="${1:-bkup.dirs}"
+    local dirs_file="${1:-${BKUP_DIRS_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/bkup/dirs}}"
 
     if [[ ! -f "$dirs_file" ]]; then
         echo "Error: Dirs file '$dirs_file' does not exist"
@@ -108,6 +117,12 @@ main() {
     # Tag with hostname for multi-machine repos
     local computer
     computer=$(hostname | cut -d. -f1)
+
+    # Auto-initialize repo if it doesn't exist yet
+    if ! "$restic_path" snapshots &>/dev/null; then
+        echo "Initializing new restic repository..." >&2
+        "$restic_path" init
+    fi
 
     # Create a backup
     "$restic_path" backup \

@@ -31,8 +31,6 @@ EOF
     exit 0
 fi
 
-cd "$(dirname "$0")"
-
 # Load environment variables from file if present (same logic as bkup)
 env_file="${BKUP_ENV_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/bkup/env}"
 if [[ -f "$env_file" ]]; then
@@ -58,13 +56,18 @@ main() {
         fi
     done
 
-    local restic_path=""
-    for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
-        if [[ -x "${prefix}/bin/restic" ]]; then
-            restic_path="${prefix}/bin/restic"
-            break
-        fi
-    done
+    # Find restic — try PATH first, then common Homebrew locations
+    local restic_path
+    if restic_path="$(command -v restic 2>/dev/null)"; then
+        :
+    else
+        for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew; do
+            if [[ -x "${prefix}/bin/restic" ]]; then
+                restic_path="${prefix}/bin/restic"
+                break
+            fi
+        done
+    fi
 
     if [[ -z "${restic_path:-}" ]]; then
         echo "Error: restic not found" >&2

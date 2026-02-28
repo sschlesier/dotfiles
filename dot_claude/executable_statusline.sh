@@ -24,6 +24,19 @@ fmt_pct() {
     printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_pct "$val")" "$val" "$RST"
 }
 
+# Return human-readable time until an ISO-8601 UTC timestamp (e.g. "1h42m", "38m")
+time_until() {
+    local ts=$1
+    [[ -z "$ts" ]] && return
+    local epoch
+    epoch=$(TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%S" "${ts%%.*}" "+%s" 2>/dev/null)
+    [[ -z "$epoch" ]] && return
+    local diff=$(( epoch - $(date +%s) ))
+    [[ $diff -le 0 ]] && { printf 'soon'; return; }
+    local h=$(( diff / 3600 )) m=$(( (diff % 3600) / 60 ))
+    [[ $h -gt 0 ]] && printf '%dh%dm' "$h" "$m" || printf '%dm' "$m"
+}
+
 # ── --refresh: bust cache and exit ────────────────────────────────────────────
 
 if [[ "${1:-}" == "--refresh" ]]; then
@@ -142,7 +155,22 @@ if [[ "$USAGE_DATA" == ERR:* ]]; then
 else
     FIVE_H="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.utilization // 0' 2>/dev/null | cut -d. -f1)"
     SEVEN_D="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.utilization // 0' 2>/dev/null | cut -d. -f1)"
-    USAGE_PART="$(fmt_pct "5h " "$FIVE_H")${SEP}$(fmt_pct "7d " "$SEVEN_D")"
+    FIVE_H_RESET="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.resets_at // empty' 2>/dev/null)"
+    SEVEN_D_RESET="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.resets_at // empty' 2>/dev/null)"
+
+    FIVE_H_PART="$(fmt_pct "5h " "$FIVE_H")"
+    if [[ $FIVE_H -ge 80 ]]; then
+        FIVE_H_TTR="$(time_until "$FIVE_H_RESET")"
+        [[ -n "$FIVE_H_TTR" ]] && FIVE_H_PART="${FIVE_H_PART} ${DIM}↺${RST}${FIVE_H_TTR}"
+    fi
+
+    SEVEN_D_PART="$(fmt_pct "7d " "$SEVEN_D")"
+    if [[ $SEVEN_D -ge 95 ]]; then
+        SEVEN_D_TTR="$(time_until "$SEVEN_D_RESET")"
+        [[ -n "$SEVEN_D_TTR" ]] && SEVEN_D_PART="${SEVEN_D_PART} ${DIM}↺${RST}${SEVEN_D_TTR}"
+    fi
+
+    USAGE_PART="${FIVE_H_PART}${SEP}${SEVEN_D_PART}"
 fi
 
 PARTS=""

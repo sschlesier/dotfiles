@@ -39,7 +39,23 @@ if COMMON=$(git -C "$(pwd)" rev-parse --git-common-dir 2>/dev/null); then
   fi
 fi
 
+# Derive a readable container name from the git branch (or directory name)
+BRANCH=$(git -C "$(pwd)" branch --show-current 2>/dev/null)
+if [ -z "$BRANCH" ]; then
+  BRANCH=$(basename "$(pwd)")
+fi
+CAGE_NAME="cage-$(printf '%s' "$BRANCH" | tr '/' '-' | tr -cd 'a-zA-Z0-9-' | head -c 60)"
+
+# Auto-append numeric suffix if the name is already in use
+BASE_NAME="$CAGE_NAME"
+SUFFIX=2
+while container list 2>/dev/null | grep -qw "$CAGE_NAME"; do
+  CAGE_NAME="${BASE_NAME}-${SUFFIX}"
+  SUFFIX=$((SUFFIX + 1))
+done
+
 exec container run -it --rm \
+  --name "$CAGE_NAME" \
   --volume "$(pwd):/home/claude/workspace" \
   --volume "claude-creds:/home/claude/.claude" \
   --volume "$HOME/.claude:/tmp/.claude-host:ro" \

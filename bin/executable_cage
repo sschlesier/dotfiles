@@ -1,0 +1,37 @@
+#!/bin/bash
+# cage — run Claude Code in an isolated Apple container (VM-level isolation)
+#
+# USAGE
+#   cage [claude-args]     Run Claude from the current directory
+#
+# EXAMPLES
+#   cd ~/projects/my-app && cage
+#   cage --resume
+#
+# FIRST TIME SETUP
+#   1. brew install container
+#   2. container system start
+#   3. cage-update          # build the image
+#   4. cage-login           # authenticate (opens browser, one-time OAuth)
+#   5. cage                 # ready
+#
+# OTHER COMMANDS
+#   cage-login              # re-authenticate when token expires
+#   cage-update             # rebuild image after Claude Code updates
+#
+# HOW IT WORKS
+#   - Each container is a lightweight Linux VM (Apple Virtualization Framework)
+#   - pwd is mounted at /home/claude/workspace — nothing else on your Mac is visible
+#   - Credentials persist in the 'claude-creds' container volume
+#   - Your ~/.claude config (CLAUDE.md, settings, commands, skills) is synced in read-only
+#   - Runs as non-root with --dangerously-skip-permissions
+
+set -e
+
+exec container run -it --rm \
+  --volume "$(pwd):/home/claude/workspace" \
+  --volume "claude-creds:/home/claude/.claude" \
+  --volume "$HOME/.claude:/tmp/.claude-host:ro" \
+  --env TERM \
+  claude-isolated \
+  claude --dangerously-skip-permissions "$@"

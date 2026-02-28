@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+echo "Rebuilding claude-isolated with latest claude-code..."
+container build \
+  --build-arg CACHE_BUST="$(date +%s)" \
+  --tag claude-isolated \
+  "$SCRIPT_DIR"
+
+echo "Done. Current version:"
+container run --rm claude-isolated claude --version

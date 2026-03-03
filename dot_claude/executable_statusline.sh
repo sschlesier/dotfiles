@@ -75,10 +75,10 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
         REPO="$(basename "$(git rev-parse --show-toplevel 2>/dev/null)")"
         REPO_SEP="/"
     fi
+    LOC_PART="${DIM}${REPO}${REPO_SEP}${BRANCH}${RST}"
 else
-    BRANCH=""
-    REPO=""
-    REPO_SEP="/"
+    SHORT_PWD="${PWD/#$HOME/~}"
+    LOC_PART="${DIM}${SHORT_PWD}${RST}"
 fi
 
 # ── Usage fetch (called only when cache is stale) ─────────────────────────────
@@ -176,9 +176,7 @@ else
     USAGE_PART="${FIVE_H_PART}${SEP}${SEVEN_D_PART}"
 fi
 
-PARTS=""
-[[ -n "$BRANCH" ]] && PARTS="${DIM}${REPO}${REPO_SEP}${BRANCH}${RST}${SEP}"
-PARTS="${PARTS}${CTX_PART}${SEP}${USAGE_PART}"
+PARTS="${LOC_PART}${SEP}${CTX_PART}${SEP}${USAGE_PART}"
 [[ -n "$AGE_PART" ]] && PARTS="${PARTS}  ${AGE_PART}"
 PARTS="${PARTS}${SEP}${MODEL}"
 

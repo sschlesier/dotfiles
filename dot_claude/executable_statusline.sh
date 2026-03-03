@@ -64,12 +64,15 @@ CTX_PCT="${CTX_RAW%.*}"
 if git rev-parse --git-dir > /dev/null 2>&1; then
     BRANCH="$(git branch --show-current 2>/dev/null)"
     BRANCH="${BRANCH:-detached}"
-    REPO="$(basename "$(dirname "$(git rev-parse --git-common-dir 2>/dev/null)")")"
     GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)"
     COMMON_DIR="$(git rev-parse --git-common-dir 2>/dev/null)"
     if [[ "$GIT_DIR" != "$COMMON_DIR" ]]; then
+        # In a worktree: common-dir is always absolute, gives main repo path
+        REPO="$(basename "$(dirname "$COMMON_DIR")")"
         REPO_SEP="@"
     else
+        # Main worktree: use show-toplevel to get absolute path (avoids '.' when at repo root)
+        REPO="$(basename "$(git rev-parse --show-toplevel 2>/dev/null)")"
         REPO_SEP="/"
     fi
 else

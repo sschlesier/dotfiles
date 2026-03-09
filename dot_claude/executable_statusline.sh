@@ -75,7 +75,11 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
         REPO="$(basename "$(git rev-parse --show-toplevel 2>/dev/null)")"
         REPO_SEP="/"
     fi
-    LOC_PART="${DIM}${REPO}${REPO_SEP}${BRANCH}${RST}"
+    if [[ "$GIT_DIR" != "$COMMON_DIR" ]]; then
+        LOC_PART="${GRN}🌲${RST} ${DIM}${REPO}${REPO_SEP}${BRANCH}${RST}"
+    else
+        LOC_PART="${DIM}${REPO}${REPO_SEP}${BRANCH}${RST}"
+    fi
 else
     SHORT_PWD="${PWD/#$HOME/~}"
     LOC_PART="${DIM}${SHORT_PWD}${RST}"

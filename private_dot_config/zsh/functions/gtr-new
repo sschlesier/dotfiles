@@ -10,6 +10,22 @@ gtr-new() {
   local branch="$1"
   shift
 
+  # Fetch latest main from origin
+  echo "gtr-new: fetching origin/main..."
+  if ! git fetch origin main 2>/dev/null; then
+    echo "gtr-new: failed to fetch 'origin/main'" >&2
+    return 1
+  fi
+
+  # Default to --from origin/main unless user specified --from or --from-current
+  local has_from=0
+  for arg in "$@"; do
+    [[ "$arg" == --from || "$arg" == --from-current ]] && has_from=1
+  done
+  if (( ! has_from )); then
+    set -- --from origin/main --no-fetch "$@"
+  fi
+
   echo "gtr-new: creating worktree '$branch'..."
 
   if ! git gtr new "$branch" "$@"; then

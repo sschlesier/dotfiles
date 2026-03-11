@@ -48,8 +48,9 @@ for i in "${!environments[@]}"; do
 done
 
 lambda_ping() {
-  local env="$1" region="$2" fn="$3" label="$4"
-  local tmp="${label}-${env}.json"
+  local env="$1" region="$2" fn="$3"
+  local tmp
+  tmp=$(mktemp)
   echo "printf '$env '; aws --region $region lambda invoke \
     --function-name $fn \
     --cli-binary-format raw-in-base64-out \
@@ -57,18 +58,24 @@ lambda_ping() {
 }
 
 cmds+=('echo -e "\n\npost-metric lambda"')
-cmds+=("$(lambda_ping prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp post-metric)")
+cmds+=("$(lambda_ping prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp)")
 
 cmds+=('echo -e "\n\ninvoice anomaly detection lambda"')
-cmds+=("$(lambda_ping prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr anomaly)")
+cmds+=("$(lambda_ping prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr)")
 
 cmds+=('echo -e "\n\nomnivore alerter"')
-cmds+=("$(lambda_ping prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH alerter)")
+cmds+=("$(lambda_ping prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH)")
 
 cmds+=('echo -e "\n\nbilling runner"')
-cmds+=("$(lambda_ping dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK billing-runner)")
-cmds+=("$(lambda_ping staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H billing-runner)")
-cmds+=("$(lambda_ping prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ billing-runner)")
+cmds+=("$(lambda_ping dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK)")
+cmds+=("$(lambda_ping staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H)")
+cmds+=("$(lambda_ping prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ)")
+
+cmds+=('echo -e "\n\nmenusync runner"')
+cmds+=("$(lambda_ping dev us-east-1 ready-menusync-runner-ReadyMenuSyncRunner-1NA9OQMNW2CAH)")
+cmds+=("$(lambda_ping staging us-east-2 ready-menusync-runner-ReadyMenuSyncRunner-1HYR1X8OL20UV)")
+cmds+=("$(lambda_ping demo us-west-1 ready-menusync-runner-ReadyMenuSyncRunner-1GRYBDNA4AVYT)")
+cmds+=("$(lambda_ping prod ca-central-1 ready-menusync-runner-ReadyMenuSyncRunner-U0MEAKD4KC6R)")
 
 
 parallel -j 200% -k ::: "${cmds[@]}"

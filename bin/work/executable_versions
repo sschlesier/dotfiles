@@ -47,26 +47,28 @@ for i in "${!environments[@]}"; do
   cmds+=("$cmd")
 done
 
+lambda_ping() {
+  local env="$1" region="$2" fn="$3" label="$4"
+  local tmp="${label}-${env}.json"
+  echo "printf '$env '; aws --region $region lambda invoke \
+    --function-name $fn \
+    --cli-binary-format raw-in-base64-out \
+    --payload '{\"ping\": 1}' $tmp > /dev/null && jq -r '.appVersion' $tmp && rm $tmp"
+}
+
 cmds+=('echo -e "\n\npost-metric lambda"')
-cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
-  --function-name post-metrics-Function-JQwkOV9M3BPp \
-  --cli-binary-format raw-in-base64-out \
-  --payload '{\"ping\": 1}' post-metric.json > /dev/null && jq -r '.appVersion' post-metric.json && rm post-metric.json"
-cmds+=("$cmd")
+cmds+=("$(lambda_ping prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp post-metric)")
 
 cmds+=('echo -e "\n\ninvoice anomaly detection lambda"')
-cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
-  --function-name invoice-anomaly-detection-Function-BVrJFsOZ2oKr \
-  --cli-binary-format raw-in-base64-out \
-  --payload '{\"ping\": 1}' anomaly.json > /dev/null && jq -r '.appVersion' anomaly.json && rm anomaly.json"
-cmds+=("$cmd")
+cmds+=("$(lambda_ping prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr anomaly)")
 
 cmds+=('echo -e "\n\nomnivore alerter"')
-cmd="printf 'prod '; aws --region ca-central-1 lambda invoke \
-  --function-name omnivore-alerter-Function-WfoFaZnQwDkH \
-  --cli-binary-format raw-in-base64-out \
-  --payload '{\"ping\": 1}' alerter.json > /dev/null && jq -r '.appVersion' alerter.json && rm alerter.json"
-cmds+=("$cmd")
+cmds+=("$(lambda_ping prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH alerter)")
+
+cmds+=('echo -e "\n\nbilling runner"')
+cmds+=("$(lambda_ping dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK billing-runner)")
+cmds+=("$(lambda_ping staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H billing-runner)")
+cmds+=("$(lambda_ping prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ billing-runner)")
 
 
 parallel -j 200% -k ::: "${cmds[@]}"

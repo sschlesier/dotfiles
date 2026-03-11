@@ -25,7 +25,7 @@ gtr-delete() {
   fi
 
   local selection
-  selection="$(_gtr_fzf_pick "Delete worktree> " "${worktrees[@]}")" || return 0
+  selection="$(_gtr_fzf_pick "Delete worktree> " "" "${worktrees[@]}")" || return 0
 
   if [[ -z "$selection" ]]; then
     return 0

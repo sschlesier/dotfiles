@@ -40,19 +40,23 @@ _gtr_parse_selection() {
 
 _gtr_fzf_pick() {
   local prompt="${1:-Worktree> }"
-  shift
+  local query="$2"
+  shift 2
   (( $# == 0 )) && return 1
-  printf '%s\n' "$@" | fzf \
-    --no-select-1 \
-    --delimiter=$'\t' \
-    --with-nth=2,1 \
-    --ansi \
-    --layout=reverse \
-    --border \
-    --prompt="$prompt" \
-    --header='branch / path' \
-    --preview='git -C {1} log --oneline --graph --color=always -15 2>/dev/null; echo "---"; git -C {1} status --short 2>/dev/null' \
+  local fzf_args=(
+    --no-select-1
+    --delimiter=$'\t'
+    --with-nth=2,1
+    --ansi
+    --layout=reverse
+    --border
+    --prompt="$prompt"
+    --header='branch / path'
+    --preview='git -C {1} log --oneline --graph --color=always -15 2>/dev/null; echo "---"; git -C {1} status --short 2>/dev/null'
     --preview-window=right:60%
+  )
+  [[ -n "$query" ]] && fzf_args+=(--query="$query")
+  printf '%s\n' "$@" | fzf "${fzf_args[@]}"
 }
 
 _gtr_main_path() {

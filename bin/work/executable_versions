@@ -39,14 +39,6 @@ for i in "${!environments[@]}"; do
   cmds+=("$cmd")
 done
 
-environments=("dev" "staging" "production")
-cmds+=('echo -e "\n\nsell-sheet-parser"')
-urls=("test1" "api.staging" "api")
-for i in "${!environments[@]}"; do
-  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/sell-sheet/health\" | jq -r .version"
-  cmds+=("$cmd")
-done
-
 lambda_ping() {
   local env="$1" region="$2" fn="$3"
   local tmp

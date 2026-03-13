@@ -54,6 +54,36 @@ lookup-pipeline() {
           ;;
       esac
       ;;
+  menusync)
+      case "$env" in
+        staging)
+          echo 4188
+          ;;
+        prod)
+          echo 4189
+          ;;
+      esac
+      ;;
+  billingrunner)
+      case "$env" in
+        staging)
+          echo 4185
+          ;;
+        prod)
+          echo 4183
+          ;;
+      esac
+      ;;
+  menucopier)
+      case "$env" in
+        staging)
+          echo 4171
+          ;;
+        prod)
+          echo 4173
+          ;;
+      esac
+      ;;
   esac
 }
 

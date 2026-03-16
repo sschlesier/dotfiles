@@ -3,71 +3,93 @@
 environments=("dev" "staging" "demo" "production")
 urls=("test1" "api.staging" "api.demo2" "api")
 
-cmds=("echo rapi")
+cmds=()
 for i in "${!environments[@]}"; do
-  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/ping\" | jq -r .ApplicationVersion"
+  cmd="printf 'rapi %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}.readytopay.co/ping\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
   cmds+=("$cmd")
 done
 
-cmds+=('echo -e "\n\ndapi"')
 for i in "${!environments[@]}"; do
-  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/dashboard/ping\" | jq -r .ApplicationVersion"
+  cmd="printf 'dapi %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}.readytopay.co/dashboard/ping\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
   cmds+=("$cmd")
 done
 
-cmds+=('echo -e "\n\nfrapi"')
 for i in "${!environments[@]}"; do
-  if [[ ${environments[$i]} == "demo" ]]
-  then
-    continue
-  fi
-  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}.readytopay.co/frapi/ping\" | jq -r .ApplicationVersion"
+  if [[ ${environments[$i]} == "demo" ]]; then continue; fi
+  cmd="printf 'frapi %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}.readytopay.co/frapi/ping\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
   cmds+=("$cmd")
 done
 
-cmds+=('echo -e "\n\ndui"')
 urls=("ready-dashboard-dev.herokuapp.com" "ready-dashboard-staging.herokuapp.com" "ready-dashboard-demo.herokuapp.com" "admin.readypay.co")
 for i in "${!environments[@]}"; do
-  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}/ping.json\" | jq -r .ApplicationVersion"
+  cmd="printf 'dui %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}/ping.json\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
   cmds+=("$cmd")
 done
 
-cmds+=('echo -e "\n\nrma"')
 urls=("test1.readydemo.co" "staging1.readydemo.co" "readydemo.co" "readypay.co")
 for i in "${!environments[@]}"; do
-  cmd="printf \"%s \" ${environments[$i]}; curl -s \"https://${urls[$i]}/ping.json\" | jq -r .ApplicationVersion"
+  cmd="printf 'rma %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}/ping.json\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
   cmds+=("$cmd")
 done
 
 lambda_ping() {
-  local env="$1" region="$2" fn="$3"
+  local section="$1" env="$2" region="$3" fn="$4"
   local tmp
   tmp=$(mktemp)
-  echo "printf '$env '; aws --region $region lambda invoke \
-    --function-name $fn \
-    --cli-binary-format raw-in-base64-out \
-    --payload '{\"ping\": 1}' $tmp > /dev/null && jq -r '.appVersion' $tmp && rm $tmp"
+  echo "printf '${section} ${env} '; (aws --region $region lambda invoke --function-name $fn --cli-binary-format raw-in-base64-out --payload '{\"ping\": 1}' $tmp 2>/dev/null > /dev/null && jq -r '.appVersion // \"error\"' $tmp 2>/dev/null; rm -f $tmp) || echo 'error'"
 }
 
-cmds+=('echo -e "\n\npost-metric lambda"')
-cmds+=("$(lambda_ping prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp)")
+cmds+=("$(lambda_ping post-metric-lambda prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp)")
+cmds+=("$(lambda_ping invoice-anomaly-detection-lambda prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr)")
+cmds+=("$(lambda_ping omnivore-alerter prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH)")
+cmds+=("$(lambda_ping billing-runner dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK)")
+cmds+=("$(lambda_ping billing-runner staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H)")
+cmds+=("$(lambda_ping billing-runner prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ)")
+cmds+=("$(lambda_ping menusync-runner dev us-east-1 ready-menusync-runner-ReadyMenuSyncRunner-1NA9OQMNW2CAH)")
+cmds+=("$(lambda_ping menusync-runner staging us-east-2 ready-menusync-runner-ReadyMenuSyncRunner-1HYR1X8OL20UV)")
+cmds+=("$(lambda_ping menusync-runner demo us-west-1 ready-menusync-runner-ReadyMenuSyncRunner-1GRYBDNA4AVYT)")
+cmds+=("$(lambda_ping menusync-runner prod ca-central-1 ready-menusync-runner-ReadyMenuSyncRunner-U0MEAKD4KC6R)")
 
-cmds+=('echo -e "\n\ninvoice anomaly detection lambda"')
-cmds+=("$(lambda_ping prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr)")
+total=${#cmds[@]}
+buffer=()
+count=0
+while IFS= read -r line; do
+  if [[ $line =~ ^[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+.+ ]]; then
+    buffer+=("$line")
+    ((count++))
+    filled=$((total > 0 ? count * 40 / total : 0))
+    [[ $filled -gt 40 ]] && filled=40
+    bar=$(printf '#%.0s' $(seq 1 $filled 2>/dev/null))
+    bar+=$(printf ' %.0s' $(seq 1 $((40 - filled)) 2>/dev/null))
+    printf '\r[%-40s] %d/%d' "$bar" "$count" "$total"
+  fi
+done < <(parallel -j 200% --line-buffer ::: "${cmds[@]}")
+printf '\n'
 
-cmds+=('echo -e "\n\nomnivore alerter"')
-cmds+=("$(lambda_ping prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH)")
-
-cmds+=('echo -e "\n\nbilling runner"')
-cmds+=("$(lambda_ping dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK)")
-cmds+=("$(lambda_ping staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H)")
-cmds+=("$(lambda_ping prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ)")
-
-cmds+=('echo -e "\n\nmenusync runner"')
-cmds+=("$(lambda_ping dev us-east-1 ready-menusync-runner-ReadyMenuSyncRunner-1NA9OQMNW2CAH)")
-cmds+=("$(lambda_ping staging us-east-2 ready-menusync-runner-ReadyMenuSyncRunner-1HYR1X8OL20UV)")
-cmds+=("$(lambda_ping demo us-west-1 ready-menusync-runner-ReadyMenuSyncRunner-1GRYBDNA4AVYT)")
-cmds+=("$(lambda_ping prod ca-central-1 ready-menusync-runner-ReadyMenuSyncRunner-U0MEAKD4KC6R)")
-
-
-parallel -j 200% -k ::: "${cmds[@]}"
+printf '\n\n\n'
+printf '%s\n' "${buffer[@]}" | awk '
+BEGIN {
+  section["rapi"]=1; section["dapi"]=2; section["frapi"]=3; section["dui"]=4; section["rma"]=5
+  section["post-metric-lambda"]=6; section["invoice-anomaly-detection-lambda"]=7
+  section["omnivore-alerter"]=8; section["billing-runner"]=9; section["menusync-runner"]=10
+  env["dev"]=1; env["staging"]=2; env["demo"]=3; env["production"]=4; env["prod"]=4
+}
+{
+  s=$1; e=$2
+  srank = ($1 in section) ? section[$1] : 999
+  erank = ($2 in env) ? env[$2] : 999
+  printf "%03d %03d ", srank, erank
+  print $0
+}' | sort -n | cut -d' ' -f3- | awk '{
+  section=$1; env=$2
+  $1=$2=""
+  sub(/^[[:space:]]+/, "")
+  version=$0
+  sub(/-lambda$/, "", section)
+  if (section != prev) {
+    if (prev != "") print ""
+    print section
+    prev=section
+  }
+  printf "%-12s  %s\n", env, version
+}'

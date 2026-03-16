@@ -3,6 +3,7 @@
 update_all_plugins() {
     antidote update
     $EDITOR +PlugUpdate +PlugUpgrade +qall
+    fnm-sync
     echo updating tldr cache...
     tldr --update
 }

@@ -1,0 +1,213 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+readonly DEFAULT_MAJOR_FILE="${HOME}/.config/fnm/majors"
+readonly FNM_BIN="${FNM_SYNC_FNM:-fnm}"
+
+dry_run=false
+major_file="${DEFAULT_MAJOR_FILE}"
+
+usage() {
+  cat <<'EOF'
+Usage: fnm-sync [--dry-run] [--file PATH]
+
+Sync installed fnm-managed Node.js versions to the latest patch release for
+each major listed in ~/.config/fnm/majors by default.
+EOF
+}
+
+log() {
+  printf '%s\n' "$*"
+}
+
+run() {
+  if [[ "${dry_run}" == true ]]; then
+    log "dry-run: $*"
+    return 0
+  fi
+
+  "$@"
+}
+
+fnm_cmd() {
+  "${FNM_BIN}" "$@"
+}
+
+trim() {
+  local value="$1"
+
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+  printf '%s' "${value}"
+}
+
+version_major() {
+  local version="${1#v}"
+  printf '%s' "${version%%.*}"
+}
+
+normalize_version() {
+  local value
+  value="$(trim "$1")"
+
+  if [[ "${value}" =~ (v[0-9]+\.[0-9]+\.[0-9]+) ]]; then
+    printf '%s\n' "${BASH_REMATCH[1]}"
+    return 0
+  fi
+
+  return 1
+}
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --dry-run)
+      dry_run=true
+      shift
+      ;;
+    --file)
+      if [[ "$#" -lt 2 ]]; then
+        usage >&2
+        exit 1
+      fi
+      major_file="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'Unknown argument: %s\n' "$1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+done
+
+if ! command -v "${FNM_BIN}" >/dev/null 2>&1; then
+  printf 'fnm not found: %s\n' "${FNM_BIN}" >&2
+  exit 1
+fi
+
+if [[ ! -f "${major_file}" ]]; then
+  printf 'Major version file not found: %s\n' "${major_file}" >&2
+  exit 1
+fi
+
+declare -a majors=()
+declare -A managed_major_set=()
+
+while IFS= read -r raw_line || [[ -n "${raw_line}" ]]; do
+  line="${raw_line%%#*}"
+  line="$(trim "${line}")"
+
+  if [[ -z "${line}" ]]; then
+    continue
+  fi
+
+  if [[ ! "${line}" =~ ^[0-9]+$ ]]; then
+    printf 'Invalid major in %s: %s\n' "${major_file}" "${line}" >&2
+    exit 1
+  fi
+
+  if [[ -z "${managed_major_set["${line}"]+x}" ]]; then
+    managed_major_set["${line}"]=1
+    majors+=("${line}")
+  fi
+done < "${major_file}"
+
+if [[ "${#majors[@]}" -eq 0 ]]; then
+  printf 'No major versions configured in %s\n' "${major_file}" >&2
+  exit 1
+fi
+
+remote_versions="$(fnm_cmd list-remote)"
+
+declare -A latest_by_major=()
+
+while IFS= read -r remote_line; do
+  version="$(normalize_version "${remote_line}" || true)"
+  if [[ -z "${version}" ]]; then
+    continue
+  fi
+
+  major="$(version_major "${version}")"
+  if [[ -z "${managed_major_set["${major}"]+x}" ]]; then
+    continue
+  fi
+
+  latest_by_major["${major}"]="${version}"
+done <<< "${remote_versions}"
+
+for major in "${majors[@]}"; do
+  if [[ -z "${latest_by_major["${major}"]+x}" ]]; then
+    printf 'No remote release found for major %s\n' "${major}" >&2
+    exit 1
+  fi
+done
+
+local_versions_raw="$(fnm_cmd list)"
+
+declare -A installed_versions=()
+declare -A managed_versions_by_major=()
+
+while IFS= read -r local_line; do
+  version="$(normalize_version "${local_line}" || true)"
+  if [[ -z "${version}" ]]; then
+    continue
+  fi
+
+  installed_versions["${version}"]=1
+  major="$(version_major "${version}")"
+  if [[ -n "${managed_major_set["${major}"]+x}" ]]; then
+    managed_versions_by_major["${major}"]+="${version}"$'\n'
+  fi
+done <<< "${local_versions_raw}"
+
+current_default=""
+if current_default_raw="$(fnm_cmd default 2>/dev/null)"; then
+  current_default="$(normalize_version "${current_default_raw}" || true)"
+fi
+
+declare -A keep_version_by_major=()
+for major in "${majors[@]}"; do
+  keep_version_by_major["${major}"]="${latest_by_major["${major}"]}"
+done
+
+for major in "${majors[@]}"; do
+  target="${keep_version_by_major["${major}"]}"
+  if [[ -n "${installed_versions["${target}"]+x}" ]]; then
+    log "keep ${target}"
+    continue
+  fi
+
+  log "install ${target}"
+  run fnm_cmd install "${target}"
+  installed_versions["${target}"]=1
+done
+
+for major in "${majors[@]}"; do
+  keep="${keep_version_by_major["${major}"]}"
+
+  while IFS= read -r installed; do
+    if [[ -z "${installed}" ]]; then
+      continue
+    fi
+
+    if [[ "${installed}" == "${keep}" ]]; then
+      continue
+    fi
+
+    if [[ "${current_default}" == "${installed}" ]]; then
+      log "default ${keep}"
+      run fnm_cmd default "${keep}"
+      current_default="${keep}"
+    fi
+
+    log "uninstall ${installed}"
+    run fnm_cmd uninstall "${installed}"
+  done <<< "${managed_versions_by_major["${major}"]-}"
+done

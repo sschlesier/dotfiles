@@ -1,0 +1,12 @@
+# This is a template file edit with: chezmoi edit
+
+{{ $themeFile := joinPath (env "XDG_DATA_HOME") "theme_mode" -}}
+{{- $mode := "dark" -}}
+{{- if stat $themeFile }}{{ $mode = trim (output "cat" $themeFile) }}{{ end -}}
+{{- if eq $mode "light" -}}
+--theme={{ .bat_light_theme }}
+{{- else -}}
+--theme={{ .bat_dark_theme }}
+{{- end }}
+--terminal-width=-2
+

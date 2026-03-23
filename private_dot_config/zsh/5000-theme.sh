@@ -26,7 +26,7 @@ mkdir -p "$(dirname "$THEME_FILE")"
 light() {
     echo "light" > "$THEME_FILE"
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$LIGHT_THEME"
-    echo "--theme=$BAT_LIGHT_THEME" > "$HOME/.config/bat/config"
+    chezmoi apply "$HOME/.config/bat/config"
     if [[ -f "$HOME/.claude.json" ]] && command -v jq &>/dev/null; then
         jq '. + {theme: "light-ansi"}' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
     fi
@@ -36,7 +36,7 @@ light() {
 dark() {
     echo "dark" > "$THEME_FILE"
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$DARK_THEME"
-    echo "--theme=$BAT_DARK_THEME" > "$HOME/.config/bat/config"
+    chezmoi apply "$HOME/.config/bat/config"
     if [[ -f "$HOME/.claude.json" ]] && command -v jq &>/dev/null; then
         jq '. + {theme: "dark-ansi"}' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
     fi

@@ -1,35 +1,78 @@
 #! /usr/bin/env bash
 
+usage() {
+  cat <<'EOF'
+Usage: versions [-h] [-H|-l|-a]
+
+Fetch application versions from ReadyPay HTTP endpoints and/or AWS Lambda
+functions (parallel checks).
+
+  (default)     Same as -H / --http: HTTP-only pings (rapi, dapi, frapi, dui, rma).
+  -H, --http    HTTP endpoints only.
+  -l, --lambda  Lambda invokes only; progress bar and sorted table.
+  -a, --all     HTTP then Lambda (full report).
+
+  -h, --help    Show this message.
+EOF
+}
+
+mode=http
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -H|--http)
+      mode=http
+      shift
+      ;;
+    -l|--lambda)
+      mode=lambda
+      shift
+      ;;
+    -a|--all)
+      mode=all
+      shift
+      ;;
+    *)
+      printf 'versions: unknown option: %s\n' "$1" >&2
+      printf "Try 'versions --help' for usage.\n" >&2
+      exit 1
+      ;;
+  esac
+done
+
 environments=("dev" "staging" "demo" "production")
 urls=("test1" "api.staging" "api.demo2" "api")
 
-cmds=()
+http_cmds=()
 for i in "${!environments[@]}"; do
   cmd="printf 'rapi %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}.readytopay.co/ping\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
-  cmds+=("$cmd")
+  http_cmds+=("$cmd")
 done
 
 for i in "${!environments[@]}"; do
   cmd="printf 'dapi %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}.readytopay.co/dashboard/ping\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
-  cmds+=("$cmd")
+  http_cmds+=("$cmd")
 done
 
 for i in "${!environments[@]}"; do
   if [[ ${environments[$i]} == "demo" ]]; then continue; fi
   cmd="printf 'frapi %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}.readytopay.co/frapi/ping\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
-  cmds+=("$cmd")
+  http_cmds+=("$cmd")
 done
 
 urls=("ready-dashboard-dev.herokuapp.com" "ready-dashboard-staging.herokuapp.com" "ready-dashboard-demo.herokuapp.com" "admin.readypay.co")
 for i in "${!environments[@]}"; do
   cmd="printf 'dui %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}/ping.json\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
-  cmds+=("$cmd")
+  http_cmds+=("$cmd")
 done
 
 urls=("test1.readydemo.co" "staging1.readydemo.co" "readydemo.co" "readypay.co")
 for i in "${!environments[@]}"; do
   cmd="printf 'rma %s ' ${environments[$i]}; (curl -s \"https://${urls[$i]}/ping.json\" | jq -r '.ApplicationVersion // \"error\"') || echo 'error'"
-  cmds+=("$cmd")
+  http_cmds+=("$cmd")
 done
 
 lambda_ping() {
@@ -39,35 +82,55 @@ lambda_ping() {
   echo "printf '${section} ${env} '; (aws --region $region lambda invoke --function-name $fn --cli-binary-format raw-in-base64-out --payload '{\"ping\": 1}' $tmp 2>/dev/null > /dev/null && jq -r '.appVersion // \"error\"' $tmp 2>/dev/null; rm -f $tmp) || echo 'error'"
 }
 
-cmds+=("$(lambda_ping post-metric-lambda prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp)")
-cmds+=("$(lambda_ping invoice-anomaly-detection-lambda prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr)")
-cmds+=("$(lambda_ping omnivore-alerter prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH)")
-cmds+=("$(lambda_ping billing-runner dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK)")
-cmds+=("$(lambda_ping billing-runner staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H)")
-cmds+=("$(lambda_ping billing-runner prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ)")
-cmds+=("$(lambda_ping menusync-runner dev us-east-1 ready-menusync-runner-ReadyMenuSyncRunner-1NA9OQMNW2CAH)")
-cmds+=("$(lambda_ping menusync-runner staging us-east-2 ready-menusync-runner-ReadyMenuSyncRunner-1HYR1X8OL20UV)")
-cmds+=("$(lambda_ping menusync-runner demo us-west-1 ready-menusync-runner-ReadyMenuSyncRunner-1GRYBDNA4AVYT)")
-cmds+=("$(lambda_ping menusync-runner prod ca-central-1 ready-menusync-runner-ReadyMenuSyncRunner-U0MEAKD4KC6R)")
+lambda_cmds=()
+lambda_cmds+=("$(lambda_ping post-metric-lambda prod ca-central-1 post-metrics-Function-JQwkOV9M3BPp)")
+lambda_cmds+=("$(lambda_ping invoice-anomaly-detection-lambda prod ca-central-1 invoice-anomaly-detection-Function-BVrJFsOZ2oKr)")
+lambda_cmds+=("$(lambda_ping omnivore-alerter prod ca-central-1 omnivore-alerter-Function-WfoFaZnQwDkH)")
+lambda_cmds+=("$(lambda_ping billing-runner dev us-east-1 ready-billing-runner-ReadyBillingRunner-16D25U5PNRQCK)")
+lambda_cmds+=("$(lambda_ping billing-runner staging us-east-2 ready-billing-runner-ReadyBillingRunner-J6CX10B9AP6H)")
+lambda_cmds+=("$(lambda_ping billing-runner prod ca-central-1 ready-billing-runner-ReadyBillingRunner-1L44YGZWFYYWQ)")
+lambda_cmds+=("$(lambda_ping menusync-runner dev us-east-1 ready-menusync-runner-ReadyMenuSyncRunner-1NA9OQMNW2CAH)")
+lambda_cmds+=("$(lambda_ping menusync-runner staging us-east-2 ready-menusync-runner-ReadyMenuSyncRunner-1HYR1X8OL20UV)")
+lambda_cmds+=("$(lambda_ping menusync-runner demo us-west-1 ready-menusync-runner-ReadyMenuSyncRunner-1GRYBDNA4AVYT)")
+lambda_cmds+=("$(lambda_ping menusync-runner prod ca-central-1 ready-menusync-runner-ReadyMenuSyncRunner-U0MEAKD4KC6R)")
 
-total=${#cmds[@]}
-buffer=()
-count=0
-while IFS= read -r line; do
-  if [[ $line =~ ^[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+.+ ]]; then
-    buffer+=("$line")
-    ((count++))
-    filled=$((total > 0 ? count * 40 / total : 0))
-    [[ $filled -gt 40 ]] && filled=40
-    bar=$(printf '#%.0s' $(seq 1 $filled 2>/dev/null))
-    bar+=$(printf ' %.0s' $(seq 1 $((40 - filled)) 2>/dev/null))
-    printf '\r[%-40s] %d/%d' "$bar" "$count" "$total"
-  fi
-done < <(parallel -j 200% --line-buffer ::: "${cmds[@]}")
-printf '\n'
+lambda_buffer=()
 
-printf '\n\n\n'
-printf '%s\n' "${buffer[@]}" | awk '
+if [[ $mode == http || $mode == all ]]; then
+  # Phase A: HTTPS — keep job order (-k), blank line between sections for scanning
+  prev_http_section=""
+  while IFS= read -r line; do
+    if [[ $line =~ ^([^[:space:]]+)[[:space:]]+[^[:space:]]+[[:space:]]+.+ ]]; then
+      section="${BASH_REMATCH[1]}"
+      if [[ -n $prev_http_section && $section != "$prev_http_section" ]]; then
+        printf '\n'
+      fi
+      printf '%s\n' "$line"
+      prev_http_section=$section
+    fi
+  done < <(parallel -k -j 200% --line-buffer ::: "${http_cmds[@]}")
+  printf '\n'
+fi
+
+if [[ $mode == lambda || $mode == all ]]; then
+  # Phase B: Lambdas — progress bar over Lambda count only (final table is Lambda-only)
+  total=${#lambda_cmds[@]}
+  count=0
+  while IFS= read -r line; do
+    if [[ $line =~ ^[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+.+ ]]; then
+      lambda_buffer+=("$line")
+      ((count++))
+      filled=$((total > 0 ? count * 40 / total : 0))
+      [[ $filled -gt 40 ]] && filled=40
+      bar=$(printf '#%.0s' $(seq 1 $filled 2>/dev/null))
+      bar+=$(printf ' %.0s' $(seq 1 $((40 - filled)) 2>/dev/null))
+      printf '\r[%-40s] %d/%d' "$bar" "$count" "$total"
+    fi
+  done < <(parallel -k -j 200% --line-buffer ::: "${lambda_cmds[@]}")
+  printf '\n'
+
+  printf '\n\n\n'
+  printf '%s\n' "${lambda_buffer[@]}" | awk '
 BEGIN {
   section["rapi"]=1; section["dapi"]=2; section["frapi"]=3; section["dui"]=4; section["rma"]=5
   section["post-metric-lambda"]=6; section["invoice-anomaly-detection-lambda"]=7
@@ -93,3 +156,4 @@ BEGIN {
   }
   printf "%-12s  %s\n", env, version
 }'
+fi

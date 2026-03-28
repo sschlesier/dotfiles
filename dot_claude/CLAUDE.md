@@ -10,5 +10,3 @@ Do NOT add any attribution to commits. This means:
 
 - No `Co-Authored-By` lines
 - No `Signed-off-by` lines
-- No mentions of AI, Claude, or any contributor in commit messages
-- Just the commit message itself, nothing else

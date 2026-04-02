@@ -1,0 +1,10 @@
+# This is a template file edit with: chezmoi edit
+
+{{ $themeFile := joinPath (env "XDG_DATA_HOME") "theme_mode" -}}
+{{- $mode := "dark" -}}
+{{- if stat $themeFile }}{{ $mode = trim (output "cat" $themeFile) }}{{ end -}}
+{{- if eq $mode "light" -}}
+options.theme = "{{ .visidata_light_theme }}"
+{{- else -}}
+options.theme = "{{ .visidata_dark_theme }}"
+{{- end }}

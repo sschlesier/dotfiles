@@ -27,6 +27,7 @@ light() {
     echo "light" > "$THEME_FILE"
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$LIGHT_THEME"
     chezmoi apply "$HOME/.config/bat/config"
+    chezmoi apply "$HOME/.visidatarc"
     if [[ -f "$HOME/.claude.json" ]] && command -v jq &>/dev/null; then
         jq '. + {theme: "light-ansi"}' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
     fi
@@ -37,6 +38,7 @@ dark() {
     echo "dark" > "$THEME_FILE"
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$DARK_THEME"
     chezmoi apply "$HOME/.config/bat/config"
+    chezmoi apply "$HOME/.visidatarc"
     if [[ -f "$HOME/.claude.json" ]] && command -v jq &>/dev/null; then
         jq '. + {theme: "dark-ansi"}' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
     fi

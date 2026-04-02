@@ -1,2 +1,4 @@
 bat_light_theme = "OneHalfLight"
 bat_dark_theme = "OneHalfDark"
+visidata_light_theme = "light"
+visidata_dark_theme = "ascii8"

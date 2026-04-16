@@ -40,3 +40,5 @@ alias wt="gtr-switch"
 alias wtl="gtr-ls"
 alias wtd="gtr-delete"
 alias wtn="gtr-new"
+
+alias cfa="codex --full-auto"

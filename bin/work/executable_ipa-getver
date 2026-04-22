@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 1 || ! -f "$1" ]]; then
+  echo "usage: ipa-getver <path-to-ipa>" >&2
+  exit 1
+fi
+
+plist_path=$(tar -tzf "$1" | grep '^Payload/[^/]*/Info\.plist$')
+if [[ -z "$plist_path" ]]; then
+  echo "error: could not find Info.plist in $1" >&2
+  exit 1
+fi
+
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
+tar -xzOf "$1" "$plist_path" > "$tmpfile"
+
+version=$(plutil -extract CFBundleShortVersionString raw "$tmpfile")
+build=$(plutil -extract CFBundleVersion raw "$tmpfile")
+
+echo "version: $version"
+echo "build:   $build"

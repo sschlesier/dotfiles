@@ -1,0 +1,7 @@
+interface:
+  display_name: "Create Pipelines"
+  short_description: "Create Azure DevOps pipelines from YAML"
+  default_prompt: "Use $create-pipelines to create Azure DevOps pipelines for the YAML files in this repository."
+
+policy:
+  allow_implicit_invocation: false

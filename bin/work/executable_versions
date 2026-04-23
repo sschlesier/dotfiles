@@ -116,6 +116,8 @@ if [[ $mode == lambda || $mode == all ]]; then
   # Phase B: Lambdas — progress bar over Lambda count only (final table is Lambda-only)
   total=${#lambda_cmds[@]}
   count=0
+  # Show an empty bar before first Lambda result (AWS CLI + invoke latency is seconds).
+  printf '\r[%-40s] %d/%d' "" 0 "$total"
   while IFS= read -r line; do
     if [[ $line =~ ^[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+.+ ]]; then
       lambda_buffer+=("$line")

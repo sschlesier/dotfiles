@@ -15,7 +15,7 @@
     ],
     "defaultMode": "plan"
   },
-  "model": "opusplan",
+  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh",
@@ -25,5 +25,7 @@
     "gopls-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "theme": "light-ansi",
+  "editorMode": "vim"
 }

@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 1 || ! -f "$1" ]]; then
+  echo "usage: apk-getver <path-to-apk>" >&2
+  exit 1
+fi
+
+find_aapt() {
+  local cmd
+  for cmd in aapt2 aapt; do
+    if command -v "$cmd" &>/dev/null; then
+      echo "$cmd"
+      return
+    fi
+  done
+
+  local sdk_build_tools="$HOME/Library/Android/sdk/build-tools"
+  if [[ -d "$sdk_build_tools" ]]; then
+    local latest_dir
+    latest_dir=$(ls -d "$sdk_build_tools"/*/ 2>/dev/null | sort -V | tail -1)
+    if [[ -n "$latest_dir" && -x "${latest_dir}aapt2" ]]; then
+      echo "${latest_dir}aapt2"
+      return
+    elif [[ -n "$latest_dir" && -x "${latest_dir}aapt" ]]; then
+      echo "${latest_dir}aapt"
+      return
+    fi
+  fi
+
+  return 1
+}
+
+aapt_bin=$(find_aapt) || {
+  echo "error: aapt2/aapt not found (install Android SDK build-tools)" >&2
+  exit 1
+}
+
+pkg_line=$("$aapt_bin" dump badging "$1" | grep '^package:')
+
+version=$(echo "$pkg_line" | grep -o "versionName='[^']*'" | cut -d"'" -f2)
+build=$(echo "$pkg_line"   | grep -o "versionCode='[^']*'" | cut -d"'" -f2)
+
+echo "version: $version"
+echo "build:   $build"

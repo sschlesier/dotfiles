@@ -12,13 +12,37 @@ if [[ -z "$plist_path" ]]; then
   exit 1
 fi
 
-tmpfile=$(mktemp)
-trap 'rm -f "$tmpfile"' EXIT
+tmpdir=$(mktemp -d)
+trap 'rm -rf "$tmpdir"' EXIT
 
-tar -xzOf "$1" "$plist_path" > "$tmpfile"
+plist_file="$tmpdir/Info.plist"
+tar -xzOf "$1" "$plist_path" > "$plist_file"
 
-version=$(plutil -extract CFBundleShortVersionString raw "$tmpfile")
-build=$(plutil -extract CFBundleVersion raw "$tmpfile")
+version=$(plutil -extract CFBundleShortVersionString raw "$plist_file")
+build=$(plutil -extract CFBundleVersion raw "$plist_file")
+executable=$(plutil -extract CFBundleExecutable raw "$plist_file")
+bundle_dir=${plist_path%/Info.plist}
+binary_path="$bundle_dir/$executable"
 
 echo "version: $version"
 echo "build:   $build"
+
+if sdk_name=$(plutil -extract DTSDKName raw "$plist_file" 2>/dev/null); then
+  echo "plist sdk: $sdk_name"
+fi
+
+if tar -xzf "$1" -C "$tmpdir" "$binary_path" 2>/dev/null; then
+  binary_file="$tmpdir/$binary_path"
+  if command -v vtool >/dev/null 2>&1; then
+    binary_sdk=$(vtool -show-build "$binary_file" 2>/dev/null | awk '/ sdk / { print $2; exit }')
+    if [[ -n "$binary_sdk" ]]; then
+      echo "binary sdk: $binary_sdk"
+    else
+      echo "binary sdk: unknown"
+    fi
+  else
+    echo "binary sdk: unavailable (vtool not found)"
+  fi
+else
+  echo "binary sdk: unavailable (could not extract $binary_path)"
+fi

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 1 || ! -f "$1" ]]; then
+  echo "usage: aab-getver <path-to-aab>" >&2
+  exit 1
+fi
+
+if ! command -v bundletool &>/dev/null; then
+  echo "error: bundletool not found (install via: brew install bundletool)" >&2
+  exit 1
+fi
+
+manifest=$(bundletool dump manifest --bundle "$1" 2> >(grep -v '^WARNING:' >&2))
+
+version=$(echo "$manifest" | grep -o 'android:versionName="[^"]*"' | cut -d'"' -f2)
+build=$(echo "$manifest"   | grep -o 'android:versionCode="[^"]*"' | cut -d'"' -f2)
+
+echo "version: $version"
+echo "build:   $build"

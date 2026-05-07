@@ -9,3 +9,7 @@ map q quit
 
 # quit and write current directory for wrapper
 map Q $printf '%s\n' "$PWD" > "$LF_LAST_DIR" ; lf -remote "send $id quit"
+
+# delete
+cmd trash $/usr/bin/trash $fx
+map D trash

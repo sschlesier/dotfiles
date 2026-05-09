@@ -4,18 +4,16 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-readonly DEFAULT_MAJOR_FILE="${HOME}/.config/fnm/majors"
 readonly FNM_BIN="${FNM_SYNC_FNM:-fnm}"
 
 dry_run=false
-major_file="${DEFAULT_MAJOR_FILE}"
 
 usage() {
   cat <<'EOF'
-Usage: fnm-sync [--dry-run] [--file PATH]
+Usage: fnm-sync [--dry-run]
 
 Sync installed fnm-managed Node.js versions to the latest patch release for
-each major listed in ~/.config/fnm/majors by default.
+each currently installed major version.
 EOF
 }
 
@@ -67,14 +65,6 @@ while [[ "$#" -gt 0 ]]; do
       dry_run=true
       shift
       ;;
-    --file)
-      if [[ "$#" -lt 2 ]]; then
-        usage >&2
-        exit 1
-      fi
-      major_file="$2"
-      shift 2
-      ;;
     -h|--help)
       usage
       exit 0
@@ -92,35 +82,31 @@ if ! command -v "${FNM_BIN}" >/dev/null 2>&1; then
   exit 1
 fi
 
-if [[ ! -f "${major_file}" ]]; then
-  printf 'Major version file not found: %s\n' "${major_file}" >&2
-  exit 1
-fi
+local_versions_raw="$(fnm_cmd list)"
 
 declare -a majors=()
 declare -A managed_major_set=()
+declare -A installed_versions=()
+declare -A managed_versions_by_major=()
 
-while IFS= read -r raw_line || [[ -n "${raw_line}" ]]; do
-  line="${raw_line%%#*}"
-  line="$(trim "${line}")"
-
-  if [[ -z "${line}" ]]; then
+while IFS= read -r local_line; do
+  version="$(normalize_version "${local_line}" || true)"
+  if [[ -z "${version}" ]]; then
     continue
   fi
 
-  if [[ ! "${line}" =~ ^[0-9]+$ ]]; then
-    printf 'Invalid major in %s: %s\n' "${major_file}" "${line}" >&2
-    exit 1
-  fi
+  installed_versions["${version}"]=1
+  major="$(version_major "${version}")"
+  managed_versions_by_major["${major}"]+="${version}"$'\n'
 
-  if [[ -z "${managed_major_set["${line}"]+x}" ]]; then
-    managed_major_set["${line}"]=1
-    majors+=("${line}")
+  if [[ -z "${managed_major_set["${major}"]+x}" ]]; then
+    managed_major_set["${major}"]=1
+    majors+=("${major}")
   fi
-done < "${major_file}"
+done <<< "${local_versions_raw}"
 
 if [[ "${#majors[@]}" -eq 0 ]]; then
-  printf 'No major versions configured in %s\n' "${major_file}" >&2
+  printf 'No installed fnm Node.js versions found to sync\n' >&2
   exit 1
 fi
 
@@ -148,24 +134,6 @@ for major in "${majors[@]}"; do
     exit 1
   fi
 done
-
-local_versions_raw="$(fnm_cmd list)"
-
-declare -A installed_versions=()
-declare -A managed_versions_by_major=()
-
-while IFS= read -r local_line; do
-  version="$(normalize_version "${local_line}" || true)"
-  if [[ -z "${version}" ]]; then
-    continue
-  fi
-
-  installed_versions["${version}"]=1
-  major="$(version_major "${version}")"
-  if [[ -n "${managed_major_set["${major}"]+x}" ]]; then
-    managed_versions_by_major["${major}"]+="${version}"$'\n'
-  fi
-done <<< "${local_versions_raw}"
 
 current_default=""
 if current_default_raw="$(fnm_cmd default 2>/dev/null)"; then

@@ -22,10 +22,12 @@
     "padding": 1
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "theme": "light-ansi",
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "preferredNotifChannel": "kitty"
 }

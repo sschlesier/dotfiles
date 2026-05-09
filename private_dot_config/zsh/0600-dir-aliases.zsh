@@ -62,8 +62,8 @@ if type eza &> /dev/null; then
 	alias l='ls --long'
 	alias la='l --all'
 	alias lt='ls --tree'
-    alias ldo='l $DOWNLOADS'
     alias ldt='l --sort oldest'
+    alias ldo='ldt $DOWNLOADS'
 else
 	alias l='ls -lh'
 	alias la='ls -lah'

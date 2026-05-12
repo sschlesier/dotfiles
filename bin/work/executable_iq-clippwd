@@ -1,7 +1,6 @@
 #! /usr/bin/env sh
 
 site=${1:-adfs.iqmetrix.com}
+script_dir=$(unset CDPATH; cd -- "$(dirname -- "$0")" && pwd)
 
-lpuser=$(lpass show --json "$site")
-echo "$lpuser" | jq -r '.[0].password' | clip
-
+"$script_dir/keychain-secret" get "$site" password | clip

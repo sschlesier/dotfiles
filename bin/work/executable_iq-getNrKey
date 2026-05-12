@@ -1,0 +1,4 @@
+#! /bin/sh
+
+script_dir=$(unset CDPATH; cd -- "$(dirname -- "$0")" && pwd)
+"$script_dir/keychain-secret" get NR-QueryKey note

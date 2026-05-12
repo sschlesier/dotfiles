@@ -1,4 +1,26 @@
 #! /usr/bin/env zsh
 
-token_response=$(lp-getnote iqtoken)
-echo $(echo $token_response | jq -r .access_token)
+set -o errexit
+set -o nounset
+set -o pipefail
+
+script_dir=${0:A:h}
+
+if ! token_response=$("$script_dir/keychain-secret" get iqtoken note 2>/dev/null); then
+  printf '\nCannot read the IQ access token from macOS Keychain.\n' >&2
+  printf 'Expected Keychain item: service=iqtoken account=note\n' >&2
+  printf 'To create it, first migrate the API client secret, then mint a token:\n' >&2
+  printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+  printf '  %s/iq-login\n' "$script_dir" >&2
+  exit 1
+fi
+
+if ! access_token=$(printf '%s' "$token_response" | jq -er .access_token 2>/dev/null); then
+  printf '\nThe IQ token stored in macOS Keychain is not valid token JSON.\n' >&2
+  printf 'Expected Keychain item service=iqtoken account=note to contain an access_token field.\n' >&2
+  printf 'Refresh it with:\n' >&2
+  printf '  %s/iq-login\n' "$script_dir" >&2
+  exit 1
+fi
+
+printf '%s\n' "$access_token"

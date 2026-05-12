@@ -1,3 +1,26 @@
 #! /usr/bin/env zsh
 
-lp-getnote obp-token | jq -r .access_token
+set -o errexit
+set -o nounset
+set -o pipefail
+
+script_dir=${0:A:h}
+
+if ! token_response=$("$script_dir/keychain-secret" get obp-token note 2>/dev/null); then
+  printf '\nCannot read the OBP access token from macOS Keychain.\n' >&2
+  printf 'Expected Keychain item: service=obp-token account=note\n' >&2
+  printf 'To create it, first migrate the OBP client secret, then mint a token:\n' >&2
+  printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+  printf '  %s/obp-us-login\n' "$script_dir" >&2
+  exit 1
+fi
+
+if ! access_token=$(printf '%s' "$token_response" | jq -er .access_token 2>/dev/null); then
+  printf '\nThe OBP token stored in macOS Keychain is not valid token JSON.\n' >&2
+  printf 'Expected Keychain item service=obp-token account=note to contain an access_token field.\n' >&2
+  printf 'Refresh it with:\n' >&2
+  printf '  %s/obp-us-login\n' "$script_dir" >&2
+  exit 1
+fi
+
+printf '%s\n' "$access_token"

@@ -1,4 +1,9 @@
 #! /usr/bin/env bash
 
-https --ignore-stdin --body "entitymanager.iqmetrix.net/v1/entities($1)" \
-	"Authorization:Bearer $(iq-gettoken)"
+set -euo pipefail
+
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+token=$("$script_dir/iq-gettoken")
+
+https --ignore-stdin --body "https://entitymanager.iqmetrix.net/v1/entities($1)" \
+	"Authorization:Bearer $token"

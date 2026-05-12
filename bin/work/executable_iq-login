@@ -1,13 +1,54 @@
 #! /usr/bin/env zsh
 
-clientNote=$(lpass show --json APIServiceProduction-Client | jq -r '.[0].note')
-clientKey=$(echo $clientNote | jq -r '.Key')
-clientSecret=$(echo $clientNote | jq -r '.Secret')
+set -o errexit
+set -o nounset
+set -o pipefail
+
+script_dir=${0:A:h}
+
+if ! clientNote=$("$script_dir/keychain-secret" get APIServiceProduction-Client note 2>/dev/null); then
+	printf 'Cannot read the IQ API client secret from macOS Keychain.\n' >&2
+	printf 'Expected Keychain item: service=APIServiceProduction-Client account=note\n' >&2
+	printf 'Create it with:\n' >&2
+	printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+	exit 1
+fi
+
+if ! clientKey=$(printf '%s' "$clientNote" | jq -er '.Key') ||
+	! clientSecret=$(printf '%s' "$clientNote" | jq -er '.Secret'); then
+	printf 'Invalid IQ API client secret in macOS Keychain.\n' >&2
+	printf 'Expected JSON with Key and Secret fields at service=APIServiceProduction-Client account=note.\n' >&2
+	printf 'Recreate it with:\n' >&2
+	printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+	exit 1
+fi
 unset clientNote
 
-response=$(http --form --body  POST https://accounts.iqmetrix.net/v1/oauth2/token \
-	grant_type=client_credentials \
-	client_id=$clientKey \
-	client_secret=$clientSecret)
+if [[ -z "$clientKey" || "$clientKey" == "null" || -z "$clientSecret" || "$clientSecret" == "null" ]]; then
+	printf 'Invalid IQ API client secret in macOS Keychain.\n' >&2
+	printf 'Expected JSON with non-empty Key and Secret fields at service=APIServiceProduction-Client account=note.\n' >&2
+	printf 'Recreate it with:\n' >&2
+	printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+	exit 1
+fi
 
-echo "$response" | lpass edit --sync=no --non-interactive --notes iqtoken
+response=$(http --form --body POST https://accounts.iqmetrix.net/v1/oauth2/token \
+	grant_type=client_credentials \
+	client_id="$clientKey" \
+	client_secret="$clientSecret")
+
+if ! printf '%s' "$response" | jq -e '.access_token' >/dev/null; then
+	printf 'IQ token response did not include access_token; not treating this as a usable login.\n' >&2
+	printf 'Response body:\n%s\n' "$response" >&2
+	exit 1
+fi
+
+"$script_dir/keychain-secret" set iqtoken note "$response"
+
+if ! "$script_dir/keychain-secret" get iqtoken note >/dev/null; then
+	printf 'IQ token request succeeded, but the token could not be read back from macOS Keychain.\n' >&2
+	printf 'Expected Keychain item: service=iqtoken account=note\n' >&2
+	exit 1
+fi
+
+printf 'Stored IQ token in macOS Keychain: service=iqtoken account=note\n' >&2

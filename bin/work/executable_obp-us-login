@@ -7,16 +7,52 @@ if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
 
-clientNote=$(lpass show --json OBPUSClient | jq -r '.[0].note')
-clientKey=$(echo $clientNote | jq -r '.Key')
-clientSecret=$(echo $clientNote | jq -r '.Secret')
+script_dir=${0:A:h}
+
+if ! clientNote=$("$script_dir/keychain-secret" get OBPUSClient note 2>/dev/null); then
+    printf 'Cannot read the OBP API client secret from macOS Keychain.\n' >&2
+    printf 'Expected Keychain item: service=OBPUSClient account=note\n' >&2
+    printf 'Create it with:\n' >&2
+    printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+    exit 1
+fi
+
+if ! clientKey=$(printf '%s' "$clientNote" | jq -er '.Key') ||
+    ! clientSecret=$(printf '%s' "$clientNote" | jq -er '.Secret'); then
+    printf 'Invalid OBP API client secret in macOS Keychain.\n' >&2
+    printf 'Expected JSON with Key and Secret fields at service=OBPUSClient account=note.\n' >&2
+    printf 'Recreate it with:\n' >&2
+    printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+    exit 1
+fi
 unset clientNote
 
-response=$(http --form --body  POST https://obp-production.us.auth0.com/oauth/token \
+if [[ -z "$clientKey" || "$clientKey" == "null" || -z "$clientSecret" || "$clientSecret" == "null" ]]; then
+    printf 'Invalid OBP API client secret in macOS Keychain.\n' >&2
+    printf 'Expected JSON with non-empty Key and Secret fields at service=OBPUSClient account=note.\n' >&2
+    printf 'Recreate it with:\n' >&2
+    printf '  %s/migrate-lpass-to-keychain\n' "$script_dir" >&2
+    exit 1
+fi
+
+response=$(http --form --body POST https://obp-production.us.auth0.com/oauth/token \
 	grant_type=client_credentials \
-	client_id=$clientKey \
-	client_secret=$clientSecret \
+	client_id="$clientKey" \
+	client_secret="$clientSecret" \
   audience=obp-production-api)
 
-echo "$response" | lpass edit --sync=no --non-interactive --notes obp-token
+if ! printf '%s' "$response" | jq -e '.access_token' >/dev/null; then
+    printf 'OBP token response did not include access_token; not treating this as a usable login.\n' >&2
+    printf 'Response body:\n%s\n' "$response" >&2
+    exit 1
+fi
 
+"$script_dir/keychain-secret" set obp-token note "$response"
+
+if ! "$script_dir/keychain-secret" get obp-token note >/dev/null; then
+    printf 'OBP token request succeeded, but the token could not be read back from macOS Keychain.\n' >&2
+    printf 'Expected Keychain item: service=obp-token account=note\n' >&2
+    exit 1
+fi
+
+printf 'Stored OBP token in macOS Keychain: service=obp-token account=note\n' >&2

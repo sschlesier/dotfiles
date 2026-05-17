@@ -19,9 +19,22 @@ color_pct() {
     fi
 }
 
+color_remaining() {
+    local val=$1
+    if   [[ $val -le 5  ]]; then printf '%s' "$RED"
+    elif [[ $val -le 20 ]]; then printf '%s' "$YLW"
+    else                          printf '%s' "$GRN"
+    fi
+}
+
 fmt_pct() {
     local label=$1 val=$2
     printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_pct "$val")" "$val" "$RST"
+}
+
+fmt_remaining() {
+    local label=$1 val=$2
+    printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_remaining "$val")" "$val" "$RST"
 }
 
 # Return human-readable time until an ISO-8601 UTC timestamp (e.g. "1h42m", "38m")
@@ -160,19 +173,21 @@ if [[ "$USAGE_DATA" == ERR:* ]]; then
     ERR="${USAGE_DATA#ERR:}"
     USAGE_PART="${RED}[${ERR}]${RST}"
 else
-    FIVE_H="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.utilization // 0' 2>/dev/null | cut -d. -f1)"
-    SEVEN_D="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.utilization // 0' 2>/dev/null | cut -d. -f1)"
+    FIVE_H_USED="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.utilization // 0' 2>/dev/null | cut -d. -f1)"
+    SEVEN_D_USED="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.utilization // 0' 2>/dev/null | cut -d. -f1)"
+    FIVE_H=$(( 100 - FIVE_H_USED ))
+    SEVEN_D=$(( 100 - SEVEN_D_USED ))
     FIVE_H_RESET="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.resets_at // empty' 2>/dev/null)"
     SEVEN_D_RESET="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.resets_at // empty' 2>/dev/null)"
 
-    FIVE_H_PART="$(fmt_pct "5h " "$FIVE_H")"
-    if [[ $FIVE_H -ge 80 ]]; then
+    FIVE_H_PART="$(fmt_remaining "5h " "$FIVE_H")"
+    if [[ $FIVE_H_USED -ge 80 ]]; then
         FIVE_H_TTR="$(time_until "$FIVE_H_RESET")"
         [[ -n "$FIVE_H_TTR" ]] && FIVE_H_PART="${FIVE_H_PART} ${DIM}↺${RST}${FIVE_H_TTR}"
     fi
 
-    SEVEN_D_PART="$(fmt_pct "7d " "$SEVEN_D")"
-    if [[ $SEVEN_D -ge 95 ]]; then
+    SEVEN_D_PART="$(fmt_remaining "7d " "$SEVEN_D")"
+    if [[ $SEVEN_D_USED -ge 95 ]]; then
         SEVEN_D_TTR="$(time_until "$SEVEN_D_RESET")"
         [[ -n "$SEVEN_D_TTR" ]] && SEVEN_D_PART="${SEVEN_D_PART} ${DIM}↺${RST}${SEVEN_D_TTR}"
     fi

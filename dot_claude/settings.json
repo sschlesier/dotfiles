@@ -13,7 +13,7 @@
       "Bash(git clean *)",
       "Bash(rm -rf *)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
   "model": "sonnet",
   "statusLine": {
@@ -29,5 +29,6 @@
   "effortLevel": "high",
   "theme": "light-ansi",
   "editorMode": "vim",
-  "preferredNotifChannel": "kitty"
+  "preferredNotifChannel": "kitty",
+  "skipAutoPermissionPrompt": true
 }

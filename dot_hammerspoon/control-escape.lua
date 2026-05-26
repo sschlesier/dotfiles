@@ -37,3 +37,15 @@ end)
 
 flagsTap:start()
 keyDownTap:start()
+
+-- Event taps can be invalidated on sleep/wake; restart them when the system wakes.
+local wakeWatcher = hs.caffeinate.watcher.new(function(event)
+  if event == hs.caffeinate.watcher.systemDidWake
+    or event == hs.caffeinate.watcher.screensDidUnlock then
+    sendEscape = false
+    lastModifiers = {}
+    if not flagsTap:isEnabled() then flagsTap:start() end
+    if not keyDownTap:isEnabled() then keyDownTap:start() end
+  end
+end)
+wakeWatcher:start()

@@ -16,8 +16,6 @@ fi
 THEME_FILE="$XDG_DATA_HOME/theme_mode"
 LIGHT_THEME="Pencil Light"
 DARK_THEME="VSCode_Dark"
-BAT_LIGHT_THEME="OneHalfLight"
-BAT_DARK_THEME="OneHalfDark"
 
 # Initialize
 mkdir -p "$(dirname "$THEME_FILE")"
@@ -28,9 +26,7 @@ light() {
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$LIGHT_THEME"
     chezmoi apply "$HOME/.config/bat/config"
     chezmoi apply "$HOME/.visidatarc"
-    if [[ -f "$HOME/.claude.json" ]] && command -v jq &>/dev/null; then
-        jq '. + {theme: "light-ansi"}' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
-    fi
+    chezmoi apply "$HOME/.claude/settings.json"
     echo "Switched to light theme"
 }
 
@@ -39,8 +35,6 @@ dark() {
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$DARK_THEME"
     chezmoi apply "$HOME/.config/bat/config"
     chezmoi apply "$HOME/.visidatarc"
-    if [[ -f "$HOME/.claude.json" ]] && command -v jq &>/dev/null; then
-        jq '. + {theme: "dark-ansi"}' "$HOME/.claude.json" > "$HOME/.claude.json.tmp" && mv "$HOME/.claude.json.tmp" "$HOME/.claude.json"
-    fi
+    chezmoi apply "$HOME/.claude/settings.json"
     echo "Switched to dark theme"
 }

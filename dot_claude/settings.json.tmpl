@@ -1,3 +1,6 @@
+{{- $themeFile := joinPath (env "XDG_DATA_HOME") "theme_mode" -}}
+{{- $mode := "dark" -}}
+{{- if stat $themeFile }}{{ $mode = trim (output "cat" $themeFile) }}{{ end -}}
 {
   "permissions": {
     "allow": [
@@ -27,7 +30,7 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "theme": "light-ansi",
+  "theme": "{{ if eq $mode "light" }}{{ .claude_light_theme }}{{ else }}{{ .claude_dark_theme }}{{ end }}",
   "editorMode": "vim",
   "preferredNotifChannel": "kitty",
   "skipAutoPermissionPrompt": true

@@ -6,7 +6,7 @@ export "DEFAULT_USER=$(whoami)"
 # if in vscode, use a simple prompt
 if [[ $TERM_PROGRAM == "vscode" ]]; then
   printf "TERM_PROGRAM: %s\n" "$TERM_PROGRAM"
-  PROMPT='%n@%m:%~%# '
+  export PROMPT='%n@%m:%~%# '
 elif [ -f "$ZDOTDIR/.p10k.zsh" ]; then
     # shellcheck source=/dev/null
 	. "$ZDOTDIR/.p10k.zsh"
@@ -27,7 +27,6 @@ light() {
     chezmoi apply "$HOME/.config/bat/config"
     chezmoi apply "$HOME/.visidatarc"
     chezmoi apply "$HOME/.claude/settings.json"
-    echo "Switched to light theme"
 }
 
 dark() {
@@ -36,5 +35,4 @@ dark() {
     chezmoi apply "$HOME/.config/bat/config"
     chezmoi apply "$HOME/.visidatarc"
     chezmoi apply "$HOME/.claude/settings.json"
-    echo "Switched to dark theme"
 }

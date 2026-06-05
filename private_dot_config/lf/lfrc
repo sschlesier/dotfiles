@@ -1,7 +1,7 @@
 set previewer ~/.config/lf/preview
 set icons true
 
-cmd open $$EDITOR $fx
+cmd open $$EDITOR "$fx"
 set hidden true
 
 # normal quit

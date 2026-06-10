@@ -103,8 +103,7 @@ gem-refresh-path() {
 
 #add golang to path
 if type go > /dev/null; then
-	export GOPATH=$HOME/go
-	PATH+=:"$GOPATH/bin"
+	PATH+=:"${GOPATH:-$HOME/go}/bin"
 fi
 
 #add libpq (postgres client) to path

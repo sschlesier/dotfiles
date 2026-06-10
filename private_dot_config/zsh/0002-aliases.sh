@@ -42,3 +42,6 @@ alias wtd="gtr-delete"
 alias wtn="gtr-new"
 
 alias cfa="codex --full-auto"
+
+# XDG for wget
+alias wget="wget --hsts-file=$XDG_DATA_HOME/wget-hsts"

@@ -21,6 +21,7 @@ cd "$(dirname "$0")"
 service="$1"
 env="$2"
 version="$3"
+[[ "$version" != v* ]] && version="v$version"
 
 lookup-pipeline() {
   case "$service" in

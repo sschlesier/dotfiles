@@ -21,7 +21,7 @@
   "model": "sonnet",
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline.sh",
+    "command": "{{ joinPath (env "XDG_CONFIG_HOME") "claude" "statusline.sh" }}",
     "padding": 1
   },
   "enabledPlugins": {

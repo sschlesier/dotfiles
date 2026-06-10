@@ -51,9 +51,9 @@ if [[ -d "$HOME/.local/bin" ]]; then
 	PATH+=:"$HOME/.local/bin"
 fi
 
-#include .cargo/bin on path
-if [[ -d "$HOME/.cargo/bin" ]]; then
-	PATH+=:"$HOME/.cargo/bin"
+#include cargo/bin on path
+if [[ -d "${CARGO_HOME:-$HOME/.cargo}/bin" ]]; then
+	PATH+=:"${CARGO_HOME:-$HOME/.cargo}/bin"
 fi
 
 # setup homebrew (cache shellenv output to avoid rerunning brew)

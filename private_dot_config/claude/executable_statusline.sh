@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-CACHE_FILE="/tmp/claude_statusline_usage.json"
-CACHE_TTL=120  # seconds
-
 # ── Colors ────────────────────────────────────────────────────────────────────
 
 RED=$'\033[91m'
@@ -50,18 +47,6 @@ time_until() {
     [[ $h -gt 0 ]] && printf '%dh%dm' "$h" "$m" || printf '%dm' "$m"
 }
 
-# ── --refresh: bust cache and exit ────────────────────────────────────────────
-
-if [[ "${1:-}" == "--refresh" ]]; then
-    if [[ -f "$CACHE_FILE" ]]; then
-        rm -f "$CACHE_FILE"
-        echo "Cache cleared — next statusline render will fetch fresh usage data."
-    else
-        echo "No cache to clear."
-    fi
-    exit 0
-fi
-
 # ── Read Claude Code JSON from stdin ─────────────────────────────────────────
 
 INPUT="$(cat)"
@@ -80,11 +65,9 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     GIT_DIR="$(git rev-parse --git-dir 2>/dev/null)"
     COMMON_DIR="$(git rev-parse --git-common-dir 2>/dev/null)"
     if [[ "$GIT_DIR" != "$COMMON_DIR" ]]; then
-        # In a worktree: common-dir is always absolute, gives main repo path
         REPO="$(basename "$(dirname "$COMMON_DIR")")"
         REPO_SEP="@"
     else
-        # Main worktree: use show-toplevel to get absolute path (avoids '.' when at repo root)
         REPO="$(basename "$(git rev-parse --show-toplevel 2>/dev/null)")"
         REPO_SEP="/"
     fi
@@ -98,70 +81,21 @@ else
     LOC_PART="${DIM}${SHORT_PWD}${RST}"
 fi
 
-# ── Usage fetch (called only when cache is stale) ─────────────────────────────
+# ── Usage from stdin rate_limits ──────────────────────────────────────────────
 
-fetch_usage() {
-    CREDS_JSON="$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)"
-    if [[ -z "$CREDS_JSON" ]]; then
-        printf 'ERR:no-creds'
-        return
-    fi
+# Claude Code passes used_percentage (0-100); fall back to utilization for older field name
+FIVE_H_USED="$(printf '%s' "$INPUT" | jq -r '
+    .rate_limits.five_hour.used_percentage //
+    .rate_limits.five_hour.utilization //
+    empty' 2>/dev/null | cut -d. -f1)"
 
-    ACCESS_TOKEN="$(printf '%s' "$CREDS_JSON" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)"
-    if [[ -z "$ACCESS_TOKEN" ]]; then
-        printf 'ERR:no-token'
-        return
-    fi
+SEVEN_D_USED="$(printf '%s' "$INPUT" | jq -r '
+    .rate_limits.seven_day.used_percentage //
+    .rate_limits.seven_day.utilization //
+    empty' 2>/dev/null | cut -d. -f1)"
 
-    RESP="$(curl -sf --max-time 5 \
-        -H "Accept: application/json" \
-        -H "User-Agent: claude-code/2.0.31" \
-        -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-        -H "anthropic-beta: oauth-2025-04-20" \
-        "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)"
-
-    if [[ -z "$RESP" ]]; then
-        printf 'ERR:api-timeout'
-        return
-    fi
-
-    if ! printf '%s' "$RESP" | jq -e '.five_hour' > /dev/null 2>&1; then
-        printf 'ERR:bad-response'
-        return
-    fi
-
-    printf '%s' "$RESP"
-}
-
-# ── Cache logic ───────────────────────────────────────────────────────────────
-
-USAGE_DATA=""
-if [[ -f "$CACHE_FILE" ]]; then
-    CACHE_AGE=$(( $(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || echo 0) ))
-    if [[ $CACHE_AGE -lt $CACHE_TTL ]]; then
-        USAGE_DATA="$(cat "$CACHE_FILE")"
-    fi
-fi
-
-if [[ -z "$USAGE_DATA" ]]; then
-    USAGE_DATA="$(fetch_usage)"
-    if [[ "$USAGE_DATA" != ERR:* ]]; then
-        printf '%s' "$USAGE_DATA" > "$CACHE_FILE"
-    fi
-fi
-
-# ── Cache age label ───────────────────────────────────────────────────────────
-
-# Read mtime of cache file (valid after both cache-hit and fresh-write paths)
-AGE_PART=""
-if [[ -f "$CACHE_FILE" ]]; then
-    FILE_AGE=$(( $(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || echo 0) ))
-    if   [[ $FILE_AGE -lt 5  ]]; then AGE_STR="now"
-    elif [[ $FILE_AGE -lt 60 ]]; then AGE_STR="${FILE_AGE}s ago"
-    else                               AGE_STR="$(( FILE_AGE / 60 ))m ago"
-    fi
-    AGE_PART="${DIM}↻ ${AGE_STR}${RST}"
-fi
+FIVE_H_RESET="$(printf '%s' "$INPUT" | jq -r '.rate_limits.five_hour.resets_at // empty' 2>/dev/null)"
+SEVEN_D_RESET="$(printf '%s' "$INPUT" | jq -r '.rate_limits.seven_day.resets_at // empty' 2>/dev/null)"
 
 # ── Build output ──────────────────────────────────────────────────────────────
 
@@ -169,16 +103,13 @@ SEP="  ${DIM}│${RST}  "
 
 CTX_PART="$(fmt_pct "ctx " "$CTX_PCT")"
 
-if [[ "$USAGE_DATA" == ERR:* ]]; then
-    ERR="${USAGE_DATA#ERR:}"
-    USAGE_PART="${RED}[${ERR}]${RST}"
+if [[ -z "$FIVE_H_USED" && -z "$SEVEN_D_USED" ]]; then
+    USAGE_PART="${DIM}no usage data${RST}"
 else
-    FIVE_H_USED="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.utilization // 0' 2>/dev/null | cut -d. -f1)"
-    SEVEN_D_USED="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.utilization // 0' 2>/dev/null | cut -d. -f1)"
+    FIVE_H_USED="${FIVE_H_USED:-0}"
+    SEVEN_D_USED="${SEVEN_D_USED:-0}"
     FIVE_H=$(( 100 - FIVE_H_USED ))
     SEVEN_D=$(( 100 - SEVEN_D_USED ))
-    FIVE_H_RESET="$(printf '%s' "$USAGE_DATA" | jq -r '.five_hour.resets_at // empty' 2>/dev/null)"
-    SEVEN_D_RESET="$(printf '%s' "$USAGE_DATA" | jq -r '.seven_day.resets_at // empty' 2>/dev/null)"
 
     FIVE_H_PART="$(fmt_remaining "5h " "$FIVE_H")"
     if [[ $FIVE_H_USED -ge 80 ]]; then
@@ -195,8 +126,4 @@ else
     USAGE_PART="${FIVE_H_PART}${SEP}${SEVEN_D_PART}"
 fi
 
-PARTS="${LOC_PART}${SEP}${CTX_PART}${SEP}${USAGE_PART}"
-[[ -n "$AGE_PART" ]] && PARTS="${PARTS}  ${AGE_PART}"
-PARTS="${PARTS}${SEP}${MODEL}"
-
-printf '%s\n' "$PARTS"
+printf '%s\n' "${LOC_PART}${SEP}${CTX_PART}${SEP}${USAGE_PART}${SEP}${MODEL}"

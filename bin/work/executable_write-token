@@ -1,7 +1,12 @@
 #! /usr/bin/env bash
 set -euo pipefail
 
-jwt-from-header > "$XDG_CACHE_HOME/tokens/$1"
-head --bytes 16 "$XDG_CACHE_HOME/tokens/$1"
+token_file="$XDG_CACHE_HOME/tokens/$1"
 
-
+umask 077
+if [[ -e "$token_file" ]]; then
+  chmod 600 "$token_file"
+fi
+jwt-from-header > "$token_file"
+chmod 600 "$token_file"
+head --bytes 16 "$token_file"

@@ -38,7 +38,7 @@ call plug#begin('$XDG_DATA_HOME/vim/plugins')
 
 " Declare the list of plugins.
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'Shatur/neovim-ayu'
+Plug 'sainnhe/everforest'
 Plug 'aklt/plantuml-syntax'
 Plug 'blueyed/vim-diminactive'
 Plug 'bronson/vim-trailing-whitespace'
@@ -122,17 +122,12 @@ endif
 
 " Colorscheme
 syntax enable
-colorscheme ayu
-
-" Enable transparency
-highlight Normal ctermbg=none guibg=none
-highlight NonText ctermbg=none guibg=none
 set termguicolors
+colorscheme everforest
 
 " visible whitespace
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
 set nolist                      " hide whitespace
-highlight SpecialKey ctermfg=220       " override color to yellow
 
 "highlight active split by enabling syntax higlighting
 let g:diminactive_use_syntax = 0

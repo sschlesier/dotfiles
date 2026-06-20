@@ -1,6 +1,6 @@
 # Remeber this is a template and should be edited
 # with
-# chezmoi edit ~/.zshenv
+# chezmoi edit ~/.config/zsh/zshenv
 
 # set WSL
 if [[ $(uname -r) =~ icrosoft ]]; then
@@ -13,7 +13,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_RUNTIME_DIR="$TMPDIR"
 
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p "$ZSH_CACHE_DIR"
@@ -70,4 +69,3 @@ export CLAUDE_CONFIG_DIR="$XDG_CONFIG_HOME"/claude
 
 # Disable macOS Terminal.app session save/restore (prevents ~/.zsh_sessions)
 SHELL_SESSIONS_DISABLE=1
-

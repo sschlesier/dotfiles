@@ -12,6 +12,7 @@
       "WebSearch"
     ],
     "deny": [
+      "Bash(git push)",
       "Bash(git reset --hard*)",
       "Bash(git clean *)",
       "Bash(rm -rf *)"
@@ -32,6 +33,6 @@
   "effortLevel": "high",
   "theme": "{{ if eq $mode "light" }}{{ .claude_light_theme }}{{ else }}{{ .claude_dark_theme }}{{ end }}",
   "editorMode": "vim",
-  "preferredNotifChannel": "kitty",
+  "preferredNotifChannel": "notifications_disabled",
   "skipAutoPermissionPrompt": true
 }

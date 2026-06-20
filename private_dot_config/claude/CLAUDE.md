@@ -18,3 +18,9 @@ Do NOT add any attribution to commits. This means:
 
 - No `Co-Authored-By` lines
 - No `Signed-off-by` lines
+
+## Worktrees
+
+For non-trivial changes to a git repo, use gtr to create and manage a worktree before touching any files. A change is non-trivial if it adds or removes behavior, or would benefit from being independently reviewable. Skip it for single-file typo fixes, config value tweaks, copy edits, or anything you'd describe as "obvious."
+
+Before starting non-trivial work, invoke `/gtr` to set up the worktree. Do all edits, commits, and git operations from the worktree path — not the main checkout.

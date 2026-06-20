@@ -34,5 +34,19 @@
   "theme": "{{ if eq $mode "light" }}{{ .claude_light_theme }}{{ else }}{{ .claude_dark_theme }}{{ end }}",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "EnterPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"additionalContext\": \"COMMIT REMINDER: Each commit must represent one idea. Do not bundle unrelated changes. No attribution trailers (no Co-Authored-By, no Signed-off-by).\"}}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }

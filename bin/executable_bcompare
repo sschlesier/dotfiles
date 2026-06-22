@@ -1,0 +1,2 @@
+#!/bin/sh
+open -a "Beyond Compare" "$@" >/dev/null 2>&1

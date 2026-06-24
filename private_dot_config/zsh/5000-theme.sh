@@ -25,7 +25,7 @@ light() {
     echo "light" > "$THEME_FILE"
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$LIGHT_THEME"
     chezmoi apply "$HOME/.config/bat/config"
-    chezmoi apply "$HOME/.visidatarc"
+    chezmoi apply "$HOME/.config/visidata/config.py"
     chezmoi apply "$HOME/.claude/settings.json"
 }
 
@@ -33,6 +33,6 @@ dark() {
     echo "dark" > "$THEME_FILE"
     kitty +kitten themes ----config-file-name themes.conf --reload-in=all "$DARK_THEME"
     chezmoi apply "$HOME/.config/bat/config"
-    chezmoi apply "$HOME/.visidatarc"
+    chezmoi apply "$HOME/.config/visidata/config.py"
     chezmoi apply "$HOME/.claude/settings.json"
 }

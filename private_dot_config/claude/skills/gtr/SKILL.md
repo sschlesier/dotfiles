@@ -12,12 +12,18 @@ Run these in parallel:
 - `git rev-parse --git-dir 2>/dev/null` — confirm you are inside a git repo. If not, stop: "This skill only applies inside git repositories."
 - `gtr --version 2>/dev/null` — confirm gtr is installed. If not, stop: "gtr is not installed. Install it with: `brew install coderabbitai/tap/gtr`"
 
-Then check whether gtr has been configured for this repo:
+Then ensure the local prefix is set to the repo name. Run:
 ```
-git gtr config list --local 2>/dev/null
+git gtr config get gtr.worktrees.prefix --local 2>/dev/null
 ```
 
-If the output is empty or the command errors, gtr has not been set up for this repo. Invoke `/gtr-setup` before continuing. Once it completes successfully, proceed to Step 2.
+If the output is empty, set it now:
+```
+repo_name=$(basename "$(git rev-parse --show-toplevel)")
+git gtr config set gtr.worktrees.prefix "${repo_name}-" --local
+```
+
+This ensures worktrees land at `~/src/worktrees/<reponame>-<branch>` rather than a bare branch name.
 
 ## Step 2: Check if already in a worktree
 

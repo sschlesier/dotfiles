@@ -32,7 +32,7 @@
 	tool = bc
   conflictstyle = zdiff3
 [mergetool "bc"]
-	cmd = bcompare "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+	cmd = bcomp "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 [mergetool "kdiff3"]
 	path = /opt/homebrew/bin/kdiff3
 	trustExitCode = false
@@ -46,7 +46,8 @@
 [difftool "kdiff3"]
     path = /opt/homebrew/bin/kdiff3
 [difftool "bc"]
-    cmd = bcompare "$LOCAL" "$REMOTE"
+    cmd = bcomp "$LOCAL" "$REMOTE"
+    trustExitCode = true
 [difftool "difft"]
     cmd = difft "$MERGED" "$LOCAL" "abcdef1" "100644" "$REMOTE" "abcdef2" "100644"
 [difftool]

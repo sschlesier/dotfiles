@@ -19,23 +19,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opusplan",
-  "statusLine": {
-    "type": "command",
-    "command": "{{ joinPath (env "XDG_CONFIG_HOME") "claude" "statusline.sh" }}",
-    "padding": 1
-  },
-  "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
-  },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
-  "theme": "{{ if eq $mode "light" }}{{ .claude_light_theme }}{{ else }}{{ .claude_dark_theme }}{{ end }}",
-  "editorMode": "vim",
-  "preferredNotifChannel": "notifications_disabled",
-  "skipAutoPermissionPrompt": true,
-  "tui": "fullscreen",
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -49,5 +33,21 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "{{ joinPath (env "XDG_CONFIG_HOME") "claude" "statusline.sh" }}",
+    "padding": 1
+  },
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "tui": "fullscreen",
+  "theme": "{{ if eq $mode "light" }}{{ .claude_light_theme }}{{ else }}{{ .claude_dark_theme }}{{ end }}",
+  "editorMode": "vim",
+  "preferredNotifChannel": "notifications_disabled",
+  "skipAutoPermissionPrompt": true
 }

@@ -31,7 +31,7 @@ function advanceState() {
 
 #Starts here
 if [[ -e $statefile ]]; then
-	read stateName <$statefile
+	read -r stateName <$statefile
 else
 	advanceState
 fi

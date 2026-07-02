@@ -27,7 +27,7 @@ function printRemain() {
 }
 
 if [[ -z $cntup ]] && [[ -z $timer ]]; then
-	read target <$statefile
+	read -r target <$statefile
 
 	if [[ $target -gt 0 ]]; then
 		((remain = $target - $(date +%s) ))

@@ -7,4 +7,4 @@ else
 fi
 
 repeat $(tput cols) l+="$c"
-printf -- "$l\n"
+printf -- '%s\n' "$l"

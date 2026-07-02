@@ -20,11 +20,23 @@ dry_run=false
 # Parse command line options
 while getopts "nh-:" opt; do
     case "${opt}" in
-        n|-dry-run)
+        n)
             dry_run=true ;;
-        h|-help)
+        h)
             print_help
             exit 0 ;;
+        -)
+            case "${OPTARG}" in
+                dry-run)
+                    dry_run=true ;;
+                help)
+                    print_help
+                    exit 0 ;;
+                *)
+                    echo "Invalid option: --${OPTARG}" >&2
+                    print_help
+                    exit 1 ;;
+            esac ;;
         *)
             echo "Invalid option: -${OPTARG}" >&2
             print_help

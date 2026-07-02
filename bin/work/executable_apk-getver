@@ -18,7 +18,8 @@ find_aapt() {
   local sdk_build_tools="$HOME/Library/Android/sdk/build-tools"
   if [[ -d "$sdk_build_tools" ]]; then
     local latest_dir
-    latest_dir=$(ls -d "$sdk_build_tools"/*/ 2>/dev/null | sort -V | tail -1)
+    latest_dir=$(find "$sdk_build_tools" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -V | tail -1)
+    [[ -n "$latest_dir" ]] && latest_dir="$latest_dir/"
     if [[ -n "$latest_dir" && -x "${latest_dir}aapt2" ]]; then
       echo "${latest_dir}aapt2"
       return

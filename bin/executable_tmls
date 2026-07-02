@@ -13,7 +13,8 @@ get_window_process() {
     local pane=$3
 
     # Get the process tree for the pane
-    local process=$(tmux list-panes -t "$session:$window.$pane" -F "#{pane_current_command}")
+    local process
+    process=$(tmux list-panes -t "$session:$window.$pane" -F "#{pane_current_command}")
 
     # Skip if it's just a shell
     if [[ "$process" =~ ^(zsh|bash|sh)$ ]]; then
@@ -31,8 +32,7 @@ tmux list-sessions -F "#{session_name}" | while read -r session; do
     tmux list-windows -t "$session" -F "#{window_index}:#{window_name}" | while IFS=: read -r window_index window_name; do
         # Get panes in this window
         tmux list-panes -t "$session:$window_index" -F "#{pane_index}" | while read -r pane_index; do
-            process=$(get_window_process "$session" "$window_index" "$pane_index")
-            if [ $? -eq 0 ]; then
+            if process=$(get_window_process "$session" "$window_index" "$pane_index"); then
                 echo "  Window $window_index ($window_name) - Pane $pane_index: $process"
             fi
         done

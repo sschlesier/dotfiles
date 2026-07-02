@@ -2,8 +2,7 @@
 
 for branchName in "$@"
 do
-    git rev-parse --verify "$branchName" > /dev/null 2>&1
-    if [ $? -eq 0 ]
+    if git rev-parse --verify "$branchName" > /dev/null 2>&1
     then
         echo "$branchName"
         exit

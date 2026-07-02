@@ -21,7 +21,7 @@ fi
 file=${1:-}
 
 main() {
-    in2csv -f json $file
+    in2csv -f json "$file"
 }
 
 main "$@"

@@ -23,7 +23,7 @@ for port in "$@"; do
   mapfile -t proc_list < <(echo "$processes" | awk '{print $1, $2}' | sort -u)
   num_procs=${#proc_list[@]}
 
-  pids_to_kill=""
+  pids_to_kill=()
 
   if [ "$num_procs" -gt 1 ]; then
     echo "Multiple processes found using port $port:"
@@ -33,11 +33,11 @@ for port in "$@"; do
     echo "a All"
     echo "q Skip this port"
     echo "x Exit script"
-    
-    read -p "Select process to kill (1-$num_procs, a, q, or x): " choice
-    
+
+    read -rp "Select process to kill (1-$num_procs, a, q, or x): " choice
+
     if [[ "$choice" == "a" ]]; then
-      pids_to_kill=$(echo "$processes" | awk '{print $2}' | sort -u)
+      mapfile -t pids_to_kill < <(echo "$processes" | awk '{print $2}' | sort -u)
     elif [[ "$choice" == "q" ]]; then
       echo "Skipping port $port."
       continue
@@ -45,34 +45,34 @@ for port in "$@"; do
       echo "Exiting."
       exit 0
     elif [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$num_procs" ]; then
-      pids_to_kill=$(echo "${proc_list[$((choice-1))]}" | awk '{print $2}')
+      pids_to_kill=("$(echo "${proc_list[$((choice-1))]}" | awk '{print $2}')")
     else
       echo "Invalid selection. Skipping port $port."
       continue
     fi
   else
-    pids_to_kill=$(echo "${proc_list[0]}" | awk '{print $2}')
+    pids_to_kill=("$(echo "${proc_list[0]}" | awk '{print $2}')")
     echo "Killing process: ${proc_list[0]}"
   fi
 
   # First try graceful
-  kill $pids_to_kill || true
+  kill "${pids_to_kill[@]}" || true
   sleep 1
 
   # If still alive, force kill
   still_running=$(lsof -t -i:"$port" 2>/dev/null || true)
   if [ -n "$still_running" ]; then
     # Only force kill the PIDs we originally targeted that are still running
-    to_force=""
-    for pid in $pids_to_kill; do
+    to_force=()
+    for pid in "${pids_to_kill[@]}"; do
       if echo "$still_running" | grep -q "^$pid$"; then
-        to_force="$to_force $pid"
+        to_force+=("$pid")
       fi
     done
-    
-    if [ -n "$to_force" ]; then
-      echo "Force killing PIDs: $to_force"
-      kill -9 $to_force
+
+    if [ "${#to_force[@]}" -gt 0 ]; then
+      echo "Force killing PIDs: ${to_force[*]}"
+      kill -9 "${to_force[@]}"
     fi
   fi
 

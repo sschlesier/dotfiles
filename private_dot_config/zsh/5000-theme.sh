@@ -7,9 +7,9 @@ export "DEFAULT_USER=$(whoami)"
 if [[ $TERM_PROGRAM == "vscode" ]]; then
   printf "TERM_PROGRAM: %s\n" "$TERM_PROGRAM"
   export PROMPT='%n@%m:%~%# '
-elif [ -f "$ZDOTDIR/.p10k.zsh" ]; then
+elif [ -f "$ZDOTDIR/p10k.zsh" ]; then
     # shellcheck source=/dev/null
-	. "$ZDOTDIR/.p10k.zsh"
+	. "$ZDOTDIR/p10k.zsh"
 fi
 
 # Configuration

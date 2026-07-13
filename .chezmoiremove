@@ -24,3 +24,7 @@ bin
 ~/.p10k.zsh
 .config/zsh/functions/nvm-use
 .config/zsh/9100-autocorrect.sh
+.config/zsh/.zcompdump
+.config/zsh/.zsh_history
+.config/zsh/zcompdump
+.config/zsh/zsh_history

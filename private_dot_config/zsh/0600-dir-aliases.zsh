@@ -46,6 +46,7 @@ zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b
 
+aliasdir cdb "$XDG_BIN_HOME"
 aliasdir de "$DESKTOP"
 aliasdir docs "$HOME/Documents"
 aliasdir dow "$HOME/Downloads"

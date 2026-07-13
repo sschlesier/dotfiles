@@ -62,7 +62,7 @@ cd $(chezmoi source-path)   # alias: ccs
 
 ## Structure
 
-- `bin/` — scripts installed to `~/bin` and `~/bin/work`; `bin/work/` contains work-specific tooling
+- `dot_local/bin/` — scripts installed to `~/.local/bin` and `~/.local/bin/work`; `work/` contains work-specific tooling
 - `private_dot_config/zsh/` — zsh config, loaded numerically by `dot_zshrc` (`for sh in $ZDOTDIR/[0-9]*-*sh; do source "$sh"; done`)
 - `private_dot_config/git/` — git config (template), aliases, and global ignore
 - `private_dot_config/claude/` — Claude Code settings template and statusline script
@@ -80,7 +80,7 @@ cd $(chezmoi source-path)   # alias: ccs
 Files in `private_dot_config/zsh/` are sourced in numeric prefix order. Key files:
 
 - `zshenv.tmpl` → `~/.config/zsh/zshenv` — XDG dirs, WSL detection, env vars (sourced before interactive check)
-- `path.zsh` — `$PATH` setup: `~/bin`, Homebrew, cargo, go, gem, libpq, dotnet, Android SDK
+- `path.zsh` — `$PATH` setup: `$XDG_BIN_HOME` (`~/.local/bin`), Homebrew, cargo, go, gem, libpq, dotnet, Android SDK
 - `0002-aliases.sh` — chezmoi aliases (`ca`, `cs`, `cr`, `cdf`, `ccs`), editor, gtr aliases (`wt`, `wtl`, `wtd`, `wtn`)
 - `0010-antidote.sh` — loads antidote plugin manager
 - `0600-dir-aliases.zsh` — `eza`/`ls` aliases, cdpath setup, named directory aliases

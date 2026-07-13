@@ -10,13 +10,13 @@ fi
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
     echo 'Usage: ./script.sh script-name
 
-make a new bash script in ~/bin
+make a new bash script in $XDG_BIN_HOME
 '
     exit
 fi
 
 main() {
-  scriptName="$HOME/bin/$1"
+  scriptName="$XDG_BIN_HOME/$1"
   cat <<'EOF' > "$scriptName"
 #!/usr/bin/env bash
 

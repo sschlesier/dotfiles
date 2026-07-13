@@ -34,21 +34,14 @@ if [[ -d $HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs ]]; then
 	export ICLOUD=$HOME/Library/Mobile\ Documents/com\~apple\~CloudDocs
 fi
 
-#include ~/bin and all bins under that folder on path (cache to avoid repeated find)
-home_bin_cache="$ZSH_CACHE_DIR/home_bin_paths"
-if [[ -d "$HOME/bin" ]]; then
-	if [[ ! -s $home_bin_cache || "$HOME/bin" -nt $home_bin_cache ]]; then
-		find "$HOME/bin" -type d >| "$home_bin_cache"
-	fi
-	while IFS= read -r binpath
-	do
-		PATH+=:"$binpath"
-	done < "$home_bin_cache"
+#include XDG bin dir on path
+if [[ -d "$XDG_BIN_HOME" ]]; then
+	PATH+=:"$XDG_BIN_HOME"
 fi
 
-#include .local/bin on path
-if [[ -d "$HOME/.local/bin" ]]; then
-	PATH+=:"$HOME/.local/bin"
+#include work-specific bin dir on path (only present on work laptop)
+if [[ -d "$XDG_BIN_HOME/work" ]]; then
+	PATH+=:"$XDG_BIN_HOME/work"
 fi
 
 #include cargo/bin on path

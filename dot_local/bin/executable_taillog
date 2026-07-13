@@ -11,7 +11,7 @@ completion_trap()
 #disable automargin in a tmux compatible fashion
 printf "\033[?7l"
 
-tail -f "$(findlogs)" | lch -c ~/bin/lch.conf
+tail -f "$(findlogs)" | lch -c "$XDG_BIN_HOME/lch.conf"
 
 #enable automargin again
 printf "\033[?7h"

@@ -12,5 +12,5 @@ zle -N expand-aliases
 bindkey '\e^A' expand-aliases
 
 #autoload everything in functions directory
-fpath=( "$ZDOTDIR/functions" "$ZDOTDIR/completions" "${fpath[@]}" )
+fpath=( "$ZDOTDIR/functions" "${fpath[@]}" )
 autoload -Uz "$ZDOTDIR/functions"/*(.:t)

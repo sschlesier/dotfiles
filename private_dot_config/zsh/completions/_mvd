@@ -1,0 +1,10 @@
+#compdef mvd
+
+_mvd() {
+	_arguments \
+		'1:download file:_files -W "$DOWNLOADS"' \
+		'2:destination:_files' \
+		'*:: :->none'
+}
+
+_mvd "$@"

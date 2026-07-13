@@ -1,0 +1,20 @@
+mvd() {
+	if [[ $# -ne 2 || "${1:-}" == (-h|--help) ]]; then
+		echo "Usage: mvd <download-file> <destination>" >&2
+		return 2
+	fi
+
+	if [[ -z "${DOWNLOADS:-}" ]]; then
+		echo "mvd: DOWNLOADS is not set" >&2
+		return 1
+	fi
+
+	local source="$DOWNLOADS/$1"
+	if [[ ! -e "$source" ]]; then
+		echo "mvd: source not found: $source" >&2
+		return 1
+	fi
+
+	mv -- "$source" "$2"
+}
+mvd "$@"

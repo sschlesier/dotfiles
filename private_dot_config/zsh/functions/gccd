@@ -1,6 +1,19 @@
 function gccd() {
   setopt localoptions extendedglob
 
+  # rewrite http(s) github URLs to ssh form, e.g.
+  #   https://github.com/owner/repo -> git@github.com:owner/repo.git
+  local -a args
+  local a rest
+  for a in "$@"; do
+    if [[ "$a" == (#b)http(|s)://github.com/(*) ]]; then
+      rest="${match[2]%/}"
+      a="git@github.com:${rest%.git}.git"
+    fi
+    args+=("$a")
+  done
+  set -- "${args[@]}"
+
   # get repo URI from args based on valid formats: https://git-scm.com/docs/git-clone#URLS
   local repo="${${@[(r)(ssh://*|git://*|ftp(s)#://*|http(s)#://*|*@*)(.git/#)#]}:-$_}"
 

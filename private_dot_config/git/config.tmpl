@@ -1,4 +1,7 @@
 # remember to edit with chezmoi edit
+{{ $themeFile := joinPath (env "XDG_DATA_HOME") "theme_mode" -}}
+{{- $mode := "dark" -}}
+{{- if stat $themeFile }}{{ $mode = trim (output "cat" $themeFile) }}{{ end -}}
 [user]
 	name = Scott Schlesier
 	email = {{ .email }}
@@ -6,7 +9,13 @@
 	autocrlf = input
 	excludesfile = ~/.config/git/ignore
 	safecrlf = false
-	pager = diff-so-fancy | less --tabs=4 -RFX
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+	syntax-theme = {{ if eq $mode "light" }}{{ .bat_light_theme }}{{ else }}{{ .bat_dark_theme }}{{ end }}
 [include]
 	path = ~/.config/git/aliases
 	path = ~/.config/git/environment

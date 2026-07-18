@@ -27,6 +27,7 @@ light() {
     chezmoi apply "$HOME/.config/bat/config"
     chezmoi apply "$HOME/.config/visidata/config.py"
     chezmoi apply "$HOME/.config/claude/settings.json"
+    chezmoi apply "$HOME/.config/git/config"
 }
 
 dark() {
@@ -35,4 +36,5 @@ dark() {
     chezmoi apply "$HOME/.config/bat/config"
     chezmoi apply "$HOME/.config/visidata/config.py"
     chezmoi apply "$HOME/.config/claude/settings.json"
+    chezmoi apply "$HOME/.config/git/config"
 }

@@ -6,4 +6,9 @@ update_all_plugins() {
     fnm-sync
     echo updating tldr cache...
     tldr --update
+
+    # Files just changed above, so run the real compaudit now
+    # (0100-completion.sh shadows it as a no-op during normal launches).
+    # Also picks up any new completions the update installed.
+    compinit -d "$ZSH_COMPDUMP"
 }

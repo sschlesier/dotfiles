@@ -1,4 +1,5 @@
 romkatv/powerlevel10k
+Aloxaf/fzf-tab
 zsh-users/zsh-syntax-highlighting
 mollifier/cd-gitroot
 djui/alias-tips

@@ -1,13 +1,4 @@
 #! /bin/sh
 
-path=$(which "$1")
-if [ -n "$path" ]; then
-	bat "$path"
-else
-  zsh_function_path="$XDG_CONFIG_HOME/zsh/functions/$1"
-  if [ -f "$zsh_function_path" ]; then
-    bat "$zsh_function_path"
-  else
-	echo unable to find "$1"
-  fi
-fi
+path=$(whichpath "$1") || exit $?
+bat "$path"

@@ -1,0 +1,17 @@
+#! /bin/sh
+# Resolve a command or zsh function to a filesystem path.
+
+path=$(which "$1")
+if [ -n "$path" ]; then
+	echo "$path"
+	exit 0
+fi
+
+zsh_function_path="$XDG_CONFIG_HOME/zsh/functions/$1"
+if [ -f "$zsh_function_path" ]; then
+	echo "$zsh_function_path"
+	exit 0
+fi
+
+echo "unable to find $1" >&2
+exit 1

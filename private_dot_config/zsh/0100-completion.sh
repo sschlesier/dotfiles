@@ -6,21 +6,42 @@ fpath=( "$ZDOTDIR/completions" "${fpath[@]}" )
 
 # Cache completion setup
 # Use zcompdump to cache completions for faster load times
-# The cache is automatically used by compinit and regenerated if needed
+# Normal startup only loads an existing dump; refresh happens in the background.
 ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$HOST-$ZSH_VERSION"
 [[ -n $ZSH_COMPDUMP ]] && [[ -d ${ZSH_COMPDUMP:h} ]] || mkdir -p ${ZSH_COMPDUMP:h}
+ZSH_COMPDUMP_REFRESHED="$ZSH_CACHE_DIR/zcompdump_refreshed"
+ZSH_COMPDUMP_REFRESH_LOCK="$ZSH_CACHE_DIR/zcompdump-refresh.lock"
+ZSH_COMPDUMP_REFRESH_LOG="$ZSH_CACHE_DIR/zcompdump-refresh.log"
 
 _comp_options+=(globdots) # complete hidden files
 
-# compaudit (security scan of fpath) is the slow part of compinit, and is
-# separate from compinit's own check of whether fpath/zsh version changed
-# (which should always run so the dump stays in sync with installed
-# completions). Skip the real audit here — plugin files haven't changed at
-# this point in the load order, so auditing now would just check stale
-# state. update_all_plugins (functions/update_all_plugins) runs the real
-# compaudit itself once plugins are actually updated, whether that's
-# triggered by the weekly cadence or run manually. compinit re-autoloads
-# the real compaudit internally before returning, so it's back to normal
-# for manual use afterward.
-compaudit() { return 0 }
-compinit -d "$ZSH_COMPDUMP"
+_zsh_completion_refresh_due() {
+	[[ ! -s $ZSH_COMPDUMP ]] && return 0
+	[[ ! -e $ZSH_COMPDUMP_REFRESHED ]] && return 0
+
+	local -a stale_refresh
+	stale_refresh=( "$ZSH_COMPDUMP_REFRESHED"(Nm+60) )
+	(( $#stale_refresh ))
+}
+
+_zsh_refresh_completions_async() {
+	_zsh_completion_refresh_due || return 0
+	mkdir "$ZSH_COMPDUMP_REFRESH_LOCK" 2>/dev/null || return 0
+	setopt localoptions no_bg_nice
+
+	(
+		trap 'rmdir "$ZSH_COMPDUMP_REFRESH_LOCK"' EXIT INT TERM
+		autoload -Uz compinit
+		_comp_options+=(globdots)
+		if compinit -i -d "$ZSH_COMPDUMP"; then
+			touch "$ZSH_COMPDUMP_REFRESHED"
+		fi
+	) >>| "$ZSH_COMPDUMP_REFRESH_LOG" 2>&1 </dev/null &!
+	return 0
+}
+
+if [[ -s $ZSH_COMPDUMP ]]; then
+	compinit -C -d "$ZSH_COMPDUMP"
+fi
+
+_zsh_refresh_completions_async

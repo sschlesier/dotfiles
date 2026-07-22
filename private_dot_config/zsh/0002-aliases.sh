@@ -34,7 +34,7 @@ alias rga="rg --no-ignore --hidden"
 # fd all
 alias fda="fd --hidden --no-ignore"
 
-alias crsr="ide cursor"
+alias crsr="ide Cursor"
 
 alias wt="gtr-switch"
 alias wtl="gtr-ls"

@@ -17,6 +17,12 @@ ide() {
         open -na "${app_name}" --args "$@"
     else
         "${app_name}" "$@"
+        # macOS Tahoe stopped auto-focusing windows opened via CLI/IPC (only
+        # LaunchServices-mediated `open` calls get focus) - nudge it explicitly.
+        # Assumes app_name is spelled with the app's real display case
+        # (e.g. "Cursor", "PyCharm") - APFS is case-insensitive, so this
+        # still resolves to the right binary on PATH.
+        osascript -e "tell application \"${app_name}\" to activate" &>/dev/null
     fi
 }
 

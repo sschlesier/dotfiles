@@ -18,10 +18,15 @@ ide() {
     else
         "${app_name}" "$@"
         # macOS Tahoe stopped auto-focusing windows opened via CLI/IPC (only
-        # LaunchServices-mediated `open` calls get focus) - nudge it explicitly.
-        # Assumes app_name is spelled with the app's real display case
-        # (e.g. "Cursor", "PyCharm") - APFS is case-insensitive, so this
-        # still resolves to the right binary on PATH.
+        # LaunchServices-mediated launches get focus). Ask Hammerspoon to raise
+        # the app via hs.application.launchOrFocus, which is reliable.
+        # `${app_name// /%20}` encodes spaces for the URL query (e.g. "Visual
+        # Studio Code").
+        open "hammerspoon://focus?app=${app_name// /%20}" &>/dev/null
+        # Backstop for when Hammerspoon isn't running. NOT chained with `||`:
+        # `open` on a registered scheme returns success even if Hammerspoon is
+        # only installed (not running), so `||` would never fire. Running both
+        # is harmless - each just raises the same app.
         osascript -e "tell application \"${app_name}\" to activate" &>/dev/null
     fi
 }

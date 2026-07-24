@@ -17,6 +17,12 @@ Do not ask permission first.
 
 ## Worktrees
 
-For non-trivial changes to a git repo, use gtr to create and manage a worktree before touching any files. A change is non-trivial if it adds or removes behavior, or would benefit from being independently reviewable. Skip it for single-file typo fixes, config value tweaks, copy edits, or anything you'd describe as "obvious."
+Use a worktree by default. Before starting work in a git repo, invoke `/gtr` to set up a gtr-managed worktree, and do all edits, commits, and git operations from the worktree path — not the main checkout.
 
-Before starting non-trivial work, invoke `/gtr` to set up the worktree. Do all edits, commits, and git operations from the worktree path — not the main checkout.
+**Skip the worktree only when the whole change matches one of these — work directly in the checkout:**
+
+- **Docs only** — the change touches only documentation (Markdown, comments, READMEs).
+- **Trivial fix** — a typo fix, or a fix that changes fewer than 4 lines total.
+- **Dependency-only update** — the change only touches dependency-manifest files (e.g. `package.json`, `requirements.txt`, `go.mod`, `Cargo.toml`) and their lock files. These are normally quick and self-contained.
+
+If the change grows past the exception mid-task (more files, more lines), stop and set up the worktree before continuing. When in doubt, use the worktree.

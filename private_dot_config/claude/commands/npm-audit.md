@@ -4,10 +4,14 @@ Analyze and resolve npm audit vulnerabilities in this project, one at a time.
 
 ## Step 1 — Baseline
 
-Run `npm audit` and capture the full output. Report a summary table:
+Run `npm audit` and capture the full output. Also check whether `audit-resolve.json` already exists — if it does, run `npx check-audit` (and `npx check-audit --json` if you need machine-readable detail) to see which findings already have a recorded decision. Anything `check-audit` doesn't flag as unresolved has already been decided; don't re-propose or re-analyze it later in this run.
+
+Report a summary table covering only what `check-audit` still considers unresolved:
 - How many vulnerabilities, by severity
 - Which are auto-fixable (no breaking changes) vs. which require `--force` (breaking semver bump)
 - Any that are dev-only (appear only in devDependencies subtree)
+
+Separately, note how many findings are already covered by existing `audit-resolve.json` decisions (name + existing decision type only — no need to re-justify them).
 
 Do not analyze any individual vulnerability yet. Just show the table.
 
@@ -15,11 +19,15 @@ Do not analyze any individual vulnerability yet. Just show the table.
 
 If there are any vulnerabilities fixable via `npm audit fix` (no breaking changes), apply them now — no need to pause for review since npm itself guarantees these are non-breaking. Run `npm audit fix` until it stabilizes (re-run if it fixes something), then run `npm audit` again to see what remains. Commit the result.
 
-List the remaining vulnerabilities by name only — do not analyze them yet.
+If `audit-resolve.json` exists, run `npx check-audit` again against the post-fix state and use its output as the source of truth for what's actually left — a package can drop out of `npm audit`'s raw list (fixed) or turn out to already be covered by an existing decision even though it still appears in `npm audit`'s raw output.
+
+List only the vulnerabilities `check-audit` still reports as unresolved, by name only — do not analyze them yet.
 
 Then **STOP and ask the user which vulnerability to tackle first.**
 
 ## Step 3 — Analyze ONE vulnerability at a time
+
+Before analyzing, double-check the chosen vulnerability isn't already resolved in `audit-resolve.json` (e.g. `npx check-audit --json` or grep the advisory id/package in the file). If it's already decided, report the existing decision and rationale instead of redoing the analysis — only re-analyze if the user specifically wants the existing decision revisited.
 
 Work on exactly one vulnerability per iteration. Do not move to the next until the user explicitly says to proceed.
 

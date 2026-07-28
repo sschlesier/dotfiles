@@ -33,15 +33,6 @@ setsrcdirs() {
 setsrcdirs "$C_ROOT"/src
 setsrcdirs "$HOME"/src
 
-#cdpath
-cdpath=("$SRC" "$HOME")
-if [[ -n $WIN_HOME ]]; then
-	cdpath+=("$WIN_HOME")
-fi
-if [[ -n $ALTSRC ]]; then
-	cdpath+=("$ALTSRC")
-fi
-
 zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %B%d%b

@@ -12,13 +12,20 @@
       "WebSearch"
     ],
     "deny": [
-      "Bash(git push)",
+      "Bash(git push:*)",
       "Bash(git reset --hard*)",
       "Bash(git clean *)",
       "Bash(rm -rf *)",
       "Bash(aws secretsmanager *)",
+      "Bash(aws * secretsmanager *)",
       "Bash(aws ssm get-parameter*)",
-      "Bash(aws ssm get-parameters*)"
+      "Bash(aws * ssm get-parameter*)",
+      "Bash(az keyvault secret show*)",
+      "Bash(az * keyvault secret show*)",
+      "Bash(az keyvault secret download*)",
+      "Bash(az * keyvault secret download*)",
+      "Bash(az appconfig kv show*)",
+      "Bash(az * appconfig kv show*)"
     ],
     "defaultMode": "auto"
   },

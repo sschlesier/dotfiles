@@ -112,15 +112,15 @@ else
     SEVEN_D=$(( 100 - SEVEN_D_USED ))
 
     FIVE_H_PART="$(fmt_remaining "5h " "$FIVE_H")"
-    if [[ $FIVE_H_USED -ge 80 ]]; then
+    if [[ $FIVE_H_USED -ge 50 ]]; then
         FIVE_H_TTR="$(time_until "$FIVE_H_RESET")"
-        [[ -n "$FIVE_H_TTR" ]] && FIVE_H_PART="${FIVE_H_PART} ${DIM}↺${RST}${FIVE_H_TTR}"
+        [[ -n "$FIVE_H_TTR" ]] && FIVE_H_PART="${FIVE_H_PART} ${DIM}for${RST} ${FIVE_H_TTR}"
     fi
 
     SEVEN_D_PART="$(fmt_remaining "7d " "$SEVEN_D")"
-    if [[ $SEVEN_D_USED -ge 95 ]]; then
+    if [[ $SEVEN_D_USED -ge 80 ]]; then
         SEVEN_D_TTR="$(time_until "$SEVEN_D_RESET")"
-        [[ -n "$SEVEN_D_TTR" ]] && SEVEN_D_PART="${SEVEN_D_PART} ${DIM}↺${RST}${SEVEN_D_TTR}"
+        [[ -n "$SEVEN_D_TTR" ]] && SEVEN_D_PART="${SEVEN_D_PART} ${DIM}for${RST} ${SEVEN_D_TTR}"
     fi
 
     USAGE_PART="${FIVE_H_PART}${SEP}${SEVEN_D_PART}"

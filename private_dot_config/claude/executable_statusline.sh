@@ -3,43 +3,48 @@
 # ── Colors ────────────────────────────────────────────────────────────────────
 
 RED=$'\033[91m'
-YLW=$'\033[93m'
+YLW=$'\033[38;5;208m'
 GRN=$'\033[32m'
 DIM=$'\033[2m'
 RST=$'\033[0m'
 
-color_pct() {
+color_context() {
     local val=$1
-    if   [[ $val -ge 95 ]]; then printf '%s' "$RED"
-    elif [[ $val -ge 80 ]]; then printf '%s' "$YLW"
+    if   [[ $val -ge 90 ]]; then printf '%s' "$RED"
+    elif [[ $val -ge 70 ]]; then printf '%s' "$YLW"
     else                          printf '%s' "$GRN"
     fi
 }
 
-color_remaining() {
+color_caps() {
     local val=$1
-    if   [[ $val -le 5  ]]; then printf '%s' "$RED"
-    elif [[ $val -le 20 ]]; then printf '%s' "$YLW"
+    if   [[ $val -le 10  ]]; then printf '%s' "$RED"
+    elif [[ $val -le 40 ]]; then printf '%s' "$YLW"
     else                          printf '%s' "$GRN"
     fi
 }
 
-fmt_pct() {
+fmt_context() {
     local label=$1 val=$2
-    printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_pct "$val")" "$val" "$RST"
+    printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_context "$val")" "$val" "$RST"
 }
 
-fmt_remaining() {
+fmt_caps() {
     local label=$1 val=$2
-    printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_remaining "$val")" "$val" "$RST"
+    printf '%s%s%s%s%s%%%s' "$DIM" "$label" "$RST" "$(color_caps "$val")" "$val" "$RST"
 }
 
-# Return human-readable time until an ISO-8601 UTC timestamp (e.g. "1h42m", "38m")
+# Return human-readable time until a reset timestamp (Unix epoch seconds,
+# or falls back to ISO-8601 UTC, e.g. "1h42m", "38m")
 time_until() {
     local ts=$1
     [[ -z "$ts" ]] && return
     local epoch
-    epoch=$(TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%S" "${ts%%.*}" "+%s" 2>/dev/null)
+    if [[ "$ts" =~ ^[0-9]+$ ]]; then
+        epoch="$ts"
+    else
+        epoch=$(TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%S" "${ts%%.*}" "+%s" 2>/dev/null)
+    fi
     [[ -z "$epoch" ]] && return
     local diff=$(( epoch - $(date +%s) ))
     [[ $diff -le 0 ]] && { printf 'soon'; return; }
@@ -101,7 +106,7 @@ SEVEN_D_RESET="$(printf '%s' "$INPUT" | jq -r '.rate_limits.seven_day.resets_at 
 
 SEP="  ${DIM}│${RST}  "
 
-CTX_PART="$(fmt_pct "ctx " "$CTX_PCT")"
+CTX_PART="$(fmt_context "ctx " "$CTX_PCT")"
 
 if [[ -z "$FIVE_H_USED" && -z "$SEVEN_D_USED" ]]; then
     USAGE_PART="${DIM}no usage data${RST}"
@@ -111,13 +116,13 @@ else
     FIVE_H=$(( 100 - FIVE_H_USED ))
     SEVEN_D=$(( 100 - SEVEN_D_USED ))
 
-    FIVE_H_PART="$(fmt_remaining "5h " "$FIVE_H")"
+    FIVE_H_PART="$(fmt_caps "5h " "$FIVE_H")"
     if [[ $FIVE_H_USED -ge 50 ]]; then
         FIVE_H_TTR="$(time_until "$FIVE_H_RESET")"
         [[ -n "$FIVE_H_TTR" ]] && FIVE_H_PART="${FIVE_H_PART} ${DIM}for${RST} ${FIVE_H_TTR}"
     fi
 
-    SEVEN_D_PART="$(fmt_remaining "7d " "$SEVEN_D")"
+    SEVEN_D_PART="$(fmt_caps "7d " "$SEVEN_D")"
     if [[ $SEVEN_D_USED -ge 80 ]]; then
         SEVEN_D_TTR="$(time_until "$SEVEN_D_RESET")"
         [[ -n "$SEVEN_D_TTR" ]] && SEVEN_D_PART="${SEVEN_D_PART} ${DIM}for${RST} ${SEVEN_D_TTR}"

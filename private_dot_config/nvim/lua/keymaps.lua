@@ -9,7 +9,12 @@ map("i", "<C-s>", "<Esc>:update<CR>", s)
 map("n", "<leader>l", ":nohlsearch<CR>", s)
 
 -- Close buffer
-map("n", "<leader>q", ":q<CR>", s)
+map("n", "<leader>x", ":q<CR>", s)
+
+-- Old quit key: nudge toward <leader>x instead of quitting
+map("n", "<leader>q", function()
+	vim.notify("Use <leader>x to quit", vim.log.levels.WARN)
+end, s)
 
 -- Window navigation
 map("n", "<C-h>", "<C-w>h", s)

@@ -6,13 +6,15 @@ allowed-tools: Bash, Read, Edit, Write
 
 You are setting up a git worktree using gtr so that all subsequent work happens in isolation from the main checkout. Follow these steps in order.
 
-## Step 1: Verify prerequisites
+Assume you're already inside a git repo with `gtr` installed — don't verify either up front. The
+command below checks both implicitly: if it errors, diagnose from the error rather than re-running
+separate checks — "not a git repository" means stop and tell the user this skill only applies
+inside git repos; a `gtr`/`git-gtr` command-not-found means stop and tell them to install it with
+`brew install coderabbitai/tap/gtr`.
 
-Run these in parallel:
-- `git rev-parse --git-dir 2>/dev/null` — confirm you are inside a git repo. If not, stop: "This skill only applies inside git repositories."
-- `gtr --version 2>/dev/null` — confirm gtr is installed. If not, stop: "gtr is not installed. Install it with: `brew install coderabbitai/tap/gtr`"
+## Step 1: Ensure the worktree prefix is set
 
-Then ensure the local prefix is set to the repo name. Run:
+Run:
 ```
 git gtr config get gtr.worktrees.prefix --local 2>/dev/null
 ```

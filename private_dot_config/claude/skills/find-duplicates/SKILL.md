@@ -6,19 +6,14 @@ allowed-tools: Bash, Read, Write
 
 You are running a duplicate code review using jscpd. Follow these steps in order.
 
-## Step 1: Check jscpd is available
+Assume `jscpd` is already installed — don't check up front. If Step 3 (running jscpd) fails with a
+command-not-found error, see the recovery note under Notes.
 
-Run `jscpd --version`. If the command fails, stop and tell the user:
-
-> jscpd is not installed. Install it with: `brew install jscpd`
-
-Do not proceed until it is available.
-
-## Step 2: Check for existing config
+## Step 1: Check for existing config
 
 Look for `.jscpd.json` in the current directory. If it exists, read it — you will use it as the base configuration and merge your additions rather than overriding it.
 
-## Step 3: Propose paths to exclude
+## Step 2: Propose paths to exclude
 
 Scan the repo structure to identify directories and patterns that should be excluded from duplicate detection. Common candidates:
 
@@ -38,7 +33,7 @@ Present a concise list of what you plan to exclude and why. Ask the user to conf
 
 **Merge with any `ignore` already defined in `.jscpd.json`.**
 
-## Step 4: Run jscpd
+## Step 3: Run jscpd
 
 Build the command using these defaults (override with values from existing `.jscpd.json` where applicable):
 
@@ -46,7 +41,7 @@ Build the command using these defaults (override with values from existing `.jsc
 - `--min-lines 10` — skip trivially short blocks
 - `--reporters ai` — token-efficient LLM-optimized output
 - `--gitignore` — respect .gitignore automatically
-- `--ignore "..."` — the confirmed exclusion list from Step 3
+- `--ignore "..."` — the confirmed exclusion list from Step 2
 - Target: the source root (default `.`, or ask user if unclear)
 
 Example:
@@ -61,7 +56,7 @@ jscpd . \
 
 Run the command and capture the output. If jscpd exits with a non-zero code but still produces output, treat that as a soft warning (duplication above threshold), not a fatal error.
 
-## Step 5: Analyze and group findings
+## Step 4: Analyze and group findings
 
 Read the ai reporter output. Group the duplicate pairs into thematic clusters — patterns that represent the same kind of problem. Examples of clusters:
 
@@ -80,13 +75,13 @@ For each cluster, summarize:
 
 If total duplication is low (< 5% or fewer than 5 clone pairs), say so clearly and confirm whether the user still wants to proceed.
 
-## Step 6: Ask which cluster to tackle
+## Step 5: Ask which cluster to tackle
 
 Present the grouped clusters as a ranked list (highest-impact / easiest first). Ask the user which cluster they want to address.
 
 Do not start refactoring until the user picks a cluster.
 
-## Step 7: Tackle the chosen cluster
+## Step 6: Tackle the chosen cluster
 
 Once the user selects a cluster:
 
@@ -98,6 +93,8 @@ Once the user selects a cluster:
 
 ## Notes
 
+- **Recovery:** if Step 3 fails because `jscpd` isn't found, tell the user: "jscpd is not installed.
+  Install it with: `brew install jscpd`" — then retry Step 3 once it's installed.
 - Always prefer the `ai` reporter over `json` or `console` — it is purpose-built for LLM pipelines and reduces token usage significantly.
 - If the repo has a `.jscpd.json` with `reporters`, `minTokens`, or `minLines` already set, respect those values rather than overriding them with defaults.
 - The goal is to surface *meaningful* duplication worth refactoring — not to achieve zero duplication. Some repetition (migrations, test structure, generated stubs) is intentional.

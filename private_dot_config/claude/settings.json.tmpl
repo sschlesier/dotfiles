@@ -27,7 +27,8 @@
       "Bash(az appconfig kv show*)",
       "Bash(az * appconfig kv show*)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "additionalDirectories": ["{{ joinPath .chezmoi.homeDir "src" "worktrees" }}"]
   },
   "model": "sonnet",
   "hooks": {

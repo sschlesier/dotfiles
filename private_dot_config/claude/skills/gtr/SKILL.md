@@ -19,13 +19,26 @@ Run:
 git gtr config get gtr.worktrees.prefix --local 2>/dev/null
 ```
 
-If the output is empty, set it now:
+If the output is empty, set it now — note the **trailing slash**, which is what creates the
+per-project subdirectory:
 ```
 repo_name=$(basename "$(git rev-parse --show-toplevel)")
-git gtr config set gtr.worktrees.prefix "${repo_name}-" --local
+git gtr config set gtr.worktrees.prefix "${repo_name}/" --local
 ```
 
-This ensures worktrees land at `~/src/worktrees/<reponame>-<branch>` rather than a bare branch name.
+`gtr` builds worktree paths as `<gtr.worktrees.dir>/<prefix><branch>`, and `gtr.worktrees.dir` is
+`~/src/worktrees` globally, so this lands worktrees at `~/src/worktrees/<reponame>/<branch>`.
+Without the prefix they'd go straight into `~/src/worktrees/<branch>`, mixing every project
+together.
+
+Two things to know about this arrangement:
+
+- The trailing slash is undocumented — it works because `gtr` interpolates the prefix into the path
+  without sanitizing it. If a `gtr` upgrade adds prefix validation, worktrees would quietly revert
+  to flat `<reponame><branch>` names. Harmless, but that's the symptom to recognize.
+- `gtr clean` sweeps empty directories directly under `gtr.worktrees.dir`, so it may offer to
+  delete the `<reponame>/` container whenever that project has no active worktrees. Letting it is
+  fine — the next `gtr new` recreates it.
 
 ## Step 2: Check if already in a worktree
 

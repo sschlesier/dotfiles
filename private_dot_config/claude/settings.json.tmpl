@@ -43,6 +43,26 @@
           }
         ]
       }
+    ],
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ joinPath (env "XDG_CONFIG_HOME") "claude" "hooks" "worktree-create.sh" }}"
+          }
+        ]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ joinPath (env "XDG_CONFIG_HOME") "claude" "hooks" "worktree-remove.sh" }}"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
